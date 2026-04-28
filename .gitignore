@@ -48,3 +48,9 @@ app.*.map.json
 .claude/
 .agents/
 skill/
+
+# Platforms not in scope
+/linux/
+/macos/
+/web/
+/windows/
