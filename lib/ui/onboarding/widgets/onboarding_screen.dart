@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../core/themes/themes.dart';
+import '../../core/widgets/brand_mark.dart';
 import 'fasting_clock.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -127,7 +128,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               const SizedBox(height: AppSpacing.lg),
-                              _BrandMark(label: l10n.appName),
+                              BrandMark(label: l10n.appName),
                               const Spacer(flex: 2),
                               Center(
                                 child: FadeTransition(
@@ -314,47 +315,6 @@ class _AmbientGlow extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _BrandMark extends StatelessWidget {
-  const _BrandMark({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final typo = context.typo;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          width: 6,
-          height: 6,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: colors.accent,
-            boxShadow: [
-              BoxShadow(
-                color: colors.accent.withValues(alpha: 0.6),
-                blurRadius: 8,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: AppSpacing.sm),
-        Text(
-          label.toUpperCase(),
-          style: typo.caption.copyWith(
-            color: colors.textDim,
-            letterSpacing: 3.2,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
     );
   }
 }
