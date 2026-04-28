@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "688370582507-frfgf4jid1qihth3spga4g5nor924j89.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kndeveloper.mamba_growth",
+            "certificate_hash": "3a1e6eadd3f24cd65ea474e9955f2dbef53706f7"
+          }
+        },
+        {
+          "client_id": "688370582507-vm3nvva0vgpnv868dhc1g3l2jlfd8vn4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kndeveloper.mamba_growth",
+            "certificate_hash": "472c7f06e4b948fb7d064f9c6881fde7586f2653"
+          }
+        },
+        {
           "client_id": "688370582507-1qgl1a4a4nqtlgv2mc9sf12cmd1p1vi7.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +45,13 @@
             {
               "client_id": "688370582507-1qgl1a4a4nqtlgv2mc9sf12cmd1p1vi7.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "688370582507-838k6vrg080ffmp9huij7u93i32fa3v7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kndeveloper.mambaGrowth"
+              }
             }
           ]
         }
