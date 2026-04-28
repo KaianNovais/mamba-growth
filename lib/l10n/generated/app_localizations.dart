@@ -343,6 +343,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign out'**
   String get homeSignOut;
+
+  /// Bottom navigation label for the home tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// Bottom navigation label for the meals tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Meals'**
+  String get navMeals;
+
+  /// Bottom navigation label for the history tab.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get navHistory;
+
+  /// Bottom navigation label for the stats tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get navStats;
+
+  /// Title shown on the empty home tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Your day starts here.'**
+  String get homeEmptyTitle;
+
+  /// Subtitle shown on the empty home tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Once you log a fast or a meal, this is where today\'s signals will live.'**
+  String get homeEmptySubtitle;
+
+  /// Title shown on the empty meals tab.
+  ///
+  /// In en, this message translates to:
+  /// **'No meals logged yet.'**
+  String get mealsEmptyTitle;
+
+  /// Subtitle shown on the empty meals tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first meal to start seeing your daily calories with intention.'**
+  String get mealsEmptySubtitle;
+
+  /// Title shown on the empty history tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing in your history.'**
+  String get historyEmptyTitle;
+
+  /// Subtitle shown on the empty history tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Past fasts and logged days will appear here as you build consistency.'**
+  String get historyEmptySubtitle;
+
+  /// Title shown on the empty stats tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights are on the way.'**
+  String get statsEmptyTitle;
+
+  /// Subtitle shown on the empty stats tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Once you have a few days logged, you\'ll see honest trends and progress here.'**
+  String get statsEmptySubtitle;
 }
 
 class _AppLocalizationsDelegate

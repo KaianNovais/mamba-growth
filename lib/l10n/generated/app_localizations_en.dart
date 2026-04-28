@@ -134,4 +134,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeSignOut => 'Sign out';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navMeals => 'Meals';
+
+  @override
+  String get navHistory => 'History';
+
+  @override
+  String get navStats => 'Stats';
+
+  @override
+  String get homeEmptyTitle => 'Your day starts here.';
+
+  @override
+  String get homeEmptySubtitle =>
+      'Once you log a fast or a meal, this is where today\'s signals will live.';
+
+  @override
+  String get mealsEmptyTitle => 'No meals logged yet.';
+
+  @override
+  String get mealsEmptySubtitle =>
+      'Add your first meal to start seeing your daily calories with intention.';
+
+  @override
+  String get historyEmptyTitle => 'Nothing in your history.';
+
+  @override
+  String get historyEmptySubtitle =>
+      'Past fasts and logged days will appear here as you build consistency.';
+
+  @override
+  String get statsEmptyTitle => 'Insights are on the way.';
+
+  @override
+  String get statsEmptySubtitle =>
+      'Once you have a few days logged, you\'ll see honest trends and progress here.';
 }

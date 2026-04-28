@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../data/repositories/auth/auth_repository.dart';
 import '../ui/auth/widgets/auth_bottom_sheet.dart';
-import '../ui/home/widgets/home_placeholder_screen.dart';
+import '../ui/main/widgets/main_navigation_screen.dart';
 import '../ui/onboarding/widgets/onboarding_screen.dart';
 import '../ui/splash/widgets/splash_screen.dart';
 import 'routes.dart';
@@ -52,7 +52,7 @@ GoRouter buildRouter({required AuthRepository authRepository}) {
       GoRoute(
         path: Routes.home,
         name: RouteNames.home,
-        builder: (ctx, state) => const HomePlaceholderScreen(),
+        builder: (ctx, state) => const MainNavigationScreen(),
       ),
     ],
   );

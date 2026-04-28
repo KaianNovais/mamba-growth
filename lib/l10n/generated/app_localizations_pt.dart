@@ -137,4 +137,44 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get homeSignOut => 'Sair';
+
+  @override
+  String get navHome => 'Início';
+
+  @override
+  String get navMeals => 'Refeições';
+
+  @override
+  String get navHistory => 'Histórico';
+
+  @override
+  String get navStats => 'Stats';
+
+  @override
+  String get homeEmptyTitle => 'Seu dia começa aqui.';
+
+  @override
+  String get homeEmptySubtitle =>
+      'Quando você registrar um jejum ou uma refeição, os sinais de hoje vão viver aqui.';
+
+  @override
+  String get mealsEmptyTitle => 'Nenhuma refeição registrada.';
+
+  @override
+  String get mealsEmptySubtitle =>
+      'Adicione sua primeira refeição para começar a ver suas calorias do dia com intenção.';
+
+  @override
+  String get historyEmptyTitle => 'Nada no seu histórico.';
+
+  @override
+  String get historyEmptySubtitle =>
+      'Jejuns passados e dias registrados aparecem aqui conforme você constrói consistência.';
+
+  @override
+  String get statsEmptyTitle => 'Insights a caminho.';
+
+  @override
+  String get statsEmptySubtitle =>
+      'Com alguns dias registrados, você vê tendências honestas e seu progresso real aqui.';
 }
