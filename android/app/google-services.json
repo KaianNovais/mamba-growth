@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "688370582507",
+    "project_id": "mamba-growth-kn",
+    "storage_bucket": "mamba-growth-kn.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688370582507:android:8070615b77b12a636a8fae",
+        "android_client_info": {
+          "package_name": "com.kndeveloper.mamba_growth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "688370582507-1qgl1a4a4nqtlgv2mc9sf12cmd1p1vi7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTC7zhcueotJTAxLNT-JF_ntq92pIEeyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "688370582507-1qgl1a4a4nqtlgv2mc9sf12cmd1p1vi7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

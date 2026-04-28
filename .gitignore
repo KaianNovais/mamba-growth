@@ -46,4 +46,5 @@ app.*.map.json
 
 # Local tooling
 .claude/
+.agents/
 skill/

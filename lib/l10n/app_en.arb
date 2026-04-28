@@ -1,0 +1,55 @@
+{
+  "@@locale": "en",
+  "appName": "Mamba Growth",
+  "@appName": {
+    "description": "Application brand name."
+  },
+  "onboardingEyebrow": "FASTING & CALORIES",
+  "@onboardingEyebrow": {
+    "description": "Eyebrow that anchors the user in what the app is about."
+  },
+  "onboardingTitle": "Eat with intention.\nFast with clarity.",
+  "@onboardingTitle": {
+    "description": "Hero headline. Two short, parallel sentences."
+  },
+  "onboardingSubtitle": "Track every fast and every calorie in one calm space. No noise, no shame — just honest numbers that show your real progress.",
+  "@onboardingSubtitle": {
+    "description": "Supporting paragraph below the headline."
+  },
+  "onboardingHeroLabel": "FASTING",
+  "@onboardingHeroLabel": {
+    "description": "Caption above the live clock value in the hero visual."
+  },
+  "onboardingHeroFootnote": "Sample day · 10h 24m of 16h",
+  "@onboardingHeroFootnote": {
+    "description": "Tiny footnote below the hero making clear the data is illustrative."
+  },
+  "onboardingPillarFocus": "Awareness",
+  "@onboardingPillarFocus": {
+    "description": "Outcome pillar 1 — what the user gains."
+  },
+  "onboardingPillarDiscipline": "Consistency",
+  "@onboardingPillarDiscipline": {
+    "description": "Outcome pillar 2."
+  },
+  "onboardingPillarGrowth": "Insight",
+  "@onboardingPillarGrowth": {
+    "description": "Outcome pillar 3."
+  },
+  "onboardingPrimaryCta": "Start",
+  "@onboardingPrimaryCta": {
+    "description": "Primary CTA. Single-word action verb."
+  },
+  "onboardingFooter": "By continuing you agree with our Terms and Privacy Policy.",
+  "@onboardingFooter": {
+    "description": "Legal footer under the CTAs."
+  },
+  "onboardingFooterTermsLabel": "Terms",
+  "@onboardingFooterTermsLabel": {
+    "description": "Substring of onboardingFooter to render as an emphasized link (Terms of Service)."
+  },
+  "onboardingFooterPrivacyLabel": "Privacy Policy",
+  "@onboardingFooterPrivacyLabel": {
+    "description": "Substring of onboardingFooter to render as an emphasized link (Privacy Policy)."
+  }
+}

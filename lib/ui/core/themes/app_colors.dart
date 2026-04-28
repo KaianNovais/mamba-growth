@@ -33,8 +33,8 @@ class AppColors extends ThemeExtension<AppColors> {
     border: Color(0xFF2A2A30),
     borderDim: Color(0xFF1F1F25),
     text: Color(0xFFF5F5F7),
-    textDim: Color(0xFF8A8A93),
-    textDimmer: Color(0xFF55555E),
+    textDim: Color(0xFFB0B0B7),
+    textDimmer: Color(0xFF7A7A82),
     accent: Color(0xFFD4A24C),
     accentDim: Color(0xFF8A6A30),
   );

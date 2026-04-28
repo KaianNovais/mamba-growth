@@ -1,0 +1,16 @@
+{
+  "@@locale": "pt",
+  "appName": "Mamba Growth",
+  "onboardingEyebrow": "JEJUM & CALORIAS",
+  "onboardingTitle": "Coma com propósito.\nJejue com clareza.",
+  "onboardingSubtitle": "Acompanhe cada jejum e cada caloria em um só lugar. Sem ruído, sem culpa — só números honestos que mostram seu progresso real.",
+  "onboardingHeroLabel": "EM JEJUM",
+  "onboardingHeroFootnote": "Dia exemplo · 10h 24m de 16h",
+  "onboardingPillarFocus": "Consciência",
+  "onboardingPillarDiscipline": "Consistência",
+  "onboardingPillarGrowth": "Visão",
+  "onboardingPrimaryCta": "Começar",
+  "onboardingFooter": "Ao continuar você concorda com nossos Termos e Política de Privacidade.",
+  "onboardingFooterTermsLabel": "Termos",
+  "onboardingFooterPrivacyLabel": "Política de Privacidade"
+}
