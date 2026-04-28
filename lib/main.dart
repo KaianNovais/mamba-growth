@@ -1,17 +1,37 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 
+import 'data/repositories/auth/auth_repository.dart';
+import 'data/repositories/auth/auth_repository_firebase.dart';
+import 'data/services/auth/firebase_auth_service.dart';
+import 'data/services/auth/google_sign_in_service.dart';
+import 'firebase_options.dart';
 import 'l10n/generated/app_localizations.dart';
+import 'routing/router.dart';
 import 'ui/core/themes/themes.dart';
-import 'ui/onboarding/widgets/onboarding_screen.dart';
 
-void main() {
-  runApp(const MambaGrowthApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  final firebaseAuthService = FirebaseAuthService();
+  final googleSignInService = GoogleSignInService();
+  final authRepository = AuthRepositoryFirebase(
+    firebaseAuthService: firebaseAuthService,
+    googleSignInService: googleSignInService,
+  );
+
+  runApp(MambaGrowthApp(authRepository: authRepository));
 }
 
 class MambaGrowthApp extends StatelessWidget {
-  const MambaGrowthApp({super.key});
+  const MambaGrowthApp({super.key, required this.authRepository});
+
+  final AuthRepository authRepository;
 
   static const supportedLocales = <Locale>[
     Locale('en'),
@@ -20,20 +40,21 @@ class MambaGrowthApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mamba Growth',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark(),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: supportedLocales,
-      localeResolutionCallback: _resolveLocale,
-      home: OnboardingScreen(
-        onContinue: () => HapticFeedback.mediumImpact(),
+    return ChangeNotifierProvider<AuthRepository>.value(
+      value: authRepository,
+      child: MaterialApp.router(
+        title: 'Mamba Growth',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.dark(),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: supportedLocales,
+        localeResolutionCallback: _resolveLocale,
+        routerConfig: buildRouter(authRepository: authRepository),
       ),
     );
   }
