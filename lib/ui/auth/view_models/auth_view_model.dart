@@ -44,4 +44,12 @@ class AuthViewModel extends ChangeNotifier {
       _authRepository.signUpWithEmail(email: input.email, password: input.password);
 
   Future<Result<void>> _signInWithGoogle() => _authRepository.signInWithGoogle();
+
+  @override
+  void dispose() {
+    signInWithEmail.dispose();
+    signUpWithEmail.dispose();
+    signInWithGoogle.dispose();
+    super.dispose();
+  }
 }

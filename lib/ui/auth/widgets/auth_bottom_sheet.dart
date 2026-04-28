@@ -49,27 +49,18 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
   final _passwordCtrl = TextEditingController();
   final _emailFocus = FocusNode();
   final _passwordFocus = FocusNode();
+  late final Listenable _fieldsListenable =
+      Listenable.merge([_emailCtrl, _passwordCtrl]);
   bool _obscure = true;
 
   @override
-  void initState() {
-    super.initState();
-    _emailCtrl.addListener(_onFieldChanged);
-    _passwordCtrl.addListener(_onFieldChanged);
-  }
-
-  @override
   void dispose() {
-    _emailCtrl.removeListener(_onFieldChanged);
-    _passwordCtrl.removeListener(_onFieldChanged);
     _emailCtrl.dispose();
     _passwordCtrl.dispose();
     _emailFocus.dispose();
     _passwordFocus.dispose();
     super.dispose();
   }
-
-  void _onFieldChanged() => setState(() {});
 
   Command<void> _activeCommand(AuthViewModel vm) =>
       vm.mode == AuthMode.signIn ? vm.signInWithEmail : vm.signUpWithEmail;
@@ -81,6 +72,10 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
     return mode == AuthMode.signIn
         ? _passwordCtrl.text.isNotEmpty
         : _passwordCtrl.text.length >= _minPasswordLength;
+  }
+
+  Future<void> _submitIfReady(AuthViewModel vm) async {
+    if (_canSubmit(vm.mode)) await _submit(vm);
   }
 
   Future<void> _submit(AuthViewModel vm) async {
@@ -118,16 +113,16 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<AuthViewModel>();
+    final mode = context.select<AuthViewModel, AuthMode>((vm) => vm.mode);
+    final vm = context.read<AuthViewModel>();
     final colors = context.colors;
     final text = context.text;
     final l10n = AppLocalizations.of(context);
     final viewInsets = MediaQuery.viewInsetsOf(context).bottom;
 
-    final isSignIn = vm.mode == AuthMode.signIn;
+    final isSignIn = mode == AuthMode.signIn;
     final activeCmd = _activeCommand(vm);
     final googleCmd = vm.signInWithGoogle;
-    final canSubmit = _canSubmit(vm.mode);
 
     final title = isSignIn ? l10n.authSignInTitle : l10n.authSignUpTitle;
     final subtitle = isSignIn ? l10n.authSignInSubtitle : l10n.authSignUpSubtitle;
@@ -208,9 +203,7 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
                             : const [AutofillHints.newPassword],
                         fieldKey: const Key('auth-password-field'),
                         enabled: !running,
-                        onSubmitted: (_) {
-                          if (canSubmit) _submit(vm);
-                        },
+                        onSubmitted: (_) => _submitIfReady(vm),
                         suffixIcon: IconButton(
                           tooltip: _obscure
                               ? l10n.authPasswordVisibilityShow
@@ -225,39 +218,46 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
                       SizedBox(
                         width: double.infinity,
                         height: 56,
-                        child: FilledButton(
-                          key: const Key('auth-submit-button'),
-                          onPressed: (running || !canSubmit)
-                              ? null
-                              : () => _submit(vm),
-                          style: FilledButton.styleFrom(
-                            backgroundColor: colors.accent,
-                            foregroundColor: colors.bg,
-                            disabledBackgroundColor:
-                                colors.accent.withValues(alpha: 0.5),
-                            disabledForegroundColor:
-                                colors.bg.withValues(alpha: 0.7),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppRadius.lg),
-                            ),
-                          ),
-                          child: activeCmd.running
-                              ? SizedBox(
-                                  width: 18,
-                                  height: 18,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor:
-                                        AlwaysStoppedAnimation(colors.bg),
-                                  ),
-                                )
-                              : Text(
-                                  ctaLabel,
-                                  style: text.labelLarge?.copyWith(
-                                    color: colors.bg,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                        child: ListenableBuilder(
+                          listenable: _fieldsListenable,
+                          builder: (context, _) {
+                            final canSubmit = _canSubmit(mode);
+                            return FilledButton(
+                              key: const Key('auth-submit-button'),
+                              onPressed: (running || !canSubmit)
+                                  ? null
+                                  : () => _submit(vm),
+                              style: FilledButton.styleFrom(
+                                backgroundColor: colors.accent,
+                                foregroundColor: colors.bg,
+                                disabledBackgroundColor:
+                                    colors.accent.withValues(alpha: 0.5),
+                                disabledForegroundColor:
+                                    colors.bg.withValues(alpha: 0.7),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(AppRadius.lg),
                                 ),
+                              ),
+                              child: activeCmd.running
+                                  ? SizedBox(
+                                      width: 18,
+                                      height: 18,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor:
+                                            AlwaysStoppedAnimation(colors.bg),
+                                      ),
+                                    )
+                                  : Text(
+                                      ctaLabel,
+                                      style: text.labelLarge?.copyWith(
+                                        color: colors.bg,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(height: AppSpacing.md),
