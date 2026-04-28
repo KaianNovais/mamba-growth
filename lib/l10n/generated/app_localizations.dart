@@ -175,6 +175,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy Policy'**
   String get onboardingFooterPrivacyLabel;
+
+  /// Auth bottom sheet title in sign-in mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get authSignInTitle;
+
+  /// Auth bottom sheet title in sign-up mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your account'**
+  String get authSignUpTitle;
+
+  /// Auth bottom sheet subtitle in sign-in mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to continue your journey.'**
+  String get authSignInSubtitle;
+
+  /// Auth bottom sheet subtitle in sign-up mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Start tracking with intention.'**
+  String get authSignUpSubtitle;
+
+  /// Email field label.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get authEmailLabel;
+
+  /// Email field hint.
+  ///
+  /// In en, this message translates to:
+  /// **'you@email.com'**
+  String get authEmailHint;
+
+  /// Password field label.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authPasswordLabel;
+
+  /// Semantic label to show the password.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get authPasswordVisibilityShow;
+
+  /// Semantic label to hide the password.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get authPasswordVisibilityHide;
+
+  /// Submit button in sign-in mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get authSubmitSignIn;
+
+  /// Submit button in sign-up mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get authSubmitSignUp;
+
+  /// Google sign-in button label.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get authContinueWithGoogle;
+
+  /// Separator between Google and email/password.
+  ///
+  /// In en, this message translates to:
+  /// **'OR'**
+  String get authDividerOr;
+
+  /// Prompt to switch to sign-up mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account?'**
+  String get authToggleToSignUpPrompt;
+
+  /// Action label to switch to sign-up.
+  ///
+  /// In en, this message translates to:
+  /// **'Create one'**
+  String get authToggleToSignUpAction;
+
+  /// Prompt to switch to sign-in mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get authToggleToSignInPrompt;
+
+  /// Action label to switch to sign-in.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get authToggleToSignInAction;
+
+  /// Inline error for invalid credentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password.'**
+  String get authErrorInvalidCredentials;
+
+  /// Inline error when email is already used.
+  ///
+  /// In en, this message translates to:
+  /// **'An account already exists for this email.'**
+  String get authErrorEmailInUse;
+
+  /// Inline error for weak password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters.'**
+  String get authErrorWeakPassword;
+
+  /// Inline error when user is disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has been disabled.'**
+  String get authErrorUserDisabled;
+
+  /// Inline error for network failure.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection.'**
+  String get authErrorNetwork;
+
+  /// Inline error for rate limiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Try again later.'**
+  String get authErrorTooManyRequests;
+
+  /// Inline error when Google sign-in fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not sign in with Google.'**
+  String get authErrorGoogleSignInFailed;
+
+  /// Generic fallback inline error.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get authErrorUnknown;
+
+  /// Greeting on the home placeholder. {name} is the display name or email.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome, {name}'**
+  String homeWelcomeGreeting(String name);
+
+  /// Subtitle on the home placeholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Your home is coming soon.'**
+  String get homeComingSoon;
+
+  /// Sign out button label.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get homeSignOut;
 }
 
 class _AppLocalizationsDelegate

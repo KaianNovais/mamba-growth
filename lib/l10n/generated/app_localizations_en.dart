@@ -48,4 +48,90 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingFooterPrivacyLabel => 'Privacy Policy';
+
+  @override
+  String get authSignInTitle => 'Welcome back';
+
+  @override
+  String get authSignUpTitle => 'Create your account';
+
+  @override
+  String get authSignInSubtitle => 'Sign in to continue your journey.';
+
+  @override
+  String get authSignUpSubtitle => 'Start tracking with intention.';
+
+  @override
+  String get authEmailLabel => 'Email';
+
+  @override
+  String get authEmailHint => 'you@email.com';
+
+  @override
+  String get authPasswordLabel => 'Password';
+
+  @override
+  String get authPasswordVisibilityShow => 'Show password';
+
+  @override
+  String get authPasswordVisibilityHide => 'Hide password';
+
+  @override
+  String get authSubmitSignIn => 'Sign in';
+
+  @override
+  String get authSubmitSignUp => 'Create account';
+
+  @override
+  String get authContinueWithGoogle => 'Continue with Google';
+
+  @override
+  String get authDividerOr => 'OR';
+
+  @override
+  String get authToggleToSignUpPrompt => 'Don\'t have an account?';
+
+  @override
+  String get authToggleToSignUpAction => 'Create one';
+
+  @override
+  String get authToggleToSignInPrompt => 'Already have an account?';
+
+  @override
+  String get authToggleToSignInAction => 'Sign in';
+
+  @override
+  String get authErrorInvalidCredentials => 'Invalid email or password.';
+
+  @override
+  String get authErrorEmailInUse => 'An account already exists for this email.';
+
+  @override
+  String get authErrorWeakPassword => 'Password must be at least 6 characters.';
+
+  @override
+  String get authErrorUserDisabled => 'This account has been disabled.';
+
+  @override
+  String get authErrorNetwork => 'No internet connection.';
+
+  @override
+  String get authErrorTooManyRequests => 'Too many attempts. Try again later.';
+
+  @override
+  String get authErrorGoogleSignInFailed => 'Could not sign in with Google.';
+
+  @override
+  String get authErrorUnknown => 'Something went wrong. Please try again.';
+
+  @override
+  String homeWelcomeGreeting(String name) {
+    return 'Welcome, $name';
+  }
+
+  @override
+  String get homeComingSoon => 'Your home is coming soon.';
+
+  @override
+  String get homeSignOut => 'Sign out';
 }
