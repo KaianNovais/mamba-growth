@@ -44,6 +44,11 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Android signing — NEVER commit
+/android/key.properties
+/android/upload-keystore.jks
+/android/*.jks
+
 # Local tooling
 .claude/
 .agents/
