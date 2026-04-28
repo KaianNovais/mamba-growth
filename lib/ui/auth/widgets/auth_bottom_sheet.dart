@@ -73,7 +73,7 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
     if (!mounted) return;
     final cmd = _activeCommand(vm);
     if (cmd.completed) {
-      Navigator.of(context).pop();
+      await _dismiss();
     }
   }
 
@@ -81,8 +81,16 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
     await vm.signInWithGoogle.execute();
     if (!mounted) return;
     if (vm.signInWithGoogle.completed) {
-      Navigator.of(context).pop();
+      await _dismiss();
     }
+  }
+
+  Future<void> _dismiss() async {
+    // Em sucesso de auth, o `refreshListenable` do GoRouter já
+    // redireciona para /home no mesmo frame — o stack pode não ter
+    // mais a rota de baixo do sheet. `maybePop` é defensivo: fecha
+    // o sheet se ainda estiver no topo do Navigator, ou não faz nada.
+    await Navigator.of(context, rootNavigator: true).maybePop();
   }
 
   @override
