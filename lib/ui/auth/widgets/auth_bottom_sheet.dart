@@ -42,6 +42,9 @@ class _AuthSheetContent extends StatefulWidget {
 }
 
 class _AuthSheetContentState extends State<_AuthSheetContent> {
+  static final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+  static const _minPasswordLength = 6;
+
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
   final _emailFocus = FocusNode();
@@ -49,7 +52,16 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
   bool _obscure = true;
 
   @override
+  void initState() {
+    super.initState();
+    _emailCtrl.addListener(_onFieldChanged);
+    _passwordCtrl.addListener(_onFieldChanged);
+  }
+
+  @override
   void dispose() {
+    _emailCtrl.removeListener(_onFieldChanged);
+    _passwordCtrl.removeListener(_onFieldChanged);
     _emailCtrl.dispose();
     _passwordCtrl.dispose();
     _emailFocus.dispose();
@@ -57,8 +69,19 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
     super.dispose();
   }
 
+  void _onFieldChanged() => setState(() {});
+
   Command<void> _activeCommand(AuthViewModel vm) =>
       vm.mode == AuthMode.signIn ? vm.signInWithEmail : vm.signUpWithEmail;
+
+  bool _canSubmit(AuthMode mode) {
+    if (!_emailRegex.hasMatch(_emailCtrl.text.trim())) return false;
+    // Em sign in basta a senha não estar vazia (Firebase responde
+    // se for inválida); em sign up exigimos o mínimo do Firebase.
+    return mode == AuthMode.signIn
+        ? _passwordCtrl.text.isNotEmpty
+        : _passwordCtrl.text.length >= _minPasswordLength;
+  }
 
   Future<void> _submit(AuthViewModel vm) async {
     final input = EmailPasswordInput(
@@ -104,6 +127,7 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
     final isSignIn = vm.mode == AuthMode.signIn;
     final activeCmd = _activeCommand(vm);
     final googleCmd = vm.signInWithGoogle;
+    final canSubmit = _canSubmit(vm.mode);
 
     final title = isSignIn ? l10n.authSignInTitle : l10n.authSignUpTitle;
     final subtitle = isSignIn ? l10n.authSignInSubtitle : l10n.authSignUpSubtitle;
@@ -184,7 +208,9 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
                             : const [AutofillHints.newPassword],
                         fieldKey: const Key('auth-password-field'),
                         enabled: !running,
-                        onSubmitted: (_) => _submit(vm),
+                        onSubmitted: (_) {
+                          if (canSubmit) _submit(vm);
+                        },
                         suffixIcon: IconButton(
                           tooltip: _obscure
                               ? l10n.authPasswordVisibilityShow
@@ -201,12 +227,16 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
                         height: 56,
                         child: FilledButton(
                           key: const Key('auth-submit-button'),
-                          onPressed: running ? null : () => _submit(vm),
+                          onPressed: (running || !canSubmit)
+                              ? null
+                              : () => _submit(vm),
                           style: FilledButton.styleFrom(
                             backgroundColor: colors.accent,
                             foregroundColor: colors.bg,
                             disabledBackgroundColor:
                                 colors.accent.withValues(alpha: 0.5),
+                            disabledForegroundColor:
+                                colors.bg.withValues(alpha: 0.7),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(AppRadius.lg),
                             ),
