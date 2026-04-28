@@ -6,9 +6,11 @@
 
 **Architecture:** MVVM + Repository + Service do skill `flutter-expert` (case study Compass do time Flutter), com `ChangeNotifier` + `provider`. `AuthRepository` é a SSOT do `currentUser` e dispara o redirect do `GoRouter` via `refreshListenable`. `Result<T>` na borda repo→viewmodel; UI consome `Command0/Command1`. Design system de `lib/ui/core/themes` é única fonte de verdade.
 
-**Tech Stack:** Flutter 3.11+, Dart 3, `firebase_auth ^6.4.0`, `google_sign_in ^7.2.0`, `go_router ^16.3.0`, `provider ^6.1.5`, `mocktail ^1.0.4` (dev).
+**Tech Stack:** Flutter 3.11+, Dart 3, `firebase_auth ^6.4.0`, `google_sign_in ^7.2.0`, `go_router ^16.3.0`, `provider ^6.1.5`.
 
 **Spec:** `docs/superpowers/specs/2026-04-28-firebase-auth-design.md`
+
+> **Nota:** A spec original previa testes (utils, domain, data, viewmodel, widget, router). O usuário pediu para **não implementar testes** neste MVP. Todas as tarefas abaixo focam em código de produção. Testes ficam como dívida técnica documentada.
 
 ---
 
@@ -33,19 +35,12 @@
 | `lib/ui/home/widgets/home_placeholder_screen.dart` | Placeholder pós-login com sign out. |
 | `lib/routing/routes.dart` | Constantes de path/name. |
 | `lib/routing/router.dart` | `buildRouter(authRepository:)` com redirect. |
-| `test/utils/result_test.dart` | Testes do Result. |
-| `test/utils/command_test.dart` | Testes dos commands. |
-| `test/domain/models/auth_exception_test.dart` | Mapeamento `FirebaseAuthException.code` → `AuthErrorKind`. |
-| `test/data/repositories/auth/auth_repository_firebase_test.dart` | Testes do repo (sucesso, erro, cancel, signOut, authStateChanges). |
-| `test/ui/auth/view_models/auth_view_model_test.dart` | Testes do VM (toggleMode, commands, re-entrancy). |
-| `test/ui/auth/widgets/auth_bottom_sheet_test.dart` | Widget tests do sheet. |
-| `test/routing/router_test.dart` | Matrix de redirect. |
 
 ### Modified files
 
 | Path | Mudança |
 |---|---|
-| `pubspec.yaml` | Adicionar 4 deps. |
+| `pubspec.yaml` | Adicionar 3 deps. |
 | `lib/main.dart` | Bootstrap async com `Firebase.initializeApp`, DI raiz, `MaterialApp.router`. |
 | `lib/ui/onboarding/widgets/onboarding_screen.dart` | Remover `_BrandMark` privado (movido para core/widgets). |
 | `lib/l10n/app_en.arb` | +27 strings. |
@@ -53,15 +48,19 @@
 | `android/build.gradle` (se necessário) | Plugin `com.google.gms.google-services` no classpath. |
 | `android/app/build.gradle` (se necessário) | Aplicar plugin `com.google.gms.google-services`. |
 
+### Deleted files
+
+| Path | Motivo |
+|---|---|
+| `test/widget_test.dart` | Template inicial referencia `MyApp` que não existe mais; sem testes no MVP. |
+
 ---
 
 ## Conventions
 
-- **Test runner:** `flutter test`. Para um arquivo: `flutter test test/<path>.dart`. Para um nome específico: `flutter test test/<path>.dart --plain-name "<test name>"`.
-- **Static analysis:** `flutter analyze` (zero issues exigidos).
+- **Static analysis:** `flutter analyze` (zero issues exigidos a cada task).
 - **Codegen l10n:** `flutter gen-l10n` (executa baseado em `l10n.yaml`).
-- **Commits:** Conventional Commits (`feat:`, `test:`, `refactor:`, `chore:`, `docs:`). Cada task termina em commit.
-- **Mocking:** `mocktail` (sem code-gen). Fakes via `class FakeFoo extends Mock implements Foo`.
+- **Commits:** Conventional Commits (`feat:`, `refactor:`, `chore:`, `docs:`). Cada task termina em commit.
 - **Imports:** sempre relativos dentro de `lib/`.
 
 ---
@@ -88,15 +87,9 @@ dependencies:
   google_sign_in: ^7.2.0
   go_router: ^16.3.0
   provider: ^6.1.5
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
-  flutter_lints: ^6.0.0
-  flutter_launcher_icons: ^0.14.4
-  mocktail: ^1.0.4
 ```
+
+(`dev_dependencies` permanece intacta — não adicionar `mocktail`.)
 
 - [ ] **Step 2: Resolver pacotes**
 
@@ -112,7 +105,7 @@ Expected: "No issues found!"
 
 ```bash
 git -C C:/mamba_growth add pubspec.yaml pubspec.lock
-git -C C:/mamba_growth commit -m "chore(deps): add google_sign_in, go_router, provider, mocktail"
+git -C C:/mamba_growth commit -m "chore(deps): add google_sign_in, go_router, provider"
 ```
 
 ---
@@ -121,55 +114,8 @@ git -C C:/mamba_growth commit -m "chore(deps): add google_sign_in, go_router, pr
 
 **Files:**
 - Create: `lib/utils/result.dart`
-- Test: `test/utils/result_test.dart`
 
-- [ ] **Step 1: Escrever o teste falhando**
-
-Conteúdo de `test/utils/result_test.dart`:
-
-```dart
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mamba_growth/utils/result.dart';
-
-void main() {
-  group('Result', () {
-    test('Ok carries the value', () {
-      const result = Result<int>.ok(42);
-
-      expect(result, isA<Ok<int>>());
-      expect((result as Ok<int>).value, 42);
-    });
-
-    test('Error carries the exception', () {
-      final exception = Exception('boom');
-      final result = Result<int>.error(exception);
-
-      expect(result, isA<Error<int>>());
-      expect((result as Error<int>).error, exception);
-    });
-
-    test('pattern match works for Ok and Error', () {
-      Result<String> r1 = const Result.ok('hello');
-      Result<String> r2 = Result.error(Exception('nope'));
-
-      String describe(Result<String> r) => switch (r) {
-        Ok(:final value) => 'ok=$value',
-        Error(:final error) => 'err=$error',
-      };
-
-      expect(describe(r1), 'ok=hello');
-      expect(describe(r2), startsWith('err=Exception'));
-    });
-  });
-}
-```
-
-- [ ] **Step 2: Rodar teste — esperar falha por arquivo inexistente**
-
-Run: `cd C:/mamba_growth && flutter test test/utils/result_test.dart`
-Expected: Compile error (`result.dart` não existe).
-
-- [ ] **Step 3: Implementar `lib/utils/result.dart`**
+- [ ] **Step 1: Implementar `lib/utils/result.dart`**
 
 ```dart
 /// Tipo de retorno padrão da borda Repository → ViewModel.
@@ -193,15 +139,15 @@ final class Error<T> extends Result<T> {
 }
 ```
 
-- [ ] **Step 4: Rodar teste — esperar verde**
+- [ ] **Step 2: Validar analyze**
 
-Run: `cd C:/mamba_growth && flutter test test/utils/result_test.dart`
-Expected: `All tests passed!`
+Run: `cd C:/mamba_growth && flutter analyze lib/utils/result.dart`
+Expected: "No issues found!"
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 3: Commit**
 
 ```bash
-git -C C:/mamba_growth add lib/utils/result.dart test/utils/result_test.dart
+git -C C:/mamba_growth add lib/utils/result.dart
 git -C C:/mamba_growth commit -m "feat(utils): add sealed Result<T> with Ok/Error"
 ```
 
@@ -211,89 +157,8 @@ git -C C:/mamba_growth commit -m "feat(utils): add sealed Result<T> with Ok/Erro
 
 **Files:**
 - Create: `lib/utils/command.dart`
-- Test: `test/utils/command_test.dart`
 
-- [ ] **Step 1: Escrever o teste falhando**
-
-Conteúdo de `test/utils/command_test.dart`:
-
-```dart
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mamba_growth/utils/command.dart';
-import 'package:mamba_growth/utils/result.dart';
-
-void main() {
-  group('Command0', () {
-    test('runs action and exposes Ok result', () async {
-      final cmd = Command0<String>(() async => const Result.ok('done'));
-      var notifications = 0;
-      cmd.addListener(() => notifications++);
-
-      await cmd.execute();
-
-      expect(cmd.completed, isTrue);
-      expect(cmd.error, isFalse);
-      expect(cmd.running, isFalse);
-      expect((cmd.result! as Ok<String>).value, 'done');
-      expect(notifications, greaterThanOrEqualTo(2)); // start + finish
-    });
-
-    test('runs action and exposes Error result', () async {
-      final cmd = Command0<void>(() async => Result.error(Exception('x')));
-
-      await cmd.execute();
-
-      expect(cmd.error, isTrue);
-      expect(cmd.completed, isFalse);
-    });
-
-    test('re-entrancy guard ignores second execute while running', () async {
-      var calls = 0;
-      final cmd = Command0<void>(() async {
-        calls++;
-        await Future<void>.delayed(const Duration(milliseconds: 10));
-        return const Result.ok(null);
-      });
-
-      final first = cmd.execute();
-      await cmd.execute(); // deve ser ignorada
-      await first;
-
-      expect(calls, 1);
-    });
-
-    test('clearResult resets state and notifies', () async {
-      final cmd = Command0<int>(() async => const Result.ok(7));
-      await cmd.execute();
-      expect(cmd.completed, isTrue);
-
-      var notified = false;
-      cmd.addListener(() => notified = true);
-      cmd.clearResult();
-
-      expect(cmd.result, isNull);
-      expect(notified, isTrue);
-    });
-  });
-
-  group('Command1', () {
-    test('passes argument to action', () async {
-      final cmd = Command1<int, int>((a) async => Result.ok(a * 2));
-
-      await cmd.execute(21);
-
-      expect((cmd.result! as Ok<int>).value, 42);
-    });
-  });
-}
-```
-
-- [ ] **Step 2: Rodar teste — esperar falha**
-
-Run: `cd C:/mamba_growth && flutter test test/utils/command_test.dart`
-Expected: Compile error (arquivo não existe).
-
-- [ ] **Step 3: Implementar `lib/utils/command.dart`**
+- [ ] **Step 1: Implementar `lib/utils/command.dart`**
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -349,15 +214,15 @@ class Command1<T, A> extends Command<T> {
 }
 ```
 
-- [ ] **Step 4: Rodar teste — esperar verde**
+- [ ] **Step 2: Validar analyze**
 
-Run: `cd C:/mamba_growth && flutter test test/utils/command_test.dart`
-Expected: `All tests passed!`
+Run: `cd C:/mamba_growth && flutter analyze lib/utils/command.dart`
+Expected: "No issues found!"
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 3: Commit**
 
 ```bash
-git -C C:/mamba_growth add lib/utils/command.dart test/utils/command_test.dart
+git -C C:/mamba_growth add lib/utils/command.dart
 git -C C:/mamba_growth commit -m "feat(utils): add Command0/Command1 with re-entrancy guard"
 ```
 
@@ -367,8 +232,6 @@ git -C C:/mamba_growth commit -m "feat(utils): add Command0/Command1 with re-ent
 
 **Files:**
 - Create: `lib/domain/models/auth_user.dart`
-
-Sem teste — value class trivial.
 
 - [ ] **Step 1: Implementar `lib/domain/models/auth_user.dart`**
 
@@ -413,82 +276,8 @@ git -C C:/mamba_growth commit -m "feat(domain): add immutable AuthUser model"
 
 **Files:**
 - Create: `lib/domain/models/auth_exception.dart`
-- Test: `test/domain/models/auth_exception_test.dart`
 
-- [ ] **Step 1: Escrever o teste falhando**
-
-Conteúdo de `test/domain/models/auth_exception_test.dart`:
-
-```dart
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mamba_growth/domain/models/auth_exception.dart';
-
-void main() {
-  group('AuthException.fromFirebase', () {
-    AuthException map(String code) =>
-        AuthException.fromFirebase(FirebaseAuthException(code: code));
-
-    test('maps invalid-credential to invalidCredentials', () {
-      expect(map('invalid-credential').kind, AuthErrorKind.invalidCredentials);
-    });
-
-    test('maps invalid-email to invalidCredentials', () {
-      expect(map('invalid-email').kind, AuthErrorKind.invalidCredentials);
-    });
-
-    test('maps wrong-password to invalidCredentials', () {
-      expect(map('wrong-password').kind, AuthErrorKind.invalidCredentials);
-    });
-
-    test('maps user-not-found to invalidCredentials', () {
-      expect(map('user-not-found').kind, AuthErrorKind.invalidCredentials);
-    });
-
-    test('maps email-already-in-use to emailAlreadyInUse', () {
-      expect(map('email-already-in-use').kind, AuthErrorKind.emailAlreadyInUse);
-    });
-
-    test('maps weak-password to weakPassword', () {
-      expect(map('weak-password').kind, AuthErrorKind.weakPassword);
-    });
-
-    test('maps user-disabled to userDisabled', () {
-      expect(map('user-disabled').kind, AuthErrorKind.userDisabled);
-    });
-
-    test('maps network-request-failed to networkError', () {
-      expect(map('network-request-failed').kind, AuthErrorKind.networkError);
-    });
-
-    test('maps too-many-requests to tooManyRequests', () {
-      expect(map('too-many-requests').kind, AuthErrorKind.tooManyRequests);
-    });
-
-    test('falls back to unknown for unrecognized codes', () {
-      expect(map('something-weird').kind, AuthErrorKind.unknown);
-    });
-
-    test('preserves original FirebaseAuthException as cause', () {
-      final fbException = FirebaseAuthException(code: 'invalid-credential');
-      final mapped = AuthException.fromFirebase(fbException);
-      expect(mapped.cause, fbException);
-    });
-  });
-
-  test('AuthCancelledException is a distinct type', () {
-    expect(const AuthCancelledException(), isA<Exception>());
-    expect(const AuthCancelledException(), isNot(isA<AuthException>()));
-  });
-}
-```
-
-- [ ] **Step 2: Rodar teste — esperar falha**
-
-Run: `cd C:/mamba_growth && flutter test test/domain/models/auth_exception_test.dart`
-Expected: Compile error.
-
-- [ ] **Step 3: Implementar `lib/domain/models/auth_exception.dart`**
+- [ ] **Step 1: Implementar `lib/domain/models/auth_exception.dart`**
 
 ```dart
 import 'package:firebase_auth/firebase_auth.dart';
@@ -553,15 +342,15 @@ class AuthCancelledException implements Exception {
 }
 ```
 
-- [ ] **Step 4: Rodar teste — esperar verde**
+- [ ] **Step 2: Validar analyze**
 
-Run: `cd C:/mamba_growth && flutter test test/domain/models/auth_exception_test.dart`
-Expected: `All tests passed!` (11 tests).
+Run: `cd C:/mamba_growth && flutter analyze lib/domain/models/auth_exception.dart`
+Expected: "No issues found!"
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 3: Commit**
 
 ```bash
-git -C C:/mamba_growth add lib/domain/models/auth_exception.dart test/domain/models/auth_exception_test.dart
+git -C C:/mamba_growth add lib/domain/models/auth_exception.dart
 git -C C:/mamba_growth commit -m "feat(domain): add AuthException with Firebase code mapping"
 ```
 
@@ -575,7 +364,7 @@ git -C C:/mamba_growth commit -m "feat(domain): add AuthException with Firebase 
 
 - [ ] **Step 1: Adicionar strings em `app_en.arb`**
 
-Acrescentar antes do `}` final de `lib/l10n/app_en.arb`:
+Acrescentar antes do `}` final de `lib/l10n/app_en.arb` (não esquecer da vírgula após o último item existente):
 
 ```json
 ,
@@ -642,7 +431,7 @@ Acrescentar antes do `}` final de `lib/l10n/app_en.arb`:
 
 - [ ] **Step 2: Adicionar strings em `app_pt.arb`**
 
-Acrescentar antes do `}` final de `lib/l10n/app_pt.arb` (mesma ordem, traduções pt-BR):
+Acrescentar antes do `}` final de `lib/l10n/app_pt.arb`:
 
 ```json
 ,
@@ -676,8 +465,6 @@ Acrescentar antes do `}` final de `lib/l10n/app_pt.arb` (mesma ordem, traduçõe
   "homeSignOut": "Sair"
 ```
 
-> Nota: o `app_pt.arb` é o secondary locale e por convenção do `intl` não precisa de blocos `@keyName` (eles ficam no template `app_en.arb`).
-
 - [ ] **Step 3: Gerar localizations**
 
 Run: `cd C:/mamba_growth && flutter gen-l10n`
@@ -702,8 +489,6 @@ git -C C:/mamba_growth commit -m "feat(l10n): add auth and home placeholder stri
 **Files:**
 - Create: `lib/data/services/auth/firebase_auth_service.dart`
 
-Sem teste — wrapper sem lógica. Será exercitado pelos testes do repository.
-
 - [ ] **Step 1: Implementar `lib/data/services/auth/firebase_auth_service.dart`**
 
 ```dart
@@ -711,8 +496,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 /// Casca fina sobre [FirebaseAuth.instance].
 ///
-/// Não tem estado, não tem regras. Existe para que o
-/// `AuthRepository` seja testável (a gente fakea esta classe).
+/// Não tem estado, não tem regras. Existe para isolar o
+/// `AuthRepository` da API do Firebase.
 class FirebaseAuthService {
   FirebaseAuthService({FirebaseAuth? firebaseAuth})
       : _auth = firebaseAuth ?? FirebaseAuth.instance;
@@ -885,192 +670,12 @@ git -C C:/mamba_growth commit -m "feat(data): add AuthRepository abstract interf
 
 ---
 
-## Task 10: `AuthRepositoryFirebase` + testes
+## Task 10: `AuthRepositoryFirebase`
 
 **Files:**
 - Create: `lib/data/repositories/auth/auth_repository_firebase.dart`
-- Test: `test/data/repositories/auth/auth_repository_firebase_test.dart`
 
-- [ ] **Step 1: Escrever o teste falhando**
-
-Conteúdo de `test/data/repositories/auth/auth_repository_firebase_test.dart`:
-
-```dart
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mamba_growth/data/repositories/auth/auth_repository_firebase.dart';
-import 'package:mamba_growth/data/services/auth/firebase_auth_service.dart';
-import 'package:mamba_growth/data/services/auth/google_sign_in_service.dart';
-import 'package:mamba_growth/domain/models/auth_exception.dart';
-import 'package:mamba_growth/utils/result.dart';
-import 'package:mocktail/mocktail.dart';
-
-class _FakeFirebaseAuthService extends Mock implements FirebaseAuthService {}
-
-class _FakeGoogleSignInService extends Mock implements GoogleSignInService {}
-
-class _FakeUser extends Mock implements User {}
-
-class _FakeUserCredential extends Mock implements UserCredential {}
-
-class _FakeAuthCredential extends Mock implements AuthCredential {}
-
-void main() {
-  late _FakeFirebaseAuthService firebase;
-  late _FakeGoogleSignInService google;
-  late StreamController<User?> authStream;
-
-  setUpAll(() {
-    registerFallbackValue(_FakeAuthCredential());
-  });
-
-  setUp(() {
-    firebase = _FakeFirebaseAuthService();
-    google = _FakeGoogleSignInService();
-    authStream = StreamController<User?>.broadcast();
-    when(() => firebase.authStateChanges())
-        .thenAnswer((_) => authStream.stream);
-  });
-
-  tearDown(() async {
-    await authStream.close();
-  });
-
-  AuthRepositoryFirebase build() => AuthRepositoryFirebase(
-        firebaseAuthService: firebase,
-        googleSignInService: google,
-      );
-
-  test('signInWithEmail success returns Ok', () async {
-    when(() => firebase.signInWithEmailAndPassword(
-          email: any(named: 'email'),
-          password: any(named: 'password'),
-        )).thenAnswer((_) async => _FakeUserCredential());
-
-    final repo = build();
-    final result = await repo.signInWithEmail(email: 'a@b.c', password: 'pw');
-
-    expect(result, isA<Ok<void>>());
-    verify(() => firebase.signInWithEmailAndPassword(
-          email: 'a@b.c',
-          password: 'pw',
-        )).called(1);
-  });
-
-  test('signInWithEmail maps invalid-credential FirebaseAuthException', () async {
-    when(() => firebase.signInWithEmailAndPassword(
-          email: any(named: 'email'),
-          password: any(named: 'password'),
-        )).thenThrow(FirebaseAuthException(code: 'invalid-credential'));
-
-    final repo = build();
-    final result = await repo.signInWithEmail(email: 'a@b.c', password: 'pw');
-
-    expect(result, isA<Error<void>>());
-    final err = (result as Error<void>).error;
-    expect(err, isA<AuthException>());
-    expect((err as AuthException).kind, AuthErrorKind.invalidCredentials);
-  });
-
-  test('signUpWithEmail maps email-already-in-use', () async {
-    when(() => firebase.createUserWithEmailAndPassword(
-          email: any(named: 'email'),
-          password: any(named: 'password'),
-        )).thenThrow(FirebaseAuthException(code: 'email-already-in-use'));
-
-    final repo = build();
-    final result = await repo.signUpWithEmail(email: 'a@b.c', password: 'pw');
-
-    expect(result, isA<Error<void>>());
-    expect(
-      ((result as Error<void>).error as AuthException).kind,
-      AuthErrorKind.emailAlreadyInUse,
-    );
-  });
-
-  test('signInWithGoogle success calls authenticate then signInWithCredential', () async {
-    when(() => google.authenticateAndGetIdToken()).thenAnswer((_) async => 'tok');
-    when(() => firebase.signInWithCredential(any()))
-        .thenAnswer((_) async => _FakeUserCredential());
-
-    final repo = build();
-    final result = await repo.signInWithGoogle();
-
-    expect(result, isA<Ok<void>>());
-    verifyInOrder([
-      () => google.authenticateAndGetIdToken(),
-      () => firebase.signInWithCredential(any()),
-    ]);
-  });
-
-  test('signInWithGoogle cancellation returns Error<AuthCancelledException>', () async {
-    when(() => google.authenticateAndGetIdToken())
-        .thenThrow(const GoogleSignInException(
-          code: GoogleSignInExceptionCode.canceled,
-          description: 'User canceled',
-        ));
-
-    final repo = build();
-    final result = await repo.signInWithGoogle();
-
-    expect(result, isA<Error<void>>());
-    expect((result as Error<void>).error, isA<AuthCancelledException>());
-  });
-
-  test('authStateChanges propagates currentUser and notifies listeners', () async {
-    final repo = build();
-    var notifications = 0;
-    repo.addListener(() => notifications++);
-
-    expect(repo.isInitialized, isFalse);
-    expect(repo.currentUser, isNull);
-
-    final user = _FakeUser();
-    when(() => user.uid).thenReturn('u1');
-    when(() => user.email).thenReturn('a@b.c');
-    when(() => user.displayName).thenReturn('Kaian');
-    when(() => user.photoURL).thenReturn(null);
-
-    authStream.add(user);
-    await Future<void>.delayed(Duration.zero);
-
-    expect(repo.isInitialized, isTrue);
-    expect(repo.currentUser, isNotNull);
-    expect(repo.currentUser!.uid, 'u1');
-    expect(repo.isAuthenticated, isTrue);
-    expect(notifications, greaterThanOrEqualTo(1));
-
-    authStream.add(null);
-    await Future<void>.delayed(Duration.zero);
-    expect(repo.currentUser, isNull);
-    expect(repo.isAuthenticated, isFalse);
-  });
-
-  test('signOut calls google then firebase', () async {
-    when(() => google.signOut()).thenAnswer((_) async {});
-    when(() => firebase.signOut()).thenAnswer((_) async {});
-
-    final repo = build();
-    final result = await repo.signOut();
-
-    expect(result, isA<Ok<void>>());
-    verifyInOrder([
-      () => google.signOut(),
-      () => firebase.signOut(),
-    ]);
-  });
-}
-```
-
-- [ ] **Step 2: Rodar teste — esperar falha**
-
-Run: `cd C:/mamba_growth && flutter test test/data/repositories/auth/auth_repository_firebase_test.dart`
-Expected: Compile error.
-
-- [ ] **Step 3: Implementar `lib/data/repositories/auth/auth_repository_firebase.dart`**
+- [ ] **Step 1: Implementar `lib/data/repositories/auth/auth_repository_firebase.dart`**
 
 ```dart
 import 'dart:async';
@@ -1188,146 +793,26 @@ class AuthRepositoryFirebase extends AuthRepository {
 }
 ```
 
-- [ ] **Step 4: Rodar teste — esperar verde**
+- [ ] **Step 2: Validar analyze**
 
-Run: `cd C:/mamba_growth && flutter test test/data/repositories/auth/auth_repository_firebase_test.dart`
-Expected: `All tests passed!` (7 tests).
+Run: `cd C:/mamba_growth && flutter analyze lib/data/repositories/auth/auth_repository_firebase.dart`
+Expected: "No issues found!"
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 3: Commit**
 
 ```bash
-git -C C:/mamba_growth add lib/data/repositories/auth/auth_repository_firebase.dart test/data/repositories/auth/auth_repository_firebase_test.dart
+git -C C:/mamba_growth add lib/data/repositories/auth/auth_repository_firebase.dart
 git -C C:/mamba_growth commit -m "feat(data): add AuthRepositoryFirebase with email/Google flows"
 ```
 
 ---
 
-## Task 11: `AuthViewModel` + testes
+## Task 11: `AuthViewModel`
 
 **Files:**
 - Create: `lib/ui/auth/view_models/auth_view_model.dart`
-- Test: `test/ui/auth/view_models/auth_view_model_test.dart`
 
-- [ ] **Step 1: Escrever o teste falhando**
-
-Conteúdo de `test/ui/auth/view_models/auth_view_model_test.dart`:
-
-```dart
-import 'package:flutter/foundation.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mamba_growth/data/repositories/auth/auth_repository.dart';
-import 'package:mamba_growth/domain/models/auth_user.dart';
-import 'package:mamba_growth/ui/auth/view_models/auth_view_model.dart';
-import 'package:mamba_growth/utils/result.dart';
-import 'package:mocktail/mocktail.dart';
-
-class _FakeAuthRepository extends ChangeNotifier implements AuthRepository {
-  Future<Result<void>> signInResponse = Future.value(const Result.ok(null));
-  Future<Result<void>> signUpResponse = Future.value(const Result.ok(null));
-  Future<Result<void>> googleResponse = Future.value(const Result.ok(null));
-
-  int signInCalls = 0;
-  int signUpCalls = 0;
-  int googleCalls = 0;
-
-  @override
-  AuthUser? get currentUser => null;
-
-  @override
-  bool get isAuthenticated => false;
-
-  @override
-  bool get isInitialized => true;
-
-  @override
-  Future<Result<void>> signInWithEmail({required String email, required String password}) {
-    signInCalls++;
-    return signInResponse;
-  }
-
-  @override
-  Future<Result<void>> signUpWithEmail({required String email, required String password}) {
-    signUpCalls++;
-    return signUpResponse;
-  }
-
-  @override
-  Future<Result<void>> signInWithGoogle() {
-    googleCalls++;
-    return googleResponse;
-  }
-
-  @override
-  Future<Result<void>> signOut() async => const Result.ok(null);
-}
-
-void main() {
-  late _FakeAuthRepository repo;
-
-  setUp(() {
-    repo = _FakeAuthRepository();
-  });
-
-  test('starts in signIn mode', () {
-    final vm = AuthViewModel(authRepository: repo);
-    expect(vm.mode, AuthMode.signIn);
-  });
-
-  test('toggleMode flips mode and notifies', () {
-    final vm = AuthViewModel(authRepository: repo);
-    var notified = false;
-    vm.addListener(() => notified = true);
-
-    vm.toggleMode();
-
-    expect(vm.mode, AuthMode.signUp);
-    expect(notified, isTrue);
-
-    vm.toggleMode();
-    expect(vm.mode, AuthMode.signIn);
-  });
-
-  test('toggleMode clears previous results from email commands', () async {
-    final vm = AuthViewModel(authRepository: repo);
-
-    await vm.signInWithEmail.execute(
-      const EmailPasswordInput(email: 'a@b.c', password: 'pw'),
-    );
-    expect(vm.signInWithEmail.completed, isTrue);
-
-    vm.toggleMode();
-
-    expect(vm.signInWithEmail.result, isNull);
-    expect(vm.signUpWithEmail.result, isNull);
-  });
-
-  test('signInWithEmail.execute calls repository signInWithEmail', () async {
-    final vm = AuthViewModel(authRepository: repo);
-
-    await vm.signInWithEmail.execute(
-      const EmailPasswordInput(email: 'a@b.c', password: 'pw'),
-    );
-
-    expect(repo.signInCalls, 1);
-    expect(vm.signInWithEmail.completed, isTrue);
-  });
-
-  test('signInWithGoogle.execute calls repository signInWithGoogle', () async {
-    final vm = AuthViewModel(authRepository: repo);
-
-    await vm.signInWithGoogle.execute();
-
-    expect(repo.googleCalls, 1);
-  });
-}
-```
-
-- [ ] **Step 2: Rodar teste — esperar falha**
-
-Run: `cd C:/mamba_growth && flutter test test/ui/auth/view_models/auth_view_model_test.dart`
-Expected: Compile error.
-
-- [ ] **Step 3: Implementar `lib/ui/auth/view_models/auth_view_model.dart`**
+- [ ] **Step 1: Implementar `lib/ui/auth/view_models/auth_view_model.dart`**
 
 ```dart
 import 'package:flutter/foundation.dart';
@@ -1379,15 +864,15 @@ class AuthViewModel extends ChangeNotifier {
 }
 ```
 
-- [ ] **Step 4: Rodar teste — esperar verde**
+- [ ] **Step 2: Validar analyze**
 
-Run: `cd C:/mamba_growth && flutter test test/ui/auth/view_models/auth_view_model_test.dart`
-Expected: `All tests passed!` (5 tests).
+Run: `cd C:/mamba_growth && flutter analyze lib/ui/auth/view_models/auth_view_model.dart`
+Expected: "No issues found!"
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 3: Commit**
 
 ```bash
-git -C C:/mamba_growth add lib/ui/auth/view_models/auth_view_model.dart test/ui/auth/view_models/auth_view_model_test.dart
+git -C C:/mamba_growth add lib/ui/auth/view_models/auth_view_model.dart
 git -C C:/mamba_growth commit -m "feat(ui): add AuthViewModel with signIn/signUp/Google commands"
 ```
 
@@ -1458,7 +943,7 @@ a) Adicionar import (junto aos outros imports do arquivo):
 import '../../core/widgets/brand_mark.dart';
 ```
 
-b) Substituir o uso de `_BrandMark(label: l10n.appName)` por `BrandMark(label: l10n.appName)`.
+b) Substituir o uso de `_BrandMark(label: l10n.appName)` (no método `build` do `_OnboardingScreenState`) por `BrandMark(label: l10n.appName)`.
 
 c) Remover toda a classe privada `class _BrandMark extends StatelessWidget { ... }` no fim do arquivo.
 
@@ -1467,12 +952,7 @@ c) Remover toda a classe privada `class _BrandMark extends StatelessWidget { ...
 Run: `cd C:/mamba_growth && flutter analyze`
 Expected: "No issues found!"
 
-- [ ] **Step 4: Smoke test rápido**
-
-Run: `cd C:/mamba_growth && flutter test test/widget_test.dart`
-Expected: Passa (ou ignorável se for o template — mas não pode quebrar build).
-
-- [ ] **Step 5: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
 git -C C:/mamba_growth add lib/ui/core/widgets/brand_mark.dart lib/ui/onboarding/widgets/onboarding_screen.dart
@@ -1630,154 +1110,14 @@ git -C C:/mamba_growth commit -m "feat(ui): add HomePlaceholderScreen with sign 
 
 ---
 
-## Task 15: `AuthBottomSheet` + widget tests
+## Task 15: `AuthBottomSheet`
 
 **Files:**
 - Create: `lib/ui/auth/widgets/auth_bottom_sheet.dart`
-- Test: `test/ui/auth/widgets/auth_bottom_sheet_test.dart`
 
-> Tarefa maior. Implementação inclui drag handle, título/subtítulo dinâmicos, botão Google, divider OR, dois TextField, erro inline, submit CTA e toggle row. Widget tests cobrem comportamento essencial.
+> Tarefa maior — sheet completo com drag handle, título/subtítulo dinâmicos, botão Google, divider OR, dois TextField, erro inline, submit CTA e toggle row.
 
-- [ ] **Step 1: Escrever o teste falhando**
-
-Conteúdo de `test/ui/auth/widgets/auth_bottom_sheet_test.dart`:
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mamba_growth/data/repositories/auth/auth_repository.dart';
-import 'package:mamba_growth/domain/models/auth_exception.dart';
-import 'package:mamba_growth/domain/models/auth_user.dart';
-import 'package:mamba_growth/l10n/generated/app_localizations.dart';
-import 'package:mamba_growth/ui/auth/widgets/auth_bottom_sheet.dart';
-import 'package:mamba_growth/ui/core/themes/themes.dart';
-import 'package:mamba_growth/utils/result.dart';
-import 'package:provider/provider.dart';
-
-class _FakeAuthRepository extends ChangeNotifier implements AuthRepository {
-  Future<Result<void>> Function()? onSignInEmail;
-  Future<Result<void>> Function()? onSignUpEmail;
-  Future<Result<void>> Function()? onSignInGoogle;
-
-  @override
-  AuthUser? get currentUser => null;
-
-  @override
-  bool get isAuthenticated => false;
-
-  @override
-  bool get isInitialized => true;
-
-  @override
-  Future<Result<void>> signInWithEmail({required String email, required String password}) {
-    return (onSignInEmail ?? () async => const Result.ok(null))();
-  }
-
-  @override
-  Future<Result<void>> signUpWithEmail({required String email, required String password}) {
-    return (onSignUpEmail ?? () async => const Result.ok(null))();
-  }
-
-  @override
-  Future<Result<void>> signInWithGoogle() {
-    return (onSignInGoogle ?? () async => const Result.ok(null))();
-  }
-
-  @override
-  Future<Result<void>> signOut() async => const Result.ok(null);
-}
-
-Future<void> _pumpSheet(WidgetTester tester, _FakeAuthRepository repo) async {
-  await tester.pumpWidget(
-    ChangeNotifierProvider<AuthRepository>.value(
-      value: repo,
-      child: MaterialApp(
-        theme: AppTheme.dark(),
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('en')],
-        home: Builder(
-          builder: (context) => Scaffold(
-            body: ElevatedButton(
-              onPressed: () => AuthBottomSheet.show(context),
-              child: const Text('open'),
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-
-  await tester.tap(find.text('open'));
-  await tester.pumpAndSettle();
-}
-
-void main() {
-  testWidgets('starts in sign-in mode with title "Welcome back"', (tester) async {
-    final repo = _FakeAuthRepository();
-    await _pumpSheet(tester, repo);
-
-    expect(find.text('Welcome back'), findsOneWidget);
-    expect(find.text('Sign in'), findsWidgets); // CTA + maybe toggle
-  });
-
-  testWidgets('toggle switches to sign-up mode title', (tester) async {
-    final repo = _FakeAuthRepository();
-    await _pumpSheet(tester, repo);
-
-    await tester.tap(find.text('Create one'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Create your account'), findsOneWidget);
-  });
-
-  testWidgets('shows inline error when invalid credentials returned', (tester) async {
-    final repo = _FakeAuthRepository()
-      ..onSignInEmail = () async => Result.error(
-            const AuthException(AuthErrorKind.invalidCredentials),
-          );
-
-    await _pumpSheet(tester, repo);
-
-    await tester.enterText(find.byKey(const Key('auth-email-field')), 'a@b.c');
-    await tester.enterText(find.byKey(const Key('auth-password-field')), 'pw');
-    await tester.tap(find.byKey(const Key('auth-submit-button')));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Invalid email or password.'), findsOneWidget);
-  });
-
-  testWidgets('submit button shows loading and is disabled while running', (tester) async {
-    final repo = _FakeAuthRepository()
-      ..onSignInEmail = () async {
-        await Future<void>.delayed(const Duration(milliseconds: 100));
-        return const Result.ok(null);
-      };
-
-    await _pumpSheet(tester, repo);
-    await tester.enterText(find.byKey(const Key('auth-email-field')), 'a@b.c');
-    await tester.enterText(find.byKey(const Key('auth-password-field')), 'pw');
-    await tester.tap(find.byKey(const Key('auth-submit-button')));
-    await tester.pump(const Duration(milliseconds: 30));
-
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-    await tester.pumpAndSettle();
-  });
-}
-```
-
-- [ ] **Step 2: Rodar teste — esperar falha**
-
-Run: `cd C:/mamba_growth && flutter test test/ui/auth/widgets/auth_bottom_sheet_test.dart`
-Expected: Compile error.
-
-- [ ] **Step 3: Implementar `lib/ui/auth/widgets/auth_bottom_sheet.dart`**
+- [ ] **Step 1: Implementar `lib/ui/auth/widgets/auth_bottom_sheet.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -1879,7 +1219,6 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
     final isSignIn = vm.mode == AuthMode.signIn;
     final activeCmd = _activeCommand(vm);
     final googleCmd = vm.signInWithGoogle;
-    final anyRunning = activeCmd.running || googleCmd.running;
 
     final title = isSignIn ? l10n.authSignInTitle : l10n.authSignUpTitle;
     final subtitle = isSignIn ? l10n.authSignInSubtitle : l10n.authSignUpSubtitle;
@@ -1920,98 +1259,111 @@ class _AuthSheetContentState extends State<_AuthSheetContent> {
                 style: text.bodyMedium?.copyWith(color: colors.textDim),
               ),
               const SizedBox(height: AppSpacing.xl),
-              _GoogleButton(
-                label: l10n.authContinueWithGoogle,
-                running: googleCmd.running,
-                disabled: anyRunning,
-                onPressed: () => _submitGoogle(vm),
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              _OrDivider(label: l10n.authDividerOr),
-              const SizedBox(height: AppSpacing.lg),
-              _LabeledTextField(
-                label: l10n.authEmailLabel,
-                controller: _emailCtrl,
-                focusNode: _emailFocus,
-                hintText: l10n.authEmailHint,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                autofillHints: const [AutofillHints.email],
-                fieldKey: const Key('auth-email-field'),
-                enabled: !anyRunning,
-                onSubmitted: (_) => _passwordFocus.requestFocus(),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              _LabeledTextField(
-                label: l10n.authPasswordLabel,
-                controller: _passwordCtrl,
-                focusNode: _passwordFocus,
-                obscureText: _obscure,
-                textInputAction: TextInputAction.done,
-                autofillHints: isSignIn
-                    ? const [AutofillHints.password]
-                    : const [AutofillHints.newPassword],
-                fieldKey: const Key('auth-password-field'),
-                enabled: !anyRunning,
-                onSubmitted: (_) => _submit(vm),
-                suffixIcon: IconButton(
-                  tooltip: _obscure
-                      ? l10n.authPasswordVisibilityShow
-                      : l10n.authPasswordVisibilityHide,
-                  icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
-                  onPressed: () => setState(() => _obscure = !_obscure),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              _InlineError(command: activeCmd, l10n: l10n),
-              const SizedBox(height: AppSpacing.md),
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: FilledButton(
-                  key: const Key('auth-submit-button'),
-                  onPressed: anyRunning ? null : () => _submit(vm),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: colors.accent,
-                    foregroundColor: colors.bg,
-                    disabledBackgroundColor: colors.accent.withValues(alpha: 0.5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.lg),
-                    ),
-                  ),
-                  child: activeCmd.running
-                      ? SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation(colors.bg),
-                          ),
-                        )
-                      : Text(
-                          ctaLabel,
-                          style: text.labelLarge?.copyWith(
-                            color: colors.bg,
-                            fontWeight: FontWeight.w600,
-                          ),
+              AnimatedBuilder(
+                animation: Listenable.merge([activeCmd, googleCmd]),
+                builder: (context, _) {
+                  final running = activeCmd.running || googleCmd.running;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _GoogleButton(
+                        label: l10n.authContinueWithGoogle,
+                        running: googleCmd.running,
+                        disabled: running,
+                        onPressed: () => _submitGoogle(vm),
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      _OrDivider(label: l10n.authDividerOr),
+                      const SizedBox(height: AppSpacing.lg),
+                      _LabeledTextField(
+                        label: l10n.authEmailLabel,
+                        controller: _emailCtrl,
+                        focusNode: _emailFocus,
+                        hintText: l10n.authEmailHint,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        autofillHints: const [AutofillHints.email],
+                        fieldKey: const Key('auth-email-field'),
+                        enabled: !running,
+                        onSubmitted: (_) => _passwordFocus.requestFocus(),
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      _LabeledTextField(
+                        label: l10n.authPasswordLabel,
+                        controller: _passwordCtrl,
+                        focusNode: _passwordFocus,
+                        obscureText: _obscure,
+                        textInputAction: TextInputAction.done,
+                        autofillHints: isSignIn
+                            ? const [AutofillHints.password]
+                            : const [AutofillHints.newPassword],
+                        fieldKey: const Key('auth-password-field'),
+                        enabled: !running,
+                        onSubmitted: (_) => _submit(vm),
+                        suffixIcon: IconButton(
+                          tooltip: _obscure
+                              ? l10n.authPasswordVisibilityShow
+                              : l10n.authPasswordVisibilityHide,
+                          icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
+                          onPressed: () => setState(() => _obscure = !_obscure),
                         ),
-                ),
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      _InlineError(command: activeCmd, l10n: l10n),
+                      const SizedBox(height: AppSpacing.md),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: FilledButton(
+                          key: const Key('auth-submit-button'),
+                          onPressed: running ? null : () => _submit(vm),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: colors.accent,
+                            foregroundColor: colors.bg,
+                            disabledBackgroundColor:
+                                colors.accent.withValues(alpha: 0.5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(AppRadius.lg),
+                            ),
+                          ),
+                          child: activeCmd.running
+                              ? SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor:
+                                        AlwaysStoppedAnimation(colors.bg),
+                                  ),
+                                )
+                              : Text(
+                                  ctaLabel,
+                                  style: text.labelLarge?.copyWith(
+                                    color: colors.bg,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            togglePrompt,
+                            style: text.bodySmall?.copyWith(color: colors.textDimmer),
+                          ),
+                          TextButton(
+                            onPressed: running ? null : vm.toggleMode,
+                            child: Text(toggleAction),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                    ],
+                  );
+                },
               ),
-              const SizedBox(height: AppSpacing.md),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    togglePrompt,
-                    style: text.bodySmall?.copyWith(color: colors.textDimmer),
-                  ),
-                  TextButton(
-                    onPressed: anyRunning ? null : vm.toggleMode,
-                    child: Text(toggleAction),
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.md),
             ],
           ),
         ),
@@ -2093,9 +1445,7 @@ class _OrDivider extends StatelessWidget {
 
     return Row(
       children: [
-        Expanded(
-          child: Container(height: 1, color: colors.borderDim),
-        ),
+        Expanded(child: Container(height: 1, color: colors.borderDim)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Text(
@@ -2107,9 +1457,7 @@ class _OrDivider extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(
-          child: Container(height: 1, color: colors.borderDim),
-        ),
+        Expanded(child: Container(height: 1, color: colors.borderDim)),
       ],
     );
   }
@@ -2210,7 +1558,6 @@ class _InlineError extends StatelessWidget {
       animation: command,
       builder: (context, _) {
         final result = command.result;
-        final colors = context.colors;
         final text = context.text;
         String? message;
         if (result is Error<void>) {
@@ -2252,58 +1599,15 @@ class _InlineError extends StatelessWidget {
 }
 ```
 
-> Nota técnica: `AnimatedBuilder(animation: command)` rebuilda só o `_InlineError` quando o command muda. O `context.watch<AuthViewModel>()` no `_AuthSheetContent` cobre `mode`. O CTA observa `vm` indiretamente via watch + os builds rerodam ao mudar `running`. Para precisão, o CTA mostra spinner com base em `activeCmd.running` que é avaliado a cada build do parent — quando o command notifica, vm não notifica mas como o `_AuthSheetContent` consome o `vm` (e cada command é notifier), fechamos com um `AnimatedBuilder` no scope do parent. Para simplificar, o widget já refaz o rebuild via `context.watch<AuthViewModel>()`. Isso bate, porque os commands disparam notifyListeners mas o parent recebe rebuilds via `vm.notifyListeners` somente em `toggleMode`. **Para garantir rebuild dos botões durante `running`, embrulhe a árvore de botões num `AnimatedBuilder(animation: Listenable.merge([activeCmd, googleCmd]), ...)`** — alteração descrita abaixo.
+- [ ] **Step 2: Validar analyze**
 
-- [ ] **Step 4: Ajuste de rebuild dos botões**
-
-Refatorar o trecho do `_AuthSheetContent.build` que monta `_GoogleButton` e o submit `FilledButton` envolvendo-os em um `AnimatedBuilder` que escuta os dois commands. Substitua o trecho:
-
-```dart
-              _GoogleButton(
-                label: l10n.authContinueWithGoogle,
-                running: googleCmd.running,
-                disabled: anyRunning,
-                onPressed: () => _submitGoogle(vm),
-              ),
-```
-
-por:
-
-```dart
-              AnimatedBuilder(
-                animation: Listenable.merge([activeCmd, googleCmd]),
-                builder: (context, _) {
-                  final running = activeCmd.running || googleCmd.running;
-                  return _GoogleButton(
-                    label: l10n.authContinueWithGoogle,
-                    running: googleCmd.running,
-                    disabled: running,
-                    onPressed: () => _submitGoogle(vm),
-                  );
-                },
-              ),
-```
-
-E o submit `FilledButton`: envolver o widget atual num `AnimatedBuilder(animation: Listenable.merge([activeCmd, googleCmd]), builder: (context, _) { final running = ...; return SizedBox(...); })`.
-
-> Os campos de texto (`_LabeledTextField`) também leem `enabled: !anyRunning` — eles ficam dentro do mesmo `AnimatedBuilder` se quiser rebuild deles também. Para simplicidade, podemos envolver toda a `Column` interna num único `AnimatedBuilder` que escuta os dois commands. **Ajuste preferido**: envolver toda a Column de form (Google → submit → toggle) num único `AnimatedBuilder` cuja `animation` é `Listenable.merge([activeCmd, googleCmd])`. O conteúdo continua o mesmo, apenas re-renderiza quando algum command notifica.
-
-Edite o `build` para isso e mantenha a coluna externa igual. Resultado final: as partes que dependem de `running` (Google, fields, submit, toggle, inline error) ficam dentro do AnimatedBuilder; o título/subtítulo/divider ficam fora (dependem só do `vm.mode` via watch).
-
-- [ ] **Step 5: Rodar teste — esperar verde**
-
-Run: `cd C:/mamba_growth && flutter test test/ui/auth/widgets/auth_bottom_sheet_test.dart`
-Expected: `All tests passed!` (4 tests).
-
-- [ ] **Step 6: Validar analyze**
-
-Run: `cd C:/mamba_growth && flutter analyze`
+Run: `cd C:/mamba_growth && flutter analyze lib/ui/auth`
 Expected: "No issues found!"
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 3: Commit**
 
 ```bash
-git -C C:/mamba_growth add lib/ui/auth/widgets/auth_bottom_sheet.dart test/ui/auth/widgets/auth_bottom_sheet_test.dart
+git -C C:/mamba_growth add lib/ui/auth/widgets/auth_bottom_sheet.dart
 git -C C:/mamba_growth commit -m "feat(ui): add AuthBottomSheet with email/Google flows"
 ```
 
@@ -2344,133 +1648,12 @@ git -C C:/mamba_growth commit -m "feat(routing): add Routes and RouteNames const
 
 ---
 
-## Task 17: `buildRouter` + testes de redirect
+## Task 17: `buildRouter` com redirect
 
 **Files:**
 - Create: `lib/routing/router.dart`
-- Test: `test/routing/router_test.dart`
 
-- [ ] **Step 1: Escrever teste falhando**
-
-Conteúdo de `test/routing/router_test.dart`:
-
-```dart
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mamba_growth/data/repositories/auth/auth_repository.dart';
-import 'package:mamba_growth/domain/models/auth_user.dart';
-import 'package:mamba_growth/l10n/generated/app_localizations.dart';
-import 'package:mamba_growth/routing/router.dart';
-import 'package:mamba_growth/routing/routes.dart';
-import 'package:mamba_growth/utils/result.dart';
-import 'package:provider/provider.dart';
-
-class _StubAuthRepository extends ChangeNotifier implements AuthRepository {
-  _StubAuthRepository({this.initialized = false, this.user});
-
-  bool initialized;
-  AuthUser? user;
-
-  void setState({required bool initialized, AuthUser? user}) {
-    this.initialized = initialized;
-    this.user = user;
-    notifyListeners();
-  }
-
-  @override
-  AuthUser? get currentUser => user;
-
-  @override
-  bool get isAuthenticated => user != null;
-
-  @override
-  bool get isInitialized => initialized;
-
-  @override
-  Future<Result<void>> signInWithEmail({required String email, required String password}) async =>
-      const Result.ok(null);
-
-  @override
-  Future<Result<void>> signUpWithEmail({required String email, required String password}) async =>
-      const Result.ok(null);
-
-  @override
-  Future<Result<void>> signInWithGoogle() async => const Result.ok(null);
-
-  @override
-  Future<Result<void>> signOut() async => const Result.ok(null);
-}
-
-Future<void> _pumpApp(WidgetTester tester, _StubAuthRepository repo) async {
-  await tester.pumpWidget(
-    ChangeNotifierProvider<AuthRepository>.value(
-      value: repo,
-      child: MaterialApp.router(
-        routerConfig: buildRouter(authRepository: repo),
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('en')],
-      ),
-    ),
-  );
-  await tester.pumpAndSettle();
-}
-
-void main() {
-  testWidgets('not initialized → stays on splash', (tester) async {
-    final repo = _StubAuthRepository();
-    await _pumpApp(tester, repo);
-
-    expect(find.byKey(const Key('splash-screen')), findsOneWidget);
-  });
-
-  testWidgets('initialized + not authenticated → onboarding', (tester) async {
-    final repo = _StubAuthRepository(initialized: true);
-    await _pumpApp(tester, repo);
-
-    expect(find.byKey(const Key('onboarding-screen')), findsOneWidget);
-  });
-
-  testWidgets('initialized + authenticated → home', (tester) async {
-    final repo = _StubAuthRepository(
-      initialized: true,
-      user: const AuthUser(uid: 'u1', email: 'a@b.c'),
-    );
-    await _pumpApp(tester, repo);
-
-    expect(find.byKey(const Key('home-screen')), findsOneWidget);
-  });
-
-  testWidgets('login transition: not authed → authed redirects to home', (tester) async {
-    final repo = _StubAuthRepository(initialized: true);
-    await _pumpApp(tester, repo);
-    expect(find.byKey(const Key('onboarding-screen')), findsOneWidget);
-
-    repo.setState(
-      initialized: true,
-      user: const AuthUser(uid: 'u1', email: 'a@b.c'),
-    );
-    await tester.pumpAndSettle();
-
-    expect(find.byKey(const Key('home-screen')), findsOneWidget);
-  });
-}
-```
-
-> **Pré-requisito da implementação**: precisamos adicionar `Key('splash-screen')`, `Key('onboarding-screen')` e `Key('home-screen')` nos respectivos widgets. Step 4 abaixo cobre essa edição.
-
-- [ ] **Step 2: Rodar teste — esperar falha**
-
-Run: `cd C:/mamba_growth && flutter test test/routing/router_test.dart`
-Expected: Compile error (`buildRouter` não existe).
-
-- [ ] **Step 3: Implementar `lib/routing/router.dart`**
+- [ ] **Step 1: Implementar `lib/routing/router.dart`**
 
 ```dart
 import 'package:flutter/material.dart';
@@ -2478,7 +1661,6 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../data/repositories/auth/auth_repository.dart';
-import '../l10n/generated/app_localizations.dart';
 import '../ui/auth/widgets/auth_bottom_sheet.dart';
 import '../ui/home/widgets/home_placeholder_screen.dart';
 import '../ui/onboarding/widgets/onboarding_screen.dart';
@@ -2518,9 +1700,7 @@ GoRouter buildRouter({required AuthRepository authRepository}) {
         path: Routes.onboarding,
         name: RouteNames.onboarding,
         builder: (context, _) {
-          final l10n = AppLocalizations.of(context);
           return OnboardingScreen(
-            key: const Key('onboarding-screen'),
             onContinue: () async {
               HapticFeedback.mediumImpact();
               await AuthBottomSheet.show(context);
@@ -2531,45 +1711,22 @@ GoRouter buildRouter({required AuthRepository authRepository}) {
       GoRoute(
         path: Routes.home,
         name: RouteNames.home,
-        builder: (_, __) =>
-            const HomePlaceholderScreen(key: Key('home-screen')),
+        builder: (_, __) => const HomePlaceholderScreen(),
       ),
     ],
   );
 }
 ```
 
-> Nota: `OnboardingScreen` e `HomePlaceholderScreen` recebem `Key` aqui pra que os widget tests achem-as. `SplashScreen` precisa de `Key('splash-screen')` — adicionado no próximo step.
+- [ ] **Step 2: Validar analyze**
 
-- [ ] **Step 4: Adicionar keys**
+Run: `cd C:/mamba_growth && flutter analyze lib/routing/router.dart`
+Expected: "No issues found!"
 
-Editar `lib/ui/splash/widgets/splash_screen.dart`: trocar `const SplashScreen({super.key})` para passar a key default `Key('splash-screen')`. Forma mais simples: deixar o construtor como está e o `GoRoute` builder usa `const SplashScreen(key: Key('splash-screen'))`.
-
-Substituir no `router.dart`:
-
-```dart
-      GoRoute(
-        path: Routes.splash,
-        name: RouteNames.splash,
-        builder: (_, __) => const SplashScreen(key: Key('splash-screen')),
-      ),
-```
-
-(Se já adicionou `key: Key('splash-screen')` no router builder no step 3, não precisa mexer no widget.)
-
-Para `OnboardingScreen`, a `Key` no builder do router já cobre. Para `HomePlaceholderScreen`, idem.
-
-- [ ] **Step 5: Rodar teste — esperar verde**
-
-Run: `cd C:/mamba_growth && flutter test test/routing/router_test.dart`
-Expected: `All tests passed!` (4 tests).
-
-> Se algum teste falhar por `AppLocalizations.of(context).appName` retornar null em testes, é porque a `MaterialApp.router` precisa dos delegates. O `_pumpApp` já passa os delegates corretos.
-
-- [ ] **Step 6: Commit**
+- [ ] **Step 3: Commit**
 
 ```bash
-git -C C:/mamba_growth add lib/routing/router.dart test/routing/router_test.dart
+git -C C:/mamba_growth add lib/routing/router.dart
 git -C C:/mamba_growth commit -m "feat(routing): add GoRouter with auth-aware redirect"
 ```
 
@@ -2579,6 +1736,7 @@ git -C C:/mamba_growth commit -m "feat(routing): add GoRouter with auth-aware re
 
 **Files:**
 - Modify: `lib/main.dart`
+- Delete: `test/widget_test.dart` (template inicial referencia `MyApp` que não existe mais)
 
 - [ ] **Step 1: Substituir conteúdo de `lib/main.dart`**
 
@@ -2658,75 +1816,23 @@ class MambaGrowthApp extends StatelessWidget {
 }
 ```
 
-> Nota: removemos o import de `OnboardingScreen` e o uso direto em `home`. O router agora é responsável.
+> Removemos o import de `OnboardingScreen` e o uso direto em `home`. O router agora é responsável.
 
-- [ ] **Step 2: Rodar todos os testes**
+- [ ] **Step 2: Deletar `test/widget_test.dart`**
 
-Run: `cd C:/mamba_growth && flutter test`
-Expected: todos os arquivos de teste passam (incluindo `test/widget_test.dart` se ainda existir — pode precisar atualizar conforme step 3).
+Run: `rm C:/mamba_growth/test/widget_test.dart`
+Expected: arquivo removido. (Sem testes neste MVP — o template original referencia `MyApp` que não existe mais.)
 
-- [ ] **Step 3: Atualizar `test/widget_test.dart` (template)**
-
-O template atual chama `MyApp()`, que não existe mais. Substituir o conteúdo de `test/widget_test.dart` por um teste mínimo que carrega o app com fakes:
-
-```dart
-import 'package:flutter/foundation.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mamba_growth/data/repositories/auth/auth_repository.dart';
-import 'package:mamba_growth/domain/models/auth_user.dart';
-import 'package:mamba_growth/main.dart';
-import 'package:mamba_growth/utils/result.dart';
-
-class _NoopAuthRepository extends ChangeNotifier implements AuthRepository {
-  @override
-  AuthUser? get currentUser => null;
-
-  @override
-  bool get isAuthenticated => false;
-
-  @override
-  bool get isInitialized => true;
-
-  @override
-  Future<Result<void>> signInWithEmail({required String email, required String password}) async =>
-      const Result.ok(null);
-
-  @override
-  Future<Result<void>> signUpWithEmail({required String email, required String password}) async =>
-      const Result.ok(null);
-
-  @override
-  Future<Result<void>> signInWithGoogle() async => const Result.ok(null);
-
-  @override
-  Future<Result<void>> signOut() async => const Result.ok(null);
-}
-
-void main() {
-  testWidgets('app boots and renders onboarding when not authenticated', (tester) async {
-    await tester.pumpWidget(MambaGrowthApp(authRepository: _NoopAuthRepository()));
-    await tester.pumpAndSettle();
-
-    // Onboarding mostra a brand mark com o app name.
-    expect(find.text('MAMBA GROWTH'), findsOneWidget);
-  });
-}
-```
-
-- [ ] **Step 4: Rodar todos os testes — esperar verde**
-
-Run: `cd C:/mamba_growth && flutter test`
-Expected: `All tests passed!` em todas as suítes.
-
-- [ ] **Step 5: Validar analyze**
+- [ ] **Step 3: Validar analyze**
 
 Run: `cd C:/mamba_growth && flutter analyze`
 Expected: "No issues found!"
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
-git -C C:/mamba_growth add lib/main.dart test/widget_test.dart
+git -C C:/mamba_growth add lib/main.dart
+git -C C:/mamba_growth rm test/widget_test.dart
 git -C C:/mamba_growth commit -m "feat(app): wire async bootstrap, DI root and router"
 ```
 
@@ -2738,144 +1844,119 @@ git -C C:/mamba_growth commit -m "feat(app): wire async bootstrap, DI root and r
 - Modify (se necessário): `android/build.gradle` ou `android/build.gradle.kts`
 - Modify (se necessário): `android/app/build.gradle` ou `android/app/build.gradle.kts`
 
-- [ ] **Step 1: Inspecionar `android/build.gradle*`**
+- [ ] **Step 1: Inspecionar arquivos Gradle**
 
-Run: `cd C:/mamba_growth && ls android/ && cat android/build.gradle 2>/dev/null || cat android/build.gradle.kts 2>/dev/null`
-Expected: ver o classpath de plugins.
+Run: `cd C:/mamba_growth && ls android/ && ls android/app/`
+Expected: ver se são `.gradle` (Groovy) ou `.gradle.kts` (Kotlin DSL).
 
 - [ ] **Step 2: Garantir plugin Google Services no project-level**
 
-Se `android/build.gradle` (Groovy) — bloco `buildscript.dependencies`:
+Ler `android/build.gradle` (Groovy) ou `android/build.gradle.kts` (KTS) e `android/settings.gradle*`.
+
+Se for Groovy (`build.gradle`) e o classpath não contiver `com.google.gms:google-services`, adicionar dentro de `buildscript.dependencies`:
 
 ```groovy
 classpath 'com.google.gms:google-services:4.4.2'
 ```
 
-Se `android/build.gradle.kts` (Kotlin) — bloco `plugins` no settings ou `buildscript`:
+Se for Kotlin DSL e o id `com.google.gms.google-services` não estiver em `settings.gradle.kts` `pluginManagement` ou em `build.gradle.kts` `plugins`, adicionar em `android/settings.gradle.kts`:
 
 ```kotlin
-buildscript {
-    dependencies {
-        classpath("com.google.gms:google-services:4.4.2")
-    }
+plugins {
+    id("com.google.gms.google-services") version "4.4.2" apply false
 }
 ```
 
-Adicionar **só se ausente**.
-
 - [ ] **Step 3: Garantir plugin aplicado no app-level**
 
-Em `android/app/build.gradle` (Groovy), no topo:
+Em `android/app/build.gradle` (Groovy) — adicionar no topo se ausente:
 
 ```groovy
 apply plugin: 'com.google.gms.google-services'
 ```
 
-Em `android/app/build.gradle.kts`, dentro do bloco `plugins`:
+Em `android/app/build.gradle.kts` — adicionar no bloco `plugins` se ausente:
 
 ```kotlin
-plugins {
-    id("com.google.gms.google-services")
-}
+id("com.google.gms.google-services")
 ```
-
-Adicionar **só se ausente**.
 
 - [ ] **Step 4: Verificar minSdk**
 
-`firebase_auth 6.x` exige `minSdkVersion >= 23`. No `android/app/build.gradle*`, garantir:
-
-```
-minSdkVersion 23   // ou minSdk = 23 em Kotlin DSL
-```
+Em `android/app/build.gradle*`, garantir `minSdkVersion 23` (Groovy) ou `minSdk = 23` (KTS). Subir para 23 se estiver menor.
 
 - [ ] **Step 5: Build Android**
 
 Run: `cd C:/mamba_growth && flutter build apk --debug`
-Expected: build succeeds. Se faltar plugin, aplicar e re-rodar.
+Expected: build succeeds. Se faltar plugin, aplicar correção e re-rodar.
 
 - [ ] **Step 6: Commit (somente se houver mudança)**
 
 ```bash
 git -C C:/mamba_growth status --short
-# Se houver arquivos modificados:
+# Se houver arquivos modificados em android/:
 git -C C:/mamba_growth add android/
-git -C C:/mamba_growth commit -m "chore(android): apply google-services plugin and minSdk 23"
+git -C C:/mamba_growth commit -m "chore(android): apply google-services plugin and bump minSdk"
 ```
 
-> Se nenhum arquivo precisou ser alterado, pular o commit e seguir.
+> Se nenhum arquivo precisou ser alterado, pular o commit.
 
 ---
 
-## Task 20: Configuração nativa iOS (manual + verificação)
+## Task 20: Configuração iOS (verificação + doc)
 
 **Files:**
-- Modify (manual): `ios/Runner/Info.plist`
+- Modify (se ambiente macOS): `ios/Runner/Info.plist`
+- Create (caso ambiente Windows): `docs/superpowers/notes/2026-04-28-ios-followup.md`
 
-> Esta tarefa pode exigir intervenção manual do usuário se ele não estiver em ambiente macOS. O agente deve documentar e parar para que o usuário aplique se necessário.
+> Build e teste real do iOS exigem macOS. Este projeto roda em Windows. A task documenta o follow-up.
 
 - [ ] **Step 1: Verificar presença de `GoogleService-Info.plist`**
 
-Run: `ls C:/mamba_growth/ios/Runner/GoogleService-Info.plist`
-Expected: arquivo existe. Se não existir, `flutterfire configure` precisa ser rodado para iOS — o usuário deve fazer isso fora do flow do plano (não há forma confiável do agente executar configuração interativa).
+Run: `ls C:/mamba_growth/ios/Runner/GoogleService-Info.plist 2>/dev/null && echo OK || echo MISSING`
+Expected: `OK` (Firebase config presente). Se MISSING, fica como follow-up no doc.
 
-- [ ] **Step 2: Verificar `REVERSED_CLIENT_ID` em `Info.plist`**
-
-Abrir `ios/Runner/Info.plist`. Se não existir bloco `CFBundleURLTypes` registrando o `REVERSED_CLIENT_ID`, adicionar antes do `</dict>` final:
-
-```xml
-<key>CFBundleURLTypes</key>
-<array>
-  <dict>
-    <key>CFBundleTypeRole</key>
-    <string>Editor</string>
-    <key>CFBundleURLSchemes</key>
-    <array>
-      <string>REPLACE_WITH_REVERSED_CLIENT_ID</string>
-    </array>
-  </dict>
-</array>
-```
-
-`REPLACE_WITH_REVERSED_CLIENT_ID` deve vir do campo `REVERSED_CLIENT_ID` dentro de `GoogleService-Info.plist`.
-
-- [ ] **Step 3: Verificar `Podfile`**
-
-Abrir `ios/Podfile`. Garantir:
-
-```ruby
-platform :ios, '13.0'
-```
-
-- [ ] **Step 4: Documentar passos manuais (se ambiente não-macOS)**
-
-Se rodando em Windows (caso atual), build iOS e teste real precisam ser feitos no macOS. Adicionar ao final de `docs/superpowers/specs/2026-04-28-firebase-auth-design.md` uma seção "iOS verification" listando o que falta — ou criar `docs/superpowers/notes/2026-04-28-ios-followup.md` com o checklist.
-
-Conteúdo de `docs/superpowers/notes/2026-04-28-ios-followup.md`:
+- [ ] **Step 2: Criar `docs/superpowers/notes/2026-04-28-ios-followup.md`**
 
 ```markdown
 # iOS follow-up — Firebase Auth
 
-Para validar/testar o build iOS após o merge do auth flow:
+Verificar/aplicar quando estiver em ambiente macOS:
 
-1. Abrir `ios/Runner.xcworkspace` no Xcode (Mac).
-2. Verificar que `GoogleService-Info.plist` está adicionado ao target Runner.
-3. Rodar `pod install` em `ios/`.
-4. `flutter run -d ios` e validar:
-   - Sign in com email/senha funciona.
-   - Sign in com Google funciona (tela do Google aparece).
+1. Abrir `ios/Runner.xcworkspace` no Xcode.
+2. Confirmar que `GoogleService-Info.plist` está no target Runner.
+3. Em `ios/Runner/Info.plist`, garantir bloco `CFBundleURLTypes` com o `REVERSED_CLIENT_ID` do Firebase como URL scheme:
+
+   ```xml
+   <key>CFBundleURLTypes</key>
+   <array>
+     <dict>
+       <key>CFBundleTypeRole</key>
+       <string>Editor</string>
+       <key>CFBundleURLSchemes</key>
+       <array>
+         <string>{{REVERSED_CLIENT_ID}}</string>
+       </array>
+     </dict>
+   </array>
+   ```
+
+   Substituir `{{REVERSED_CLIENT_ID}}` pelo valor do campo homônimo do `GoogleService-Info.plist`.
+
+4. Garantir `platform :ios, '13.0'` no `ios/Podfile`.
+5. Rodar `cd ios && pod install`.
+6. `flutter run -d <ios-device>` e validar:
+   - Sign in com email/senha.
+   - Sign in com Google (tela do Google deve aparecer).
    - Sign out volta para onboarding.
-5. Se Google não funcionar, conferir `CFBundleURLSchemes` no `Info.plist`.
 ```
 
-- [ ] **Step 5: Commit (mudanças em iOS ou doc)**
+- [ ] **Step 3: Commit do doc**
 
 ```bash
-git -C C:/mamba_growth add ios/Runner/Info.plist docs/superpowers/notes/2026-04-28-ios-followup.md
-git -C C:/mamba_growth commit -m "chore(ios): document Firebase Auth follow-up and URL scheme"
+git -C C:/mamba_growth add docs/superpowers/notes/2026-04-28-ios-followup.md
+git -C C:/mamba_growth commit -m "docs(ios): note Firebase Auth iOS follow-up steps"
 ```
-
-> Se não houve nenhuma alteração local (ex: não há acesso ao plist e o doc nem foi necessário), pular essa task.
 
 ---
 
@@ -2883,7 +1964,7 @@ git -C C:/mamba_growth commit -m "chore(ios): document Firebase Auth follow-up a
 
 **Files:** nenhum.
 
-> Esta task é uma checagem manual via Firebase Console. Sem código, sem commit. O agente apenas registra que foi feito.
+> Esta task é uma checagem manual via Firebase Console. Sem código, sem commit. Apenas registro.
 
 - [ ] **Step 1: Habilitar provider Email/Password**
 
@@ -2893,9 +1974,9 @@ Acessar https://console.firebase.google.com → projeto `mamba-growth-kn` → Au
 
 Mesma tela → Google → Enable → preencher e-mail de suporte do projeto → Save.
 
-- [ ] **Step 3: Confirmar conclusão**
+- [ ] **Step 3: Confirmar conclusão com o usuário**
 
-Não tem commit. Apenas confirmar com o usuário/owner que essas duas opções estão habilitadas antes de testar manualmente.
+Pedir confirmação ao usuário antes de prosseguir para o smoke test.
 
 ---
 
@@ -2903,7 +1984,7 @@ Não tem commit. Apenas confirmar com o usuário/owner que essas duas opções e
 
 **Files:** nenhum.
 
-> Validar acceptance criteria do spec §11. Nenhum código novo.
+> Validar acceptance criteria do spec §11.
 
 - [ ] **Step 1: Executar app em dispositivo Android**
 
@@ -2914,7 +1995,6 @@ Run: `cd C:/mamba_growth && flutter run -d <android-device-id>`
 Marcar manualmente cada item de §11 do spec:
 
 - [ ] `flutter analyze` passa.
-- [ ] `flutter test` passa.
 - [ ] App instala e roda no Android.
 - [ ] Sign in com email/senha funciona contra usuário criado no console.
 - [ ] Sign up cria usuário; após criação, vai para `/home`.
@@ -2925,35 +2005,34 @@ Marcar manualmente cada item de §11 do spec:
 - [ ] Cancelar Google Sign-In não mostra erro.
 - [ ] Cores/typo/spacing 100% via design system.
 
-- [ ] **Step 3: Marcar plano como completo**
+- [ ] **Step 3: Comunicar conclusão**
 
-Não tem commit; apenas comunicação ao usuário e atualização de eventual status.
+Reportar resultado do smoke test ao usuário.
 
 ---
 
 ## Self-review
 
 ### Spec coverage
-- §1 Goal → cumprido por Tasks 11–22.
-- §2 Non-goals → respeitados (forgot/verify/freezed/use cases ausentes).
+- §1 Goal → Tasks 1–18 cobrem; §22 valida manualmente.
+- §2 Non-goals → respeitados (sem forgot/verify/freezed/use cases/testes — testes pulados a pedido do usuário).
 - §3 Architecture → Tasks 2–11.
-- §4 File layout → Tasks 1–18 (todos os arquivos criados).
+- §4 File layout → Tasks 1–18 (todos os arquivos criados/modificados).
 - §5 Detailed design → Tasks 2–18 cobrem cada subseção.
-- §6 Dependencies → Task 1.
+- §6 Dependencies → Task 1 (sem `mocktail`).
 - §7 Native config → Tasks 19–20.
 - §8 Localization → Task 6.
-- §9 Testing strategy → Tasks 2, 3, 5, 10, 11, 15, 17 (4 suítes principais + utils).
-- §10 Risks → mitigations distribuídas (`supportsAuthenticate` no Google button na Task 15; splash on initial location na Task 17; viewInsets na Task 15).
-- §11 Acceptance criteria → Task 22.
+- §9 Testing strategy → **Pulado por decisão do usuário.** Documentado no header do plano.
+- §10 Risks → mitigations distribuídas (botão Google fica desabilitado quando `running` na Task 15; splash on initial location na Task 17; viewInsets na Task 15).
+- §11 Acceptance criteria → Task 22 (sem item de `flutter test`).
 - §12 Out of scope → respeitado.
 
 ### Placeholder scan
-Sem TBD/TODO funcionais no plano — apenas um `REPLACE_WITH_REVERSED_CLIENT_ID` legítimo (placeholder de configuração XML que vai ser preenchido pelo valor real do plist).
+Sem TBD/TODO funcionais. `{{REVERSED_CLIENT_ID}}` no doc iOS é placeholder legítimo de configuração.
 
 ### Type consistency
-- `Result<T>`, `Ok<T>`, `Error<T>` consistentes entre Tasks 2, 3, 10, 11, 15, 17, 18.
+- `Result<T>`, `Ok<T>`, `Error<T>` consistentes entre Tasks 2, 10, 15.
 - `AuthErrorKind` cases enumerados em Task 5 e referenciados exatamente em Task 15 (switch exaustivo).
 - `Command0`/`Command1` API (`execute`, `running`, `result`, `error`, `completed`, `clearResult`) idêntica entre Tasks 3, 11, 15.
-- `AuthRepository` interface (`currentUser`, `isAuthenticated`, `isInitialized`, 4 métodos `Future<Result<void>>`) idêntica nos fakes das Tasks 11, 15, 17, 18.
+- `AuthRepository` interface (`currentUser`, `isAuthenticated`, `isInitialized`, 4 métodos `Future<Result<void>>`) idêntica nos consumidores das Tasks 11, 14, 15, 17, 18.
 - `EmailPasswordInput({email, password})` consistente entre Tasks 11 e 15.
-- Keys de widgets (`auth-email-field`, `auth-password-field`, `auth-submit-button`, `splash-screen`, `onboarding-screen`, `home-screen`) batem entre tests (15, 17) e widgets (15, 17).
