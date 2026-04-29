@@ -169,20 +169,28 @@ class _Body extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.xl),
-          Semantics(
-            label: fast != null
-                ? l10n.homeRingSemanticsActive(
-                    fast.elapsed(vm.now).inHours,
-                    fast.elapsed(vm.now).inMinutes % 60,
-                    fast.remaining(vm.now).inHours,
-                    fast.remaining(vm.now).inMinutes % 60,
-                    fast.targetHours,
-                  )
-                : l10n.homeRingSemanticsIdle(protocol.fastingHours),
-            child: FastingRing(
-              progress: progress,
-              size: ringDiameter,
-              child: centerChild,
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              HapticFeedback.selectionClick();
+              ProtocolBottomSheet.show(context);
+            },
+            child: Semantics(
+              button: true,
+              label: fast != null
+                  ? l10n.homeRingSemanticsActive(
+                      fast.elapsed(vm.now).inHours,
+                      fast.elapsed(vm.now).inMinutes % 60,
+                      fast.remaining(vm.now).inHours,
+                      fast.remaining(vm.now).inMinutes % 60,
+                      fast.targetHours,
+                    )
+                  : l10n.homeRingSemanticsIdle(protocol.fastingHours),
+              child: FastingRing(
+                progress: progress,
+                size: ringDiameter,
+                child: centerChild,
+              ),
             ),
           ),
           const SizedBox(height: AppSpacing.xl),
