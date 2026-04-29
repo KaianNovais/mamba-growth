@@ -18,6 +18,11 @@ abstract class FastingRepository extends ChangeNotifier {
   Future<Result<Fast>> startFast();
   Future<Result<Fast>> endFast();
   Future<void> setProtocol(FastingProtocol protocol);
+
+  /// Stream dos jejuns concluídos (mais recentes primeiro). Re-emite
+  /// o estado atual no momento da assinatura e depois cada vez que um
+  /// jejum é encerrado. Tela de histórico consome via `StreamBuilder`.
+  Stream<List<Fast>> watchCompletedFasts();
 }
 
 class FastingException implements Exception {

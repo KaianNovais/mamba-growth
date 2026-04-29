@@ -273,6 +273,26 @@ class AppLocalizationsPt extends AppLocalizations {
       'Jejuns passados e dias registrados aparecem aqui conforme você constrói consistência.';
 
   @override
+  String historyItemSummary(String elapsed, String target) {
+    return '$elapsed de $target';
+  }
+
+  @override
+  String get historyItemStatusCompleted => 'Concluído';
+
+  @override
+  String get historyItemStatusEarly => 'Encerrado antes';
+
+  @override
+  String get historyItemTestProtocol => 'Teste · 2 min';
+
+  @override
+  String get historyDateToday => 'Hoje';
+
+  @override
+  String get historyDateYesterday => 'Ontem';
+
+  @override
   String get statsEmptyTitle => 'Insights a caminho.';
 
   @override

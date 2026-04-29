@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sqflite/sqflite.dart';
 
 import '../../../domain/models/fast.dart';
@@ -30,6 +32,13 @@ class FastingRepositoryLocal extends FastingRepository {
   FastingProtocol _selectedProtocol = FastingProtocol.defaultProtocol;
   bool _isInitialized = false;
 
+  // Cache + broadcast pra histórico. Cache permite que assinantes
+  // novos recebam o estado atual imediatamente (replay-on-subscribe);
+  // controller dispara apenas quando um jejum é encerrado.
+  final StreamController<List<Fast>> _completedFastsCtrl =
+      StreamController<List<Fast>>.broadcast();
+  List<Fast> _completedFastsCache = const [];
+
   @override
   Fast? get activeFast => _activeFast;
 
@@ -44,6 +53,7 @@ class FastingRepositoryLocal extends FastingRepository {
       final db = await _localDb.database;
       _selectedProtocol = await _readSelectedProtocol(db);
       _activeFast = await _readActiveFast(db);
+      await _refreshCompletedFasts(db);
     } finally {
       _isInitialized = true;
       notifyListeners();
@@ -73,6 +83,19 @@ class FastingRepositoryLocal extends FastingRepository {
     );
     if (rows.isEmpty) return null;
     return _fastFromRow(rows.first);
+  }
+
+  Future<void> _refreshCompletedFasts(Database db) async {
+    final rows = await db.query(
+      'fasts',
+      where: 'end_at IS NOT NULL',
+      orderBy: 'start_at DESC',
+    );
+    _completedFastsCache =
+        List.unmodifiable(rows.map(_fastFromRow));
+    if (!_completedFastsCtrl.isClosed) {
+      _completedFastsCtrl.add(_completedFastsCache);
+    }
   }
 
   @override
@@ -154,6 +177,7 @@ class FastingRepositoryLocal extends FastingRepository {
         completed: completed,
       );
       _activeFast = null;
+      await _refreshCompletedFasts(db);
       notifyListeners();
       return Result.ok(ended);
     } on Exception catch (e) {
@@ -172,6 +196,18 @@ class FastingRepositoryLocal extends FastingRepository {
     );
     _selectedProtocol = protocol;
     notifyListeners();
+  }
+
+  @override
+  Stream<List<Fast>> watchCompletedFasts() async* {
+    yield _completedFastsCache;
+    yield* _completedFastsCtrl.stream;
+  }
+
+  @override
+  void dispose() {
+    _completedFastsCtrl.close();
+    super.dispose();
   }
 
   Fast _fastFromRow(Map<String, Object?> row) {

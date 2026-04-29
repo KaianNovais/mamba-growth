@@ -116,6 +116,18 @@
   "mealsEmptySubtitle": "Adicione sua primeira refeição para começar a ver suas calorias do dia com intenção.",
   "historyEmptyTitle": "Nada no seu histórico.",
   "historyEmptySubtitle": "Jejuns passados e dias registrados aparecem aqui conforme você constrói consistência.",
+  "historyItemSummary": "{elapsed} de {target}",
+  "@historyItemSummary": {
+    "placeholders": {
+      "elapsed": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "historyItemStatusCompleted": "Concluído",
+  "historyItemStatusEarly": "Encerrado antes",
+  "historyItemTestProtocol": "Teste · 2 min",
+  "historyDateToday": "Hoje",
+  "historyDateYesterday": "Ontem",
   "statsEmptyTitle": "Insights a caminho.",
   "statsEmptySubtitle": "Com alguns dias registrados, você vê tendências honestas e seu progresso real aqui.",
   "profileTitle": "Perfil",

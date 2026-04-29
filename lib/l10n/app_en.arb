@@ -116,6 +116,18 @@
   "mealsEmptySubtitle": "Add your first meal to start seeing your calories with intention.",
   "historyEmptyTitle": "Nothing in your history.",
   "historyEmptySubtitle": "Past fasts and logged days will appear here as you build consistency.",
+  "historyItemSummary": "{elapsed} of {target}",
+  "@historyItemSummary": {
+    "placeholders": {
+      "elapsed": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "historyItemStatusCompleted": "Completed",
+  "historyItemStatusEarly": "Ended early",
+  "historyItemTestProtocol": "Test · 2 min",
+  "historyDateToday": "Today",
+  "historyDateYesterday": "Yesterday",
   "statsEmptyTitle": "Insights on the way.",
   "statsEmptySubtitle": "Once you log a few days, you'll see honest trends and real progress here.",
   "profileTitle": "Profile",

@@ -566,6 +566,42 @@ abstract class AppLocalizations {
   /// **'Past fasts and logged days will appear here as you build consistency.'**
   String get historyEmptySubtitle;
 
+  /// No description provided for @historyItemSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{elapsed} of {target}'**
+  String historyItemSummary(String elapsed, String target);
+
+  /// No description provided for @historyItemStatusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get historyItemStatusCompleted;
+
+  /// No description provided for @historyItemStatusEarly.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended early'**
+  String get historyItemStatusEarly;
+
+  /// No description provided for @historyItemTestProtocol.
+  ///
+  /// In en, this message translates to:
+  /// **'Test · 2 min'**
+  String get historyItemTestProtocol;
+
+  /// No description provided for @historyDateToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get historyDateToday;
+
+  /// No description provided for @historyDateYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get historyDateYesterday;
+
   /// No description provided for @statsEmptyTitle.
   ///
   /// In en, this message translates to:

@@ -270,6 +270,26 @@ class AppLocalizationsEn extends AppLocalizations {
       'Past fasts and logged days will appear here as you build consistency.';
 
   @override
+  String historyItemSummary(String elapsed, String target) {
+    return '$elapsed of $target';
+  }
+
+  @override
+  String get historyItemStatusCompleted => 'Completed';
+
+  @override
+  String get historyItemStatusEarly => 'Ended early';
+
+  @override
+  String get historyItemTestProtocol => 'Test · 2 min';
+
+  @override
+  String get historyDateToday => 'Today';
+
+  @override
+  String get historyDateYesterday => 'Yesterday';
+
+  @override
   String get statsEmptyTitle => 'Insights on the way.';
 
   @override
