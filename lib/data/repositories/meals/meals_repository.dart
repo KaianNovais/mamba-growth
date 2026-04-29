@@ -16,9 +16,17 @@ abstract class MealsRepository extends ChangeNotifier {
 
   /// Stream com replay-on-subscribe das refeições do [day]. Re-emite
   /// ao adicionar/atualizar/excluir.
+  ///
+  /// O repositório mantém **um único "dia atual"** compartilhado entre
+  /// assinantes. Chamar com um dia diferente reconfigura o cache global —
+  /// não é seguro ter dois assinantes simultâneos pedindo dias distintos.
+  /// A UI atual sempre observa "hoje".
   Stream<List<Meal>> watchMealsForDay(DateTime day);
 
   Future<Result<Meal>> addMeal({required String name, required int calories});
+
+  /// Atualiza apenas `name` e `calories` de uma refeição existente.
+  /// `eatenAt` é imutável após a criação ("horário automático" — ver spec).
   Future<Result<Meal>> updateMeal(Meal meal);
   Future<Result<void>> deleteMeal(int id);
 
