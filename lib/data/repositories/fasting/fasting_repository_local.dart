@@ -7,23 +7,22 @@ import '../../services/database/local_database.dart';
 import '../../services/notifications/notification_service.dart';
 import 'fasting_repository.dart';
 
+typedef NotificationCopyProvider = ({String title, String body}) Function();
+
 class FastingRepositoryLocal extends FastingRepository {
   FastingRepositoryLocal({
     required LocalDatabase database,
     required NotificationService notifications,
-    required String notificationTitle,
-    required String notificationBody,
+    required NotificationCopyProvider notificationCopyProvider,
   })  : _localDb = database,
         _notifications = notifications,
-        _notificationTitle = notificationTitle,
-        _notificationBody = notificationBody {
+        _notificationCopy = notificationCopyProvider {
     _bootstrap();
   }
 
   final LocalDatabase _localDb;
   final NotificationService _notifications;
-  final String _notificationTitle;
-  final String _notificationBody;
+  final NotificationCopyProvider _notificationCopy;
 
   static const _selectedProtocolKey = 'selected_protocol_id';
 
@@ -108,10 +107,11 @@ class FastingRepositoryLocal extends FastingRepository {
       final granted = await _notifications.requestPermissionIfNeeded();
       if (granted) {
         try {
+          final copy = _notificationCopy();
           await _notifications.scheduleFastEnd(
             endAt: fast.plannedEndAt,
-            title: _notificationTitle,
-            body: _notificationBody,
+            title: copy.title,
+            body: copy.body,
           );
         } catch (_) {/* schedule é best-effort */}
       }

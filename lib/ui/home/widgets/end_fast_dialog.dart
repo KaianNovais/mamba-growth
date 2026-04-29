@@ -36,6 +36,7 @@ class EndFastDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final scheme = context.scheme;
     final text = context.text;
     final l10n = AppLocalizations.of(context);
     final overshot = fast.overshot(now);
@@ -56,8 +57,8 @@ class EndFastDialog extends StatelessWidget {
         ),
         FilledButton(
           style: FilledButton.styleFrom(
-            backgroundColor: const Color(0xFFE5484D),
-            foregroundColor: colors.text,
+            backgroundColor: scheme.error,
+            foregroundColor: scheme.onError,
           ),
           onPressed: () {
             HapticFeedback.mediumImpact();

@@ -35,15 +35,22 @@ Future<void> main() async {
   final notificationService = NotificationService();
   await notificationService.init();
 
-  // Strings da notificação são fixas em pt aqui (escolha consciente:
-  // ela é agendada uma vez quando o jejum começa e dispara horas depois,
-  // pode ficar fora do contexto da locale ativa).
+  // A copy é resolvida pela locale do device no momento do startFast.
+  // Se o usuário trocar locale entre startFast e a notificação disparar,
+  // ela ficará na locale do momento do agendamento — comportamento aceitável.
   final fastingRepository = FastingRepositoryLocal(
     database: localDatabase,
     notifications: notificationService,
-    notificationTitle: 'Jejum concluído',
-    notificationBody:
-        'Você atingiu sua meta. Quebre o jejum quando estiver pronto.',
+    notificationCopyProvider: () {
+      final locale = WidgetsBinding.instance.platformDispatcher.locale;
+      final isPt = locale.languageCode == 'pt';
+      return (
+        title: isPt ? 'Jejum concluído' : 'Fast complete',
+        body: isPt
+            ? 'Você atingiu sua meta. Quebre o jejum quando estiver pronto.'
+            : "You hit your goal. Break your fast when you're ready.",
+      );
+    },
   );
 
   runApp(MambaGrowthApp(

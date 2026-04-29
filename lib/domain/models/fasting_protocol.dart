@@ -14,15 +14,15 @@ class FastingProtocol {
   final int eatingHours;
   final bool isCustom;
 
-  static const _p1216 = FastingProtocol(id: '16:8', fastingHours: 16, eatingHours: 8, isCustom: false);
+  static const _p168 = FastingProtocol(id: '16:8', fastingHours: 16, eatingHours: 8, isCustom: false);
 
   static const presets = <FastingProtocol>[
     FastingProtocol(id: '12:12', fastingHours: 12, eatingHours: 12, isCustom: false),
-    _p1216,
+    _p168,
     FastingProtocol(id: '18:6',  fastingHours: 18, eatingHours:  6, isCustom: false),
   ];
 
-  static const defaultProtocol = _p1216; // 16:8
+  static const defaultProtocol = _p168; // 16:8
 
   factory FastingProtocol.custom({
     required int fastingHours,
