@@ -33,6 +33,11 @@ class _FastingRingState extends State<FastingRing>
     with TickerProviderStateMixin {
   static const _phaseDuration = Duration(seconds: 4);
   static const _progressDuration = Duration(milliseconds: 320);
+  // Acima desse delta animamos com tween (mudanças "humanamente
+  // perceptíveis" — start/end fast, troca de protocolo). Abaixo, só
+  // snapshotamos pra evitar re-disparar a animação de 320ms a cada
+  // tick 1Hz quando o progresso avança ~0,00002/s num jejum de 16h.
+  static const _animateDeltaThreshold = 0.01;
 
   late final AnimationController _phaseCtrl;
   late final AnimationController _progressCtrl;
@@ -54,11 +59,17 @@ class _FastingRingState extends State<FastingRing>
     super.didUpdateWidget(oldWidget);
     final next = widget.progress.clamp(0.0, 1.0);
     final current = _progressAnim.value;
-    if ((next - current).abs() > 1e-6) {
+    final delta = (next - current).abs();
+    if (delta > _animateDeltaThreshold) {
       _progressAnim = Tween<double>(begin: current, end: next).animate(
         CurvedAnimation(parent: _progressCtrl, curve: Curves.easeOutCubic),
       );
       _progressCtrl.forward(from: 0);
+    } else if (delta > 0) {
+      // Snap silencioso. O painter usa _progressAnim.value, e o
+      // _phaseCtrl em loop garante que a próxima frame leia o valor
+      // novo (~16ms depois) — imperceptível.
+      _progressAnim = AlwaysStoppedAnimation(next);
     }
     if (next > 0 && !_phaseCtrl.isAnimating) {
       _phaseCtrl.repeat();

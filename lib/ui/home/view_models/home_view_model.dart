@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../data/repositories/fasting/fasting_repository.dart';
@@ -9,11 +10,12 @@ import '../../../utils/command.dart';
 
 /// View model da tela de jejum.
 ///
-/// Mantém um `Timer.periodic(1s)` que apenas atualiza [now] e notifica
-/// listeners, fazendo o ring/labels redesenharem. O cálculo real de
-/// elapsed/remaining mora em [Fast] — por isso ao reabrir o app a
-/// tela mostra o estado correto: [now] é sempre fresco em
-/// `DateTime.now()`.
+/// O ticker 1Hz atualiza apenas [nowListenable] (um `ValueNotifier`),
+/// para que somente os widgets que dependem do tempo decorrido
+/// reconstruam a cada segundo. Mudanças de estado do repositório
+/// (ativo/parado, protocolo) continuam vindo via `notifyListeners`.
+/// Ao reabrir o app a tela mostra o estado correto porque [now] é
+/// sempre fresco em `DateTime.now()`.
 class HomeViewModel extends ChangeNotifier with WidgetsBindingObserver {
   HomeViewModel({required FastingRepository repository})
       : _repo = repository {
@@ -29,12 +31,13 @@ class HomeViewModel extends ChangeNotifier with WidgetsBindingObserver {
   late final Command0<Fast> endFast;
 
   Timer? _ticker;
-  DateTime _now = DateTime.now();
+  final ValueNotifier<DateTime> _now = ValueNotifier(DateTime.now());
 
   Fast? get activeFast => _repo.activeFast;
   FastingProtocol get selectedProtocol => _repo.selectedProtocol;
   bool get isInitialized => _repo.isInitialized;
-  DateTime get now => _now;
+  DateTime get now => _now.value;
+  ValueListenable<DateTime> get nowListenable => _now;
 
   void _onRepoChanged() {
     if (_repo.activeFast != null) {
@@ -47,10 +50,9 @@ class HomeViewModel extends ChangeNotifier with WidgetsBindingObserver {
 
   void _ensureTicker() {
     if (_ticker != null) return;
-    _now = DateTime.now();
+    _now.value = DateTime.now();
     _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
-      _now = DateTime.now();
-      notifyListeners();
+      _now.value = DateTime.now();
     });
   }
 
@@ -81,6 +83,7 @@ class HomeViewModel extends ChangeNotifier with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     startFast.dispose();
     endFast.dispose();
+    _now.dispose();
     super.dispose();
   }
 }

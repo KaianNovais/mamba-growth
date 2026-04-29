@@ -64,9 +64,22 @@ class _HomeView extends StatelessWidget {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends StatefulWidget {
   const _Body({required this.vm});
   final HomeViewModel vm;
+
+  @override
+  State<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<_Body> {
+  late final Listenable _commands;
+
+  @override
+  void initState() {
+    super.initState();
+    _commands = Listenable.merge([widget.vm.startFast, widget.vm.endFast]);
+  }
 
   String _formatElapsed(Duration d) {
     final h = d.inHours;
@@ -75,6 +88,7 @@ class _Body extends StatelessWidget {
   }
 
   Future<void> _onPrimaryPressed(BuildContext context) async {
+    final vm = widget.vm;
     final l10n = AppLocalizations.of(context);
     final messenger = ScaffoldMessenger.of(context);
     final fast = vm.activeFast;
@@ -102,6 +116,7 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vm = widget.vm;
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
     final text = context.text;
@@ -115,42 +130,77 @@ class _Body extends StatelessWidget {
         ? '${l10n.homeProtocolEyebrow} · ${protocol.displayLabel}'
         : '${l10n.homeNextProtocolEyebrow} · ${protocol.displayLabel}';
 
-    final progress = fast?.progress(vm.now) ?? 0.0;
+    final idleCenterText =
+        protocol.isTestProtocol ? '2min' : '${protocol.fastingHours}h';
 
-    final idleCenterText = protocol.isTestProtocol ? '2min' : '${protocol.fastingHours}h';
-
-    final centerChild = fast != null
-        ? Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                _formatElapsed(fast.elapsed(vm.now)),
-                style: typo.numericLarge.copyWith(color: colors.accent),
-              ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                l10n.homeElapsedLabel,
-                style: typo.caption.copyWith(color: colors.textDim, letterSpacing: 1.6),
-              ),
-            ],
+    // Ring + semantics + center child: dinâmico quando há jejum ativo
+    // (depende de `now`), estático quando não há.
+    final Widget ringWidget = fast != null
+        ? ValueListenableBuilder<DateTime>(
+            valueListenable: vm.nowListenable,
+            builder: (context, now, _) {
+              final elapsed = fast.elapsed(now);
+              final remaining = fast.remaining(now);
+              return Semantics(
+                button: false,
+                label: l10n.homeRingSemanticsActive(
+                  elapsed.inHours,
+                  elapsed.inMinutes % 60,
+                  remaining.inHours,
+                  remaining.inMinutes % 60,
+                  fast.targetHours,
+                ),
+                child: FastingRing(
+                  progress: fast.progress(now),
+                  size: ringDiameter,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _formatElapsed(elapsed),
+                        style: typo.numericLarge.copyWith(color: colors.accent),
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        l10n.homeElapsedLabel,
+                        style: typo.caption
+                            .copyWith(color: colors.textDim, letterSpacing: 1.6),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           )
-        : Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                idleCenterText,
-                style: typo.numericLarge.copyWith(color: colors.text),
+        : Semantics(
+            button: true,
+            label: l10n.homeRingSemanticsIdle(protocol.fastingHours),
+            child: FastingRing(
+              progress: 0,
+              size: ringDiameter,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    idleCenterText,
+                    style: typo.numericLarge.copyWith(color: colors.text),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    l10n.homeFastingTargetLabel,
+                    style: typo.caption
+                        .copyWith(color: colors.textDim, letterSpacing: 1.6),
+                  ),
+                ],
               ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                l10n.homeFastingTargetLabel,
-                style: typo.caption.copyWith(color: colors.textDim, letterSpacing: 1.6),
-              ),
-            ],
+            ),
           );
 
-    final subtitle = fast != null
-        ? _ActiveSubtitle(fast: fast, now: vm.now)
+    final Widget subtitle = fast != null
+        ? ValueListenableBuilder<DateTime>(
+            valueListenable: vm.nowListenable,
+            builder: (_, now, _) => _ActiveSubtitle(fast: fast, now: now),
+          )
         : protocol.isTestProtocol
             ? Text(
                 'Modo de teste · 2 minutos',
@@ -185,29 +235,13 @@ class _Body extends StatelessWidget {
                     ProtocolBottomSheet.show(context);
                   }
                 : null,
-            child: Semantics(
-              button: fast == null,
-              label: fast != null
-                  ? l10n.homeRingSemanticsActive(
-                      fast.elapsed(vm.now).inHours,
-                      fast.elapsed(vm.now).inMinutes % 60,
-                      fast.remaining(vm.now).inHours,
-                      fast.remaining(vm.now).inMinutes % 60,
-                      fast.targetHours,
-                    )
-                  : l10n.homeRingSemanticsIdle(protocol.fastingHours),
-              child: FastingRing(
-                progress: progress,
-                size: ringDiameter,
-                child: centerChild,
-              ),
-            ),
+            child: ringWidget,
           ),
           const SizedBox(height: AppSpacing.xl),
           subtitle,
           const Spacer(),
           AnimatedBuilder(
-            animation: Listenable.merge([vm.startFast, vm.endFast]),
+            animation: _commands,
             builder: (context, _) {
               final running = vm.startFast.running || vm.endFast.running;
               final isActive = vm.activeFast != null;
