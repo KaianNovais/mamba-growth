@@ -6,10 +6,14 @@ import '../../core/themes/themes.dart';
 
 /// Anel circular que representa o progresso do jejum.
 ///
-/// Cresce de 0 → progresso atual via TweenAnimationBuilder
-/// (easeOutCubic, 280ms) — suaviza o tick 1Hz do view model. O child
-/// é desenhado no centro (números do timer / meta).
-class FastingRing extends StatelessWidget {
+/// Inspirado no waveform do Material 3 expressive — o arco ativo é
+/// perturbado por uma seno com fase animando devagar (4s/loop). A
+/// amplitude faz tapering nas pontas (sin(πt)) pra que o stroke cap
+/// arredondado se feche limpo. Quando `progress == 0` a fase para de
+/// animar pra não desperdiçar frames.
+///
+/// API externa idêntica à versão anterior.
+class FastingRing extends StatefulWidget {
   const FastingRing({
     super.key,
     required this.progress,
@@ -22,23 +26,71 @@ class FastingRing extends StatelessWidget {
   final Widget child;
 
   @override
+  State<FastingRing> createState() => _FastingRingState();
+}
+
+class _FastingRingState extends State<FastingRing>
+    with TickerProviderStateMixin {
+  static const _phaseDuration = Duration(seconds: 4);
+  static const _progressDuration = Duration(milliseconds: 320);
+
+  late final AnimationController _phaseCtrl;
+  late final AnimationController _progressCtrl;
+  late Animation<double> _progressAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    final initial = widget.progress.clamp(0.0, 1.0);
+    _phaseCtrl = AnimationController(vsync: this, duration: _phaseDuration);
+    _progressCtrl =
+        AnimationController(vsync: this, duration: _progressDuration);
+    _progressAnim = AlwaysStoppedAnimation(initial);
+    if (initial > 0) _phaseCtrl.repeat();
+  }
+
+  @override
+  void didUpdateWidget(covariant FastingRing oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final next = widget.progress.clamp(0.0, 1.0);
+    final current = _progressAnim.value;
+    if ((next - current).abs() > 1e-6) {
+      _progressAnim = Tween<double>(begin: current, end: next).animate(
+        CurvedAnimation(parent: _progressCtrl, curve: Curves.easeOutCubic),
+      );
+      _progressCtrl.forward(from: 0);
+    }
+    if (next > 0 && !_phaseCtrl.isAnimating) {
+      _phaseCtrl.repeat();
+    } else if (next <= 0 && _phaseCtrl.isAnimating) {
+      _phaseCtrl.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _phaseCtrl.dispose();
+    _progressCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     return RepaintBoundary(
       child: SizedBox(
-        width: size,
-        height: size,
-        child: TweenAnimationBuilder<double>(
-          tween: Tween<double>(begin: 0, end: progress.clamp(0.0, 1.0)),
-          duration: const Duration(milliseconds: 280),
-          curve: Curves.easeOutCubic,
-          builder: (context, value, _) => CustomPaint(
-            painter: _RingPainter(
-              progress: value,
+        width: widget.size,
+        height: widget.size,
+        child: AnimatedBuilder(
+          animation: Listenable.merge([_phaseCtrl, _progressCtrl]),
+          builder: (context, _) => CustomPaint(
+            painter: _WavyRingPainter(
+              progress: _progressAnim.value,
+              phase: _phaseCtrl.value * 2 * math.pi,
               trackColor: colors.borderDim,
               progressColor: colors.accent,
             ),
-            child: Center(child: child),
+            child: Center(child: widget.child),
           ),
         ),
       ),
@@ -46,50 +98,82 @@ class FastingRing extends StatelessWidget {
   }
 }
 
-class _RingPainter extends CustomPainter {
-  _RingPainter({
+class _WavyRingPainter extends CustomPainter {
+  _WavyRingPainter({
     required this.progress,
+    required this.phase,
     required this.trackColor,
     required this.progressColor,
   });
 
   static const _strokeWidth = 6.0;
+  static const _amplitude = 2.8;
+  static const _wavelengthDp = 36.0;
 
   final double progress;
+  final double phase;
   final Color trackColor;
   final Color progressColor;
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
-    final radius = (math.min(size.width, size.height) - _strokeWidth) / 2;
+    // Reservamos espaço para a amplitude de cada lado da circunferência
+    // — assim a onda nunca "vaza" do widget.
+    final radius =
+        (math.min(size.width, size.height) - _strokeWidth - _amplitude * 2) /
+            2;
 
-    final track = Paint()
+    final trackPaint = Paint()
       ..color = trackColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = _strokeWidth
       ..strokeCap = StrokeCap.round;
-    canvas.drawCircle(center, radius, track);
+    canvas.drawCircle(center, radius, trackPaint);
 
     if (progress <= 0) return;
 
-    final fg = Paint()
+    final start = -math.pi / 2;
+    final sweep = 2 * math.pi * progress;
+    final arcLength = sweep * radius;
+    // Pelo menos uma onda inteira; arredondamos para int para evitar
+    // que a senóide quebre no meio do ciclo.
+    final waveCount = math.max(1, (arcLength / _wavelengthDp).round());
+
+    // ~8 segmentos por onda dá curva visualmente suave.
+    final segments = math.max(60, waveCount * 8);
+
+    final path = Path();
+    for (var i = 0; i <= segments; i++) {
+      final t = i / segments;
+      final theta = start + sweep * t;
+      // sin(πt) leva amplitude a 0 nas duas pontas — o stroke cap
+      // arredondado se fecha sem ressalto.
+      final taper = math.sin(t * math.pi);
+      final amp = _amplitude * taper;
+      final r = radius + amp * math.sin(t * waveCount * 2 * math.pi + phase);
+      final dx = center.dx + r * math.cos(theta);
+      final dy = center.dy + r * math.sin(theta);
+      if (i == 0) {
+        path.moveTo(dx, dy);
+      } else {
+        path.lineTo(dx, dy);
+      }
+    }
+
+    final fgPaint = Paint()
       ..color = progressColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = _strokeWidth
-      ..strokeCap = StrokeCap.round;
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      -math.pi / 2,
-      2 * math.pi * progress,
-      false,
-      fg,
-    );
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+    canvas.drawPath(path, fgPaint);
   }
 
   @override
-  bool shouldRepaint(covariant _RingPainter old) =>
+  bool shouldRepaint(covariant _WavyRingPainter old) =>
       old.progress != progress ||
+      old.phase != phase ||
       old.trackColor != trackColor ||
       old.progressColor != progressColor;
 }
