@@ -416,6 +416,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealAddedSnackbar => 'Meal added';
 
   @override
+  String get mealUpdatedSnackbar => 'Meal updated';
+
+  @override
+  String get mealsErrorGeneric => 'Something went wrong. Try again.';
+
+  @override
   String get mealValidationNameRequired => 'Enter a name';
 
   @override

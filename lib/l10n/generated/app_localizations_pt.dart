@@ -420,6 +420,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mealAddedSnackbar => 'Refeição adicionada';
 
   @override
+  String get mealUpdatedSnackbar => 'Refeição atualizada';
+
+  @override
+  String get mealsErrorGeneric => 'Não consegui salvar. Tente novamente.';
+
+  @override
   String get mealValidationNameRequired => 'Informe o nome';
 
   @override

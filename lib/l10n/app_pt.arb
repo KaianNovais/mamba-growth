@@ -182,6 +182,8 @@
   "mealDeleteDialogCancel": "Cancelar",
   "mealDeletedSnackbar": "Refeição removida",
   "mealDeletedSnackbarUndo": "Desfazer",
+  "mealUpdatedSnackbar": "Refeição atualizada",
+  "mealsErrorGeneric": "Não consegui salvar. Tente novamente.",
   "mealAddedSnackbar": "Refeição adicionada",
   "mealValidationNameRequired": "Informe o nome",
   "mealValidationNameTooLong": "Máximo 60 caracteres",

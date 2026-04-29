@@ -19,8 +19,9 @@ import '../../../utils/command.dart';
 /// nunca exiba refeições do dia anterior após "virar a meia-noite".
 class MealsViewModel extends ChangeNotifier with WidgetsBindingObserver {
   MealsViewModel({required MealsRepository repository}) : _repo = repository {
+    // Único canal: o repo já notifica em mudanças de meta + bootstrap.
+    // Mudanças de refeições chegam via stream do `_subscribe`.
     _repo.addListener(_onRepoChanged);
-    _repo.goalListenable.addListener(_onGoalChanged);
     WidgetsBinding.instance.addObserver(this);
 
     addMeal = Command1<Meal, ({String name, int calories})>(
@@ -76,8 +77,6 @@ class MealsViewModel extends ChangeNotifier with WidgetsBindingObserver {
 
   void _onRepoChanged() => notifyListeners();
 
-  void _onGoalChanged() => notifyListeners();
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -93,7 +92,6 @@ class MealsViewModel extends ChangeNotifier with WidgetsBindingObserver {
   void dispose() {
     _sub?.cancel();
     _repo.removeListener(_onRepoChanged);
-    _repo.goalListenable.removeListener(_onGoalChanged);
     WidgetsBinding.instance.removeObserver(this);
     addMeal.dispose();
     updateMeal.dispose();

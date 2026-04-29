@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/repositories/meals/meals_repository.dart';
@@ -63,11 +64,15 @@ class _Body extends StatelessWidget {
       context,
       onSave: (name, calories) async {
         await vm.addMeal.execute((name: name, calories: calories));
-        if (vm.addMeal.completed) {
-          messenger.showSnackBar(
-            SnackBar(content: Text(l10n.mealAddedSnackbar)),
-          );
-        }
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(
+              vm.addMeal.completed
+                  ? l10n.mealAddedSnackbar
+                  : l10n.mealsErrorGeneric,
+            ),
+          ),
+        );
       },
     );
   }
@@ -82,11 +87,15 @@ class _Body extends StatelessWidget {
         await vm.updateMeal.execute(
           meal.copyWith(name: name, calories: calories),
         );
-        if (vm.updateMeal.completed) {
-          messenger.showSnackBar(
-            SnackBar(content: Text(l10n.mealAddedSnackbar)),
-          );
-        }
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(
+              vm.updateMeal.completed
+                  ? l10n.mealUpdatedSnackbar
+                  : l10n.mealsErrorGeneric,
+            ),
+          ),
+        );
       },
     );
   }
@@ -120,19 +129,22 @@ class _Body extends StatelessWidget {
     if (!context.mounted) return;
     final messenger = ScaffoldMessenger.of(context);
     await vm.deleteMeal.execute(meal);
+    messenger.hideCurrentSnackBar();
     if (vm.deleteMeal.completed) {
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-            content: Text(l10n.mealDeletedSnackbar),
-            duration: const Duration(seconds: 4),
-            action: SnackBarAction(
-              label: l10n.mealDeletedSnackbarUndo,
-              onPressed: () => vm.undoDelete(meal),
-            ),
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(l10n.mealDeletedSnackbar),
+          duration: const Duration(seconds: 4),
+          action: SnackBarAction(
+            label: l10n.mealDeletedSnackbarUndo,
+            onPressed: () => vm.undoDelete(meal),
           ),
-        );
+        ),
+      );
+    } else {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.mealsErrorGeneric)),
+      );
     }
   }
 
@@ -325,7 +337,7 @@ class _Subtitle extends StatelessWidget {
 
     if (vm.goal == null) {
       return InkWell(
-        onTap: () => Navigator.of(context).pushNamed(Routes.profile),
+        onTap: () => context.pushNamed(RouteNames.profile),
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.sm),
           child: Text(

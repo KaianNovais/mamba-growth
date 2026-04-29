@@ -824,6 +824,18 @@ abstract class AppLocalizations {
   /// **'Meal added'**
   String get mealAddedSnackbar;
 
+  /// No description provided for @mealUpdatedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal updated'**
+  String get mealUpdatedSnackbar;
+
+  /// No description provided for @mealsErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Try again.'**
+  String get mealsErrorGeneric;
+
   /// No description provided for @mealValidationNameRequired.
   ///
   /// In en, this message translates to:

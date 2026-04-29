@@ -171,6 +171,8 @@
   "mealDeletedSnackbar": "Meal removed",
   "mealDeletedSnackbarUndo": "Undo",
   "mealAddedSnackbar": "Meal added",
+  "mealUpdatedSnackbar": "Meal updated",
+  "mealsErrorGeneric": "Something went wrong. Try again.",
   "mealValidationNameRequired": "Enter a name",
   "mealValidationNameTooLong": "Max 60 characters",
   "mealValidationCaloriesRequired": "Enter calories",
