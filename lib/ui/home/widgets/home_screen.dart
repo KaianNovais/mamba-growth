@@ -310,7 +310,7 @@ class _ProtocolAction extends StatelessWidget {
       message: l10n.homeProtocolAction,
       child: OutlinedButton.icon(
         onPressed: () => ProtocolBottomSheet.show(context),
-        icon: const Icon(Icons.tune_rounded, size: 16),
+        icon: const Icon(Icons.tune_rounded, size: 18),
         label: Text(label),
         style: OutlinedButton.styleFrom(
           foregroundColor: colors.text,
@@ -320,7 +320,7 @@ class _ProtocolAction extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppRadius.full),
           ),
-          textStyle: text.labelMedium,
+          textStyle: text.labelLarge?.copyWith(fontWeight: FontWeight.w600),
         ),
       ),
     );
