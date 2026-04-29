@@ -74,15 +74,7 @@ class MealsViewModel extends ChangeNotifier with WidgetsBindingObserver {
     });
   }
 
-  void _onRepoChanged() {
-    // O repo notifica em mudanças de meta E em mudanças de refeições
-    // (add/update/delete/reinsert). Re-assinamos para capturar a snapshot
-    // atual do dia — o broadcast controller do repo real também envia,
-    // mas re-assinar é idempotente e deixa o VM funcionar com fakes que
-    // emitem só na inscrição.
-    _subscribe();
-    notifyListeners();
-  }
+  void _onRepoChanged() => notifyListeners();
 
   void _onGoalChanged() => notifyListeners();
 

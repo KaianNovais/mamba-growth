@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mamba_growth/data/repositories/meals/meals_repository.dart';
@@ -5,10 +7,18 @@ import 'package:mamba_growth/domain/models/meal.dart';
 import 'package:mamba_growth/ui/meals/view_models/meals_view_model.dart';
 import 'package:mamba_growth/utils/result.dart';
 
+/// Fake espelha o contrato do MealsRepositoryLocal real:
+/// - `watchMealsForDay` yield-a o snapshot atual e depois forwarda
+///   o broadcast controller (stream "ao vivo", não completa após
+///   o primeiro yield).
+/// - mutadores de refeição emitem via controller (NÃO notifyListeners).
+/// - mutadores de meta chamam notifyListeners.
 class _FakeMealsRepository extends ChangeNotifier implements MealsRepository {
   final bool _isInitialized = true;
   final ValueNotifier<int?> _goal = ValueNotifier<int?>(null);
   final List<Meal> _meals = [];
+  final StreamController<List<Meal>> _ctrl =
+      StreamController<List<Meal>>.broadcast();
   int _nextId = 1;
 
   @override
@@ -23,6 +33,11 @@ class _FakeMealsRepository extends ChangeNotifier implements MealsRepository {
   @override
   Stream<List<Meal>> watchMealsForDay(DateTime day) async* {
     yield List.unmodifiable(_meals);
+    yield* _ctrl.stream;
+  }
+
+  void _emit() {
+    if (!_ctrl.isClosed) _ctrl.add(List.unmodifiable(_meals));
   }
 
   @override
@@ -37,7 +52,7 @@ class _FakeMealsRepository extends ChangeNotifier implements MealsRepository {
       eatenAt: DateTime.now(),
     );
     _meals.insert(0, meal);
-    notifyListeners();
+    _emit();
     return Result.ok(meal);
   }
 
@@ -48,14 +63,14 @@ class _FakeMealsRepository extends ChangeNotifier implements MealsRepository {
       return const Result.error(MealsException('not found'));
     }
     _meals[i] = meal;
-    notifyListeners();
+    _emit();
     return Result.ok(meal);
   }
 
   @override
   Future<Result<void>> deleteMeal(int id) async {
     _meals.removeWhere((m) => m.id == id);
-    notifyListeners();
+    _emit();
     return const Result.ok(null);
   }
 
@@ -63,7 +78,7 @@ class _FakeMealsRepository extends ChangeNotifier implements MealsRepository {
   Future<Result<Meal>> reinsertMeal(Meal meal) async {
     final restored = meal.copyWith(id: _nextId++);
     _meals.insert(0, restored);
-    notifyListeners();
+    _emit();
     return Result.ok(restored);
   }
 
@@ -77,6 +92,13 @@ class _FakeMealsRepository extends ChangeNotifier implements MealsRepository {
   Future<void> clearGoal() async {
     _goal.value = null;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.close();
+    _goal.dispose();
+    super.dispose();
   }
 }
 
