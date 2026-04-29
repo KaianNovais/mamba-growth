@@ -128,13 +128,187 @@ class AppLocalizationsPt extends AppLocalizations {
   String get authErrorUnknown => 'Algo deu errado. Tente novamente.';
 
   @override
-  String homeWelcomeGreeting(String name) {
-    return 'Olá, $name';
+  String get navHome => 'Início';
+
+  @override
+  String get navMeals => 'Refeições';
+
+  @override
+  String get navHistory => 'Histórico';
+
+  @override
+  String get navStats => 'Stats';
+
+  @override
+  String get homeFastingTitle => 'Jejum';
+
+  @override
+  String get homeProfileAction => 'Perfil';
+
+  @override
+  String get homeProtocolAction => 'Trocar protocolo';
+
+  @override
+  String get homeStartFast => 'Iniciar jejum';
+
+  @override
+  String get homeEndFast => 'Encerrar jejum';
+
+  @override
+  String get homeElapsedLabel => 'decorrido';
+
+  @override
+  String get homeFastingTargetLabel => 'meta de jejum';
+
+  @override
+  String get homeProtocolEyebrow => 'Protocolo';
+
+  @override
+  String get homeNextProtocolEyebrow => 'Próximo protocolo';
+
+  @override
+  String homeEndsIn(String duration) {
+    return 'Termina em $duration';
   }
 
   @override
-  String get homeComingSoon => 'Sua tela inicial está chegando.';
+  String homeEndsAt(String time) {
+    return 'às $time';
+  }
 
   @override
-  String get homeSignOut => 'Sair';
+  String get homeGoalReached => 'Meta atingida';
+
+  @override
+  String homeGoalReachedAgo(String duration) {
+    return 'há $duration';
+  }
+
+  @override
+  String homeEatingWindow(int hours) {
+    return 'Janela alimentar de ${hours}h';
+  }
+
+  @override
+  String get homeEndDialogTitle => 'Encerrar jejum?';
+
+  @override
+  String homeEndDialogBody(String elapsed, String target) {
+    return 'Você jejuou $elapsed de $target. Sua progressão será salva no histórico.';
+  }
+
+  @override
+  String homeEndDialogSurpassed(String over) {
+    return 'Você superou sua meta em $over · ótimo trabalho.';
+  }
+
+  @override
+  String get homeEndDialogCancel => 'Cancelar';
+
+  @override
+  String get homeEndDialogConfirm => 'Encerrar';
+
+  @override
+  String get homeProtocolSheetTitle => 'Protocolo de jejum';
+
+  @override
+  String get homeProtocolSheetSubtitle =>
+      'Escolha quanto tempo você vai jejuar.';
+
+  @override
+  String get homeProtocolBeginner => 'iniciante';
+
+  @override
+  String get homeProtocolPopular => 'popular';
+
+  @override
+  String get homeProtocolAdvanced => 'avançado';
+
+  @override
+  String get homeProtocolCustom => 'Personalizado';
+
+  @override
+  String homeProtocolCustomLabel(int fast, int eat) {
+    return '${fast}h jejum · ${eat}h alimentação';
+  }
+
+  @override
+  String get homeProtocolConfirm => 'Selecionar protocolo';
+
+  @override
+  String get homeNotificationFastEndTitle => 'Jejum concluído';
+
+  @override
+  String get homeNotificationFastEndBody =>
+      'Você atingiu sua meta. Quebre o jejum quando estiver pronto.';
+
+  @override
+  String homeRingSemanticsActive(
+    int elapsedH,
+    int elapsedM,
+    int remainingH,
+    int remainingM,
+    int target,
+  ) {
+    return 'Jejum $elapsedH horas e $elapsedM minutos. Faltam $remainingH horas e $remainingM minutos para a meta de $target horas.';
+  }
+
+  @override
+  String homeRingSemanticsIdle(int target) {
+    return 'Pronto para iniciar jejum de $target horas.';
+  }
+
+  @override
+  String get mealsEmptyTitle => 'Nenhuma refeição registrada.';
+
+  @override
+  String get mealsEmptySubtitle =>
+      'Adicione sua primeira refeição para começar a ver suas calorias do dia com intenção.';
+
+  @override
+  String get historyEmptyTitle => 'Nada no seu histórico.';
+
+  @override
+  String get historyEmptySubtitle =>
+      'Jejuns passados e dias registrados aparecem aqui conforme você constrói consistência.';
+
+  @override
+  String historyItemSummary(String elapsed, String target) {
+    return '$elapsed de $target';
+  }
+
+  @override
+  String get historyItemStatusCompleted => 'Concluído';
+
+  @override
+  String get historyItemStatusEarly => 'Encerrado antes';
+
+  @override
+  String get historyItemTestProtocol => 'Teste · 2 min';
+
+  @override
+  String get historyDateToday => 'Hoje';
+
+  @override
+  String get historyDateYesterday => 'Ontem';
+
+  @override
+  String get statsEmptyTitle => 'Insights a caminho.';
+
+  @override
+  String get statsEmptySubtitle =>
+      'Com alguns dias registrados, você vê tendências honestas e seu progresso real aqui.';
+
+  @override
+  String get profileTitle => 'Perfil';
+
+  @override
+  String get profileEmptyTitle => 'Em breve.';
+
+  @override
+  String get profileEmptySubtitle =>
+      'Configurações da conta e personalizações vão morar aqui.';
+
+  @override
+  String get profileSignOut => 'Sair';
 }

@@ -98,251 +98,545 @@ abstract class AppLocalizations {
     Locale('pt'),
   ];
 
-  /// Application brand name.
+  /// No description provided for @appName.
   ///
   /// In en, this message translates to:
   /// **'Mamba Growth'**
   String get appName;
 
-  /// Eyebrow that anchors the user in what the app is about.
+  /// No description provided for @onboardingEyebrow.
   ///
   /// In en, this message translates to:
   /// **'FASTING & CALORIES'**
   String get onboardingEyebrow;
 
-  /// Hero headline. Two short, parallel sentences.
+  /// No description provided for @onboardingTitle.
   ///
   /// In en, this message translates to:
-  /// **'Eat with intention.\nFast with clarity.'**
+  /// **'Eat with purpose.\nFast with clarity.'**
   String get onboardingTitle;
 
-  /// Supporting paragraph below the headline.
+  /// No description provided for @onboardingSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Track every fast and every calorie in one calm space. No noise, no shame — just honest numbers that show your real progress.'**
+  /// **'Track every fast and every calorie in one place. No noise, no shame — just honest numbers showing your real progress.'**
   String get onboardingSubtitle;
 
-  /// Caption above the live clock value in the hero visual.
+  /// No description provided for @onboardingHeroLabel.
   ///
   /// In en, this message translates to:
   /// **'FASTING'**
   String get onboardingHeroLabel;
 
-  /// Tiny footnote below the hero making clear the data is illustrative.
+  /// No description provided for @onboardingHeroFootnote.
   ///
   /// In en, this message translates to:
   /// **'Sample day · 10h 24m of 16h'**
   String get onboardingHeroFootnote;
 
-  /// Outcome pillar 1 — what the user gains.
+  /// No description provided for @onboardingPillarFocus.
   ///
   /// In en, this message translates to:
   /// **'Awareness'**
   String get onboardingPillarFocus;
 
-  /// Outcome pillar 2.
+  /// No description provided for @onboardingPillarDiscipline.
   ///
   /// In en, this message translates to:
   /// **'Consistency'**
   String get onboardingPillarDiscipline;
 
-  /// Outcome pillar 3.
+  /// No description provided for @onboardingPillarGrowth.
   ///
   /// In en, this message translates to:
-  /// **'Insight'**
+  /// **'Vision'**
   String get onboardingPillarGrowth;
 
-  /// Primary CTA. Single-word action verb.
+  /// No description provided for @onboardingPrimaryCta.
   ///
   /// In en, this message translates to:
-  /// **'Start'**
+  /// **'Get started'**
   String get onboardingPrimaryCta;
 
-  /// Legal footer under the CTAs.
+  /// No description provided for @onboardingFooter.
   ///
   /// In en, this message translates to:
-  /// **'By continuing you agree with our Terms and Privacy Policy.'**
+  /// **'By continuing you agree to our Terms and Privacy Policy.'**
   String get onboardingFooter;
 
-  /// Substring of onboardingFooter to render as an emphasized link (Terms of Service).
+  /// No description provided for @onboardingFooterTermsLabel.
   ///
   /// In en, this message translates to:
   /// **'Terms'**
   String get onboardingFooterTermsLabel;
 
-  /// Substring of onboardingFooter to render as an emphasized link (Privacy Policy).
+  /// No description provided for @onboardingFooterPrivacyLabel.
   ///
   /// In en, this message translates to:
   /// **'Privacy Policy'**
   String get onboardingFooterPrivacyLabel;
 
-  /// Auth bottom sheet title in sign-in mode.
+  /// No description provided for @authSignInTitle.
   ///
   /// In en, this message translates to:
   /// **'Welcome back'**
   String get authSignInTitle;
 
-  /// Auth bottom sheet title in sign-up mode.
+  /// No description provided for @authSignUpTitle.
   ///
   /// In en, this message translates to:
   /// **'Create your account'**
   String get authSignUpTitle;
 
-  /// Auth bottom sheet subtitle in sign-in mode.
+  /// No description provided for @authSignInSubtitle.
   ///
   /// In en, this message translates to:
   /// **'Sign in to continue your journey.'**
   String get authSignInSubtitle;
 
-  /// Auth bottom sheet subtitle in sign-up mode.
+  /// No description provided for @authSignUpSubtitle.
   ///
   /// In en, this message translates to:
   /// **'Start tracking with intention.'**
   String get authSignUpSubtitle;
 
-  /// Email field label.
+  /// No description provided for @authEmailLabel.
   ///
   /// In en, this message translates to:
   /// **'Email'**
   String get authEmailLabel;
 
-  /// Email field hint.
+  /// No description provided for @authEmailHint.
   ///
   /// In en, this message translates to:
   /// **'you@email.com'**
   String get authEmailHint;
 
-  /// Password field label.
+  /// No description provided for @authPasswordLabel.
   ///
   /// In en, this message translates to:
   /// **'Password'**
   String get authPasswordLabel;
 
-  /// Semantic label to show the password.
+  /// No description provided for @authPasswordVisibilityShow.
   ///
   /// In en, this message translates to:
   /// **'Show password'**
   String get authPasswordVisibilityShow;
 
-  /// Semantic label to hide the password.
+  /// No description provided for @authPasswordVisibilityHide.
   ///
   /// In en, this message translates to:
   /// **'Hide password'**
   String get authPasswordVisibilityHide;
 
-  /// Submit button in sign-in mode.
+  /// No description provided for @authSubmitSignIn.
   ///
   /// In en, this message translates to:
   /// **'Sign in'**
   String get authSubmitSignIn;
 
-  /// Submit button in sign-up mode.
+  /// No description provided for @authSubmitSignUp.
   ///
   /// In en, this message translates to:
   /// **'Create account'**
   String get authSubmitSignUp;
 
-  /// Google sign-in button label.
+  /// No description provided for @authContinueWithGoogle.
   ///
   /// In en, this message translates to:
   /// **'Continue with Google'**
   String get authContinueWithGoogle;
 
-  /// Separator between Google and email/password.
+  /// No description provided for @authDividerOr.
   ///
   /// In en, this message translates to:
   /// **'OR'**
   String get authDividerOr;
 
-  /// Prompt to switch to sign-up mode.
+  /// No description provided for @authToggleToSignUpPrompt.
   ///
   /// In en, this message translates to:
   /// **'Don\'t have an account?'**
   String get authToggleToSignUpPrompt;
 
-  /// Action label to switch to sign-up.
+  /// No description provided for @authToggleToSignUpAction.
   ///
   /// In en, this message translates to:
   /// **'Create one'**
   String get authToggleToSignUpAction;
 
-  /// Prompt to switch to sign-in mode.
+  /// No description provided for @authToggleToSignInPrompt.
   ///
   /// In en, this message translates to:
   /// **'Already have an account?'**
   String get authToggleToSignInPrompt;
 
-  /// Action label to switch to sign-in.
+  /// No description provided for @authToggleToSignInAction.
   ///
   /// In en, this message translates to:
   /// **'Sign in'**
   String get authToggleToSignInAction;
 
-  /// Inline error for invalid credentials.
+  /// No description provided for @authErrorInvalidCredentials.
   ///
   /// In en, this message translates to:
-  /// **'Invalid email or password.'**
+  /// **'Wrong email or password.'**
   String get authErrorInvalidCredentials;
 
-  /// Inline error when email is already used.
+  /// No description provided for @authErrorEmailInUse.
   ///
   /// In en, this message translates to:
   /// **'An account already exists for this email.'**
   String get authErrorEmailInUse;
 
-  /// Inline error for weak password.
+  /// No description provided for @authErrorWeakPassword.
   ///
   /// In en, this message translates to:
   /// **'Password must be at least 6 characters.'**
   String get authErrorWeakPassword;
 
-  /// Inline error when user is disabled.
+  /// No description provided for @authErrorUserDisabled.
   ///
   /// In en, this message translates to:
   /// **'This account has been disabled.'**
   String get authErrorUserDisabled;
 
-  /// Inline error for network failure.
+  /// No description provided for @authErrorNetwork.
   ///
   /// In en, this message translates to:
   /// **'No internet connection.'**
   String get authErrorNetwork;
 
-  /// Inline error for rate limiting.
+  /// No description provided for @authErrorTooManyRequests.
   ///
   /// In en, this message translates to:
-  /// **'Too many attempts. Try again later.'**
+  /// **'Too many attempts. Try again in a moment.'**
   String get authErrorTooManyRequests;
 
-  /// Inline error when Google sign-in fails.
+  /// No description provided for @authErrorGoogleSignInFailed.
   ///
   /// In en, this message translates to:
-  /// **'Could not sign in with Google.'**
+  /// **'Couldn\'t sign in with Google.'**
   String get authErrorGoogleSignInFailed;
 
-  /// Generic fallback inline error.
+  /// No description provided for @authErrorUnknown.
   ///
   /// In en, this message translates to:
-  /// **'Something went wrong. Please try again.'**
+  /// **'Something went wrong. Try again.'**
   String get authErrorUnknown;
 
-  /// Greeting on the home placeholder. {name} is the display name or email.
+  /// No description provided for @navHome.
   ///
   /// In en, this message translates to:
-  /// **'Welcome, {name}'**
-  String homeWelcomeGreeting(String name);
+  /// **'Home'**
+  String get navHome;
 
-  /// Subtitle on the home placeholder.
+  /// No description provided for @navMeals.
   ///
   /// In en, this message translates to:
-  /// **'Your home is coming soon.'**
-  String get homeComingSoon;
+  /// **'Meals'**
+  String get navMeals;
 
-  /// Sign out button label.
+  /// No description provided for @navHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get navHistory;
+
+  /// No description provided for @navStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get navStats;
+
+  /// No description provided for @homeFastingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting'**
+  String get homeFastingTitle;
+
+  /// No description provided for @homeProfileAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get homeProfileAction;
+
+  /// No description provided for @homeProtocolAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Change protocol'**
+  String get homeProtocolAction;
+
+  /// No description provided for @homeStartFast.
+  ///
+  /// In en, this message translates to:
+  /// **'Start fast'**
+  String get homeStartFast;
+
+  /// No description provided for @homeEndFast.
+  ///
+  /// In en, this message translates to:
+  /// **'End fast'**
+  String get homeEndFast;
+
+  /// No description provided for @homeElapsedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'elapsed'**
+  String get homeElapsedLabel;
+
+  /// No description provided for @homeFastingTargetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'fasting target'**
+  String get homeFastingTargetLabel;
+
+  /// No description provided for @homeProtocolEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Protocol'**
+  String get homeProtocolEyebrow;
+
+  /// No description provided for @homeNextProtocolEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Next protocol'**
+  String get homeNextProtocolEyebrow;
+
+  /// No description provided for @homeEndsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends in {duration}'**
+  String homeEndsIn(String duration);
+
+  /// No description provided for @homeEndsAt.
+  ///
+  /// In en, this message translates to:
+  /// **'at {time}'**
+  String homeEndsAt(String time);
+
+  /// No description provided for @homeGoalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached'**
+  String get homeGoalReached;
+
+  /// No description provided for @homeGoalReachedAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{duration} ago'**
+  String homeGoalReachedAgo(String duration);
+
+  /// No description provided for @homeEatingWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h eating window'**
+  String homeEatingWindow(int hours);
+
+  /// No description provided for @homeEndDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'End fast?'**
+  String get homeEndDialogTitle;
+
+  /// No description provided for @homeEndDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You fasted {elapsed} of {target}. Your progress will be saved to history.'**
+  String homeEndDialogBody(String elapsed, String target);
+
+  /// No description provided for @homeEndDialogSurpassed.
+  ///
+  /// In en, this message translates to:
+  /// **'You beat your goal by {over} · great work.'**
+  String homeEndDialogSurpassed(String over);
+
+  /// No description provided for @homeEndDialogCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get homeEndDialogCancel;
+
+  /// No description provided for @homeEndDialogConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get homeEndDialogConfirm;
+
+  /// No description provided for @homeProtocolSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting protocol'**
+  String get homeProtocolSheetTitle;
+
+  /// No description provided for @homeProtocolSheetSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how long you\'ll fast.'**
+  String get homeProtocolSheetSubtitle;
+
+  /// No description provided for @homeProtocolBeginner.
+  ///
+  /// In en, this message translates to:
+  /// **'beginner'**
+  String get homeProtocolBeginner;
+
+  /// No description provided for @homeProtocolPopular.
+  ///
+  /// In en, this message translates to:
+  /// **'popular'**
+  String get homeProtocolPopular;
+
+  /// No description provided for @homeProtocolAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'advanced'**
+  String get homeProtocolAdvanced;
+
+  /// No description provided for @homeProtocolCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get homeProtocolCustom;
+
+  /// No description provided for @homeProtocolCustomLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{fast}h fasting · {eat}h eating'**
+  String homeProtocolCustomLabel(int fast, int eat);
+
+  /// No description provided for @homeProtocolConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Select protocol'**
+  String get homeProtocolConfirm;
+
+  /// No description provided for @homeNotificationFastEndTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast complete'**
+  String get homeNotificationFastEndTitle;
+
+  /// No description provided for @homeNotificationFastEndBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You hit your goal. Break your fast when you\'re ready.'**
+  String get homeNotificationFastEndBody;
+
+  /// No description provided for @homeRingSemanticsActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting {elapsedH} hours and {elapsedM} minutes. {remainingH} hours and {remainingM} minutes left to reach the {target} hour goal.'**
+  String homeRingSemanticsActive(
+    int elapsedH,
+    int elapsedM,
+    int remainingH,
+    int remainingM,
+    int target,
+  );
+
+  /// No description provided for @homeRingSemanticsIdle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to start a {target} hour fast.'**
+  String homeRingSemanticsIdle(int target);
+
+  /// No description provided for @mealsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No meals logged.'**
+  String get mealsEmptyTitle;
+
+  /// No description provided for @mealsEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first meal to start seeing your calories with intention.'**
+  String get mealsEmptySubtitle;
+
+  /// No description provided for @historyEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing in your history.'**
+  String get historyEmptyTitle;
+
+  /// No description provided for @historyEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Past fasts and logged days will appear here as you build consistency.'**
+  String get historyEmptySubtitle;
+
+  /// No description provided for @historyItemSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{elapsed} of {target}'**
+  String historyItemSummary(String elapsed, String target);
+
+  /// No description provided for @historyItemStatusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get historyItemStatusCompleted;
+
+  /// No description provided for @historyItemStatusEarly.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended early'**
+  String get historyItemStatusEarly;
+
+  /// No description provided for @historyItemTestProtocol.
+  ///
+  /// In en, this message translates to:
+  /// **'Test · 2 min'**
+  String get historyItemTestProtocol;
+
+  /// No description provided for @historyDateToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get historyDateToday;
+
+  /// No description provided for @historyDateYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get historyDateYesterday;
+
+  /// No description provided for @statsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights on the way.'**
+  String get statsEmptyTitle;
+
+  /// No description provided for @statsEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Once you log a few days, you\'ll see honest trends and real progress here.'**
+  String get statsEmptySubtitle;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileTitle;
+
+  /// No description provided for @profileEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon.'**
+  String get profileEmptyTitle;
+
+  /// No description provided for @profileEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account settings and customizations will live here.'**
+  String get profileEmptySubtitle;
+
+  /// No description provided for @profileSignOut.
   ///
   /// In en, this message translates to:
   /// **'Sign out'**
-  String get homeSignOut;
+  String get profileSignOut;
 }
 
 class _AppLocalizationsDelegate

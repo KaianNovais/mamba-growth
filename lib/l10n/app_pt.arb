@@ -38,7 +38,100 @@
   "authErrorTooManyRequests": "Muitas tentativas. Tente novamente em instantes.",
   "authErrorGoogleSignInFailed": "Não foi possível entrar com Google.",
   "authErrorUnknown": "Algo deu errado. Tente novamente.",
-  "homeWelcomeGreeting": "Olá, {name}",
-  "homeComingSoon": "Sua tela inicial está chegando.",
-  "homeSignOut": "Sair"
+  "navHome": "Início",
+  "navMeals": "Refeições",
+  "navHistory": "Histórico",
+  "navStats": "Stats",
+  "homeFastingTitle": "Jejum",
+  "homeProfileAction": "Perfil",
+  "homeProtocolAction": "Trocar protocolo",
+  "homeStartFast": "Iniciar jejum",
+  "homeEndFast": "Encerrar jejum",
+  "homeElapsedLabel": "decorrido",
+  "homeFastingTargetLabel": "meta de jejum",
+  "homeProtocolEyebrow": "Protocolo",
+  "homeNextProtocolEyebrow": "Próximo protocolo",
+  "homeEndsIn": "Termina em {duration}",
+  "@homeEndsIn": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeEndsAt": "às {time}",
+  "@homeEndsAt": {
+    "placeholders": { "time": { "type": "String" } }
+  },
+  "homeGoalReached": "Meta atingida",
+  "homeGoalReachedAgo": "há {duration}",
+  "@homeGoalReachedAgo": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeEatingWindow": "Janela alimentar de {hours}h",
+  "@homeEatingWindow": {
+    "placeholders": { "hours": { "type": "int" } }
+  },
+  "homeEndDialogTitle": "Encerrar jejum?",
+  "homeEndDialogBody": "Você jejuou {elapsed} de {target}. Sua progressão será salva no histórico.",
+  "@homeEndDialogBody": {
+    "placeholders": {
+      "elapsed": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "homeEndDialogSurpassed": "Você superou sua meta em {over} · ótimo trabalho.",
+  "@homeEndDialogSurpassed": {
+    "placeholders": { "over": { "type": "String" } }
+  },
+  "homeEndDialogCancel": "Cancelar",
+  "homeEndDialogConfirm": "Encerrar",
+  "homeProtocolSheetTitle": "Protocolo de jejum",
+  "homeProtocolSheetSubtitle": "Escolha quanto tempo você vai jejuar.",
+  "homeProtocolBeginner": "iniciante",
+  "homeProtocolPopular": "popular",
+  "homeProtocolAdvanced": "avançado",
+  "homeProtocolCustom": "Personalizado",
+  "homeProtocolCustomLabel": "{fast}h jejum · {eat}h alimentação",
+  "@homeProtocolCustomLabel": {
+    "placeholders": {
+      "fast": { "type": "int" },
+      "eat": { "type": "int" }
+    }
+  },
+  "homeProtocolConfirm": "Selecionar protocolo",
+  "homeNotificationFastEndTitle": "Jejum concluído",
+  "homeNotificationFastEndBody": "Você atingiu sua meta. Quebre o jejum quando estiver pronto.",
+  "homeRingSemanticsActive": "Jejum {elapsedH} horas e {elapsedM} minutos. Faltam {remainingH} horas e {remainingM} minutos para a meta de {target} horas.",
+  "@homeRingSemanticsActive": {
+    "placeholders": {
+      "elapsedH": { "type": "int" },
+      "elapsedM": { "type": "int" },
+      "remainingH": { "type": "int" },
+      "remainingM": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "homeRingSemanticsIdle": "Pronto para iniciar jejum de {target} horas.",
+  "@homeRingSemanticsIdle": {
+    "placeholders": { "target": { "type": "int" } }
+  },
+  "mealsEmptyTitle": "Nenhuma refeição registrada.",
+  "mealsEmptySubtitle": "Adicione sua primeira refeição para começar a ver suas calorias do dia com intenção.",
+  "historyEmptyTitle": "Nada no seu histórico.",
+  "historyEmptySubtitle": "Jejuns passados e dias registrados aparecem aqui conforme você constrói consistência.",
+  "historyItemSummary": "{elapsed} de {target}",
+  "@historyItemSummary": {
+    "placeholders": {
+      "elapsed": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "historyItemStatusCompleted": "Concluído",
+  "historyItemStatusEarly": "Encerrado antes",
+  "historyItemTestProtocol": "Teste · 2 min",
+  "historyDateToday": "Hoje",
+  "historyDateYesterday": "Ontem",
+  "statsEmptyTitle": "Insights a caminho.",
+  "statsEmptySubtitle": "Com alguns dias registrados, você vê tendências honestas e seu progresso real aqui.",
+  "profileTitle": "Perfil",
+  "profileEmptyTitle": "Em breve.",
+  "profileEmptySubtitle": "Configurações da conta e personalizações vão morar aqui.",
+  "profileSignOut": "Sair"
 }

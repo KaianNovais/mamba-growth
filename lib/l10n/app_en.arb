@@ -1,114 +1,137 @@
 {
   "@@locale": "en",
   "appName": "Mamba Growth",
-  "@appName": {
-    "description": "Application brand name."
-  },
   "onboardingEyebrow": "FASTING & CALORIES",
-  "@onboardingEyebrow": {
-    "description": "Eyebrow that anchors the user in what the app is about."
-  },
-  "onboardingTitle": "Eat with intention.\nFast with clarity.",
-  "@onboardingTitle": {
-    "description": "Hero headline. Two short, parallel sentences."
-  },
-  "onboardingSubtitle": "Track every fast and every calorie in one calm space. No noise, no shame — just honest numbers that show your real progress.",
-  "@onboardingSubtitle": {
-    "description": "Supporting paragraph below the headline."
-  },
+  "onboardingTitle": "Eat with purpose.\nFast with clarity.",
+  "onboardingSubtitle": "Track every fast and every calorie in one place. No noise, no shame — just honest numbers showing your real progress.",
   "onboardingHeroLabel": "FASTING",
-  "@onboardingHeroLabel": {
-    "description": "Caption above the live clock value in the hero visual."
-  },
   "onboardingHeroFootnote": "Sample day · 10h 24m of 16h",
-  "@onboardingHeroFootnote": {
-    "description": "Tiny footnote below the hero making clear the data is illustrative."
-  },
   "onboardingPillarFocus": "Awareness",
-  "@onboardingPillarFocus": {
-    "description": "Outcome pillar 1 — what the user gains."
-  },
   "onboardingPillarDiscipline": "Consistency",
-  "@onboardingPillarDiscipline": {
-    "description": "Outcome pillar 2."
-  },
-  "onboardingPillarGrowth": "Insight",
-  "@onboardingPillarGrowth": {
-    "description": "Outcome pillar 3."
-  },
-  "onboardingPrimaryCta": "Start",
-  "@onboardingPrimaryCta": {
-    "description": "Primary CTA. Single-word action verb."
-  },
-  "onboardingFooter": "By continuing you agree with our Terms and Privacy Policy.",
-  "@onboardingFooter": {
-    "description": "Legal footer under the CTAs."
-  },
+  "onboardingPillarGrowth": "Vision",
+  "onboardingPrimaryCta": "Get started",
+  "onboardingFooter": "By continuing you agree to our Terms and Privacy Policy.",
   "onboardingFooterTermsLabel": "Terms",
-  "@onboardingFooterTermsLabel": {
-    "description": "Substring of onboardingFooter to render as an emphasized link (Terms of Service)."
-  },
   "onboardingFooterPrivacyLabel": "Privacy Policy",
-  "@onboardingFooterPrivacyLabel": {
-    "description": "Substring of onboardingFooter to render as an emphasized link (Privacy Policy)."
-  },
   "authSignInTitle": "Welcome back",
-  "@authSignInTitle": { "description": "Auth bottom sheet title in sign-in mode." },
   "authSignUpTitle": "Create your account",
-  "@authSignUpTitle": { "description": "Auth bottom sheet title in sign-up mode." },
   "authSignInSubtitle": "Sign in to continue your journey.",
-  "@authSignInSubtitle": { "description": "Auth bottom sheet subtitle in sign-in mode." },
   "authSignUpSubtitle": "Start tracking with intention.",
-  "@authSignUpSubtitle": { "description": "Auth bottom sheet subtitle in sign-up mode." },
   "authEmailLabel": "Email",
-  "@authEmailLabel": { "description": "Email field label." },
   "authEmailHint": "you@email.com",
-  "@authEmailHint": { "description": "Email field hint." },
   "authPasswordLabel": "Password",
-  "@authPasswordLabel": { "description": "Password field label." },
   "authPasswordVisibilityShow": "Show password",
-  "@authPasswordVisibilityShow": { "description": "Semantic label to show the password." },
   "authPasswordVisibilityHide": "Hide password",
-  "@authPasswordVisibilityHide": { "description": "Semantic label to hide the password." },
   "authSubmitSignIn": "Sign in",
-  "@authSubmitSignIn": { "description": "Submit button in sign-in mode." },
   "authSubmitSignUp": "Create account",
-  "@authSubmitSignUp": { "description": "Submit button in sign-up mode." },
   "authContinueWithGoogle": "Continue with Google",
-  "@authContinueWithGoogle": { "description": "Google sign-in button label." },
   "authDividerOr": "OR",
-  "@authDividerOr": { "description": "Separator between Google and email/password." },
   "authToggleToSignUpPrompt": "Don't have an account?",
-  "@authToggleToSignUpPrompt": { "description": "Prompt to switch to sign-up mode." },
   "authToggleToSignUpAction": "Create one",
-  "@authToggleToSignUpAction": { "description": "Action label to switch to sign-up." },
   "authToggleToSignInPrompt": "Already have an account?",
-  "@authToggleToSignInPrompt": { "description": "Prompt to switch to sign-in mode." },
   "authToggleToSignInAction": "Sign in",
-  "@authToggleToSignInAction": { "description": "Action label to switch to sign-in." },
-  "authErrorInvalidCredentials": "Invalid email or password.",
-  "@authErrorInvalidCredentials": { "description": "Inline error for invalid credentials." },
+  "authErrorInvalidCredentials": "Wrong email or password.",
   "authErrorEmailInUse": "An account already exists for this email.",
-  "@authErrorEmailInUse": { "description": "Inline error when email is already used." },
   "authErrorWeakPassword": "Password must be at least 6 characters.",
-  "@authErrorWeakPassword": { "description": "Inline error for weak password." },
   "authErrorUserDisabled": "This account has been disabled.",
-  "@authErrorUserDisabled": { "description": "Inline error when user is disabled." },
   "authErrorNetwork": "No internet connection.",
-  "@authErrorNetwork": { "description": "Inline error for network failure." },
-  "authErrorTooManyRequests": "Too many attempts. Try again later.",
-  "@authErrorTooManyRequests": { "description": "Inline error for rate limiting." },
-  "authErrorGoogleSignInFailed": "Could not sign in with Google.",
-  "@authErrorGoogleSignInFailed": { "description": "Inline error when Google sign-in fails." },
-  "authErrorUnknown": "Something went wrong. Please try again.",
-  "@authErrorUnknown": { "description": "Generic fallback inline error." },
-  "homeWelcomeGreeting": "Welcome, {name}",
-  "@homeWelcomeGreeting": {
-    "description": "Greeting on the home placeholder. {name} is the display name or email.",
-    "placeholders": { "name": { "type": "String" } }
+  "authErrorTooManyRequests": "Too many attempts. Try again in a moment.",
+  "authErrorGoogleSignInFailed": "Couldn't sign in with Google.",
+  "authErrorUnknown": "Something went wrong. Try again.",
+  "navHome": "Home",
+  "navMeals": "Meals",
+  "navHistory": "History",
+  "navStats": "Stats",
+  "homeFastingTitle": "Fasting",
+  "homeProfileAction": "Profile",
+  "homeProtocolAction": "Change protocol",
+  "homeStartFast": "Start fast",
+  "homeEndFast": "End fast",
+  "homeElapsedLabel": "elapsed",
+  "homeFastingTargetLabel": "fasting target",
+  "homeProtocolEyebrow": "Protocol",
+  "homeNextProtocolEyebrow": "Next protocol",
+  "homeEndsIn": "Ends in {duration}",
+  "@homeEndsIn": {
+    "placeholders": { "duration": { "type": "String" } }
   },
-  "homeComingSoon": "Your home is coming soon.",
-  "@homeComingSoon": { "description": "Subtitle on the home placeholder." },
-  "homeSignOut": "Sign out",
-  "@homeSignOut": { "description": "Sign out button label." }
+  "homeEndsAt": "at {time}",
+  "@homeEndsAt": {
+    "placeholders": { "time": { "type": "String" } }
+  },
+  "homeGoalReached": "Goal reached",
+  "homeGoalReachedAgo": "{duration} ago",
+  "@homeGoalReachedAgo": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeEatingWindow": "{hours}h eating window",
+  "@homeEatingWindow": {
+    "placeholders": { "hours": { "type": "int" } }
+  },
+  "homeEndDialogTitle": "End fast?",
+  "homeEndDialogBody": "You fasted {elapsed} of {target}. Your progress will be saved to history.",
+  "@homeEndDialogBody": {
+    "placeholders": {
+      "elapsed": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "homeEndDialogSurpassed": "You beat your goal by {over} · great work.",
+  "@homeEndDialogSurpassed": {
+    "placeholders": { "over": { "type": "String" } }
+  },
+  "homeEndDialogCancel": "Cancel",
+  "homeEndDialogConfirm": "End",
+  "homeProtocolSheetTitle": "Fasting protocol",
+  "homeProtocolSheetSubtitle": "Choose how long you'll fast.",
+  "homeProtocolBeginner": "beginner",
+  "homeProtocolPopular": "popular",
+  "homeProtocolAdvanced": "advanced",
+  "homeProtocolCustom": "Custom",
+  "homeProtocolCustomLabel": "{fast}h fasting · {eat}h eating",
+  "@homeProtocolCustomLabel": {
+    "placeholders": {
+      "fast": { "type": "int" },
+      "eat": { "type": "int" }
+    }
+  },
+  "homeProtocolConfirm": "Select protocol",
+  "homeNotificationFastEndTitle": "Fast complete",
+  "homeNotificationFastEndBody": "You hit your goal. Break your fast when you're ready.",
+  "homeRingSemanticsActive": "Fasting {elapsedH} hours and {elapsedM} minutes. {remainingH} hours and {remainingM} minutes left to reach the {target} hour goal.",
+  "@homeRingSemanticsActive": {
+    "placeholders": {
+      "elapsedH": { "type": "int" },
+      "elapsedM": { "type": "int" },
+      "remainingH": { "type": "int" },
+      "remainingM": { "type": "int" },
+      "target": { "type": "int" }
+    }
+  },
+  "homeRingSemanticsIdle": "Ready to start a {target} hour fast.",
+  "@homeRingSemanticsIdle": {
+    "placeholders": { "target": { "type": "int" } }
+  },
+  "mealsEmptyTitle": "No meals logged.",
+  "mealsEmptySubtitle": "Add your first meal to start seeing your calories with intention.",
+  "historyEmptyTitle": "Nothing in your history.",
+  "historyEmptySubtitle": "Past fasts and logged days will appear here as you build consistency.",
+  "historyItemSummary": "{elapsed} of {target}",
+  "@historyItemSummary": {
+    "placeholders": {
+      "elapsed": { "type": "String" },
+      "target": { "type": "String" }
+    }
+  },
+  "historyItemStatusCompleted": "Completed",
+  "historyItemStatusEarly": "Ended early",
+  "historyItemTestProtocol": "Test · 2 min",
+  "historyDateToday": "Today",
+  "historyDateYesterday": "Yesterday",
+  "statsEmptyTitle": "Insights on the way.",
+  "statsEmptySubtitle": "Once you log a few days, you'll see honest trends and real progress here.",
+  "profileTitle": "Profile",
+  "profileEmptyTitle": "Coming soon.",
+  "profileEmptySubtitle": "Account settings and customizations will live here.",
+  "profileSignOut": "Sign out"
 }

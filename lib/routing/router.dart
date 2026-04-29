@@ -3,8 +3,9 @@ import 'package:go_router/go_router.dart';
 
 import '../data/repositories/auth/auth_repository.dart';
 import '../ui/auth/widgets/auth_bottom_sheet.dart';
-import '../ui/home/widgets/home_placeholder_screen.dart';
+import '../ui/main/widgets/main_navigation_screen.dart';
 import '../ui/onboarding/widgets/onboarding_screen.dart';
+import '../ui/profile/widgets/profile_screen.dart';
 import '../ui/splash/widgets/splash_screen.dart';
 import 'routes.dart';
 
@@ -25,7 +26,10 @@ GoRouter buildRouter({required AuthRepository authRepository}) {
         return Routes.home;
       }
 
-      if (!isAuthed && (loc == Routes.splash || loc == Routes.home)) {
+      if (!isAuthed &&
+          (loc == Routes.splash ||
+              loc == Routes.home ||
+              loc.startsWith(Routes.home))) {
         return Routes.onboarding;
       }
 
@@ -52,7 +56,14 @@ GoRouter buildRouter({required AuthRepository authRepository}) {
       GoRoute(
         path: Routes.home,
         name: RouteNames.home,
-        builder: (ctx, state) => const HomePlaceholderScreen(),
+        builder: (ctx, state) => const MainNavigationScreen(),
+        routes: [
+          GoRoute(
+            path: 'profile',
+            name: RouteNames.profile,
+            builder: (ctx, state) => const ProfileScreen(),
+          ),
+        ],
       ),
     ],
   );

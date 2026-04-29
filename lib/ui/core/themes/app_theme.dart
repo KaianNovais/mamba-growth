@@ -57,7 +57,10 @@ class AppTheme {
         titleTextStyle: textTheme.titleLarge,
         systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(
           statusBarColor: Colors.transparent,
-          systemNavigationBarColor: c.bg,
+          statusBarIconBrightness: Brightness.light,
+          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarIconBrightness: Brightness.light,
+          systemNavigationBarContrastEnforced: false,
         ),
       ),
       cardTheme: CardThemeData(
