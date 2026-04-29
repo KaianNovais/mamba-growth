@@ -6,8 +6,12 @@ import 'package:provider/provider.dart';
 
 import 'data/repositories/auth/auth_repository.dart';
 import 'data/repositories/auth/auth_repository_firebase.dart';
+import 'data/repositories/fasting/fasting_repository.dart';
+import 'data/repositories/fasting/fasting_repository_local.dart';
 import 'data/services/auth/firebase_auth_service.dart';
 import 'data/services/auth/google_sign_in_service.dart';
+import 'data/services/database/local_database.dart';
+import 'data/services/notifications/notification_service.dart';
 import 'firebase_options.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'routing/router.dart';
@@ -27,13 +31,42 @@ Future<void> main() async {
     googleSignInService: googleSignInService,
   );
 
-  runApp(MambaGrowthApp(authRepository: authRepository));
+  final localDatabase = LocalDatabase();
+  final notificationService = NotificationService();
+  await notificationService.init();
+
+  // Strings da notificação são fixas em pt aqui (escolha consciente:
+  // ela é agendada uma vez quando o jejum começa e dispara horas depois,
+  // pode ficar fora do contexto da locale ativa).
+  final fastingRepository = FastingRepositoryLocal(
+    database: localDatabase,
+    notifications: notificationService,
+    notificationTitle: 'Jejum concluído',
+    notificationBody:
+        'Você atingiu sua meta. Quebre o jejum quando estiver pronto.',
+  );
+
+  runApp(MambaGrowthApp(
+    authRepository: authRepository,
+    fastingRepository: fastingRepository,
+    notificationService: notificationService,
+    localDatabase: localDatabase,
+  ));
 }
 
 class MambaGrowthApp extends StatelessWidget {
-  const MambaGrowthApp({super.key, required this.authRepository});
+  const MambaGrowthApp({
+    super.key,
+    required this.authRepository,
+    required this.fastingRepository,
+    required this.notificationService,
+    required this.localDatabase,
+  });
 
   final AuthRepository authRepository;
+  final FastingRepository fastingRepository;
+  final NotificationService notificationService;
+  final LocalDatabase localDatabase;
 
   static const supportedLocales = <Locale>[
     Locale('en'),
@@ -42,8 +75,13 @@ class MambaGrowthApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AuthRepository>.value(
-      value: authRepository,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthRepository>.value(value: authRepository),
+        ChangeNotifierProvider<FastingRepository>.value(value: fastingRepository),
+        Provider<NotificationService>.value(value: notificationService),
+        Provider<LocalDatabase>.value(value: localDatabase),
+      ],
       child: MaterialApp.router(
         title: 'Mamba Growth',
         debugShowCheckedModeBanner: false,

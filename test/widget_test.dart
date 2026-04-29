@@ -1,9 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mamba_growth/data/repositories/auth/auth_repository.dart';
+import 'package:mamba_growth/data/repositories/fasting/fasting_repository.dart';
+import 'package:mamba_growth/data/services/database/local_database.dart';
+import 'package:mamba_growth/data/services/notifications/notification_service.dart';
 import 'package:mamba_growth/domain/models/auth_user.dart';
+import 'package:mamba_growth/domain/models/fast.dart';
+import 'package:mamba_growth/domain/models/fasting_protocol.dart';
 import 'package:mamba_growth/l10n/generated/app_localizations.dart';
 import 'package:mamba_growth/main.dart';
 import 'package:mamba_growth/ui/core/themes/themes.dart';
@@ -42,6 +46,56 @@ class _StubAuthRepository extends ChangeNotifier implements AuthRepository {
   Future<Result<void>> signOut() async => const Result.ok(null);
 }
 
+class _StubFastingRepository extends ChangeNotifier
+    implements FastingRepository {
+  @override
+  Fast? get activeFast => null;
+
+  @override
+  FastingProtocol get selectedProtocol => FastingProtocol.defaultProtocol;
+
+  @override
+  bool get isInitialized => true;
+
+  @override
+  Future<Result<Fast>> startFast() async =>
+      const Result.error(FastingException('stub'));
+
+  @override
+  Future<Result<Fast>> endFast() async =>
+      const Result.error(FastingException('stub'));
+
+  @override
+  Future<void> setProtocol(FastingProtocol protocol) async {}
+}
+
+class _StubLocalDatabase extends LocalDatabase {
+  @override
+  Future<void> close() async {}
+}
+
+class _StubNotificationService extends NotificationService {
+  @override
+  Future<void> init() async {}
+
+  @override
+  Future<void> scheduleFastEnd({
+    required DateTime endAt,
+    required String title,
+    required String body,
+  }) async {}
+
+  @override
+  Future<void> cancelFastEnd() async {}
+}
+
+MambaGrowthApp _buildApp({AuthRepository? auth}) => MambaGrowthApp(
+      authRepository: auth ?? _StubAuthRepository(),
+      fastingRepository: _StubFastingRepository(),
+      notificationService: _StubNotificationService(),
+      localDatabase: _StubLocalDatabase(),
+    );
+
 Widget _harness({Locale? locale, VoidCallback? onContinue}) {
   return MaterialApp(
     locale: locale,
@@ -76,7 +130,7 @@ void main() {
   group('MambaGrowthApp locale resolution', () {
     testWidgets('renders English copy by default', (tester) async {
       await tester
-          .pumpWidget(MambaGrowthApp(authRepository: _StubAuthRepository()));
+          .pumpWidget(_buildApp());
       await tester.pumpAndSettle();
 
       expect(find.text('Eat with intention.\nFast with clarity.'), findsOneWidget);
@@ -90,7 +144,7 @@ void main() {
       addTearDown(tester.platformDispatcher.clearLocalesTestValue);
 
       await tester
-          .pumpWidget(MambaGrowthApp(authRepository: _StubAuthRepository()));
+          .pumpWidget(_buildApp());
       await tester.pumpAndSettle();
 
       expect(find.text('Coma com propósito.\nJejue com clareza.'), findsOneWidget);
@@ -105,7 +159,7 @@ void main() {
       addTearDown(tester.platformDispatcher.clearLocalesTestValue);
 
       await tester
-          .pumpWidget(MambaGrowthApp(authRepository: _StubAuthRepository()));
+          .pumpWidget(_buildApp());
       await tester.pumpAndSettle();
 
       expect(find.text('FASTING & CALORIES'), findsOneWidget);
