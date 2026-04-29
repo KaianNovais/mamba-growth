@@ -24,6 +24,24 @@ class FastingProtocol {
 
   static const defaultProtocol = _p168; // 16:8
 
+  // TODO(remove): Protocolo de teste de 2 minutos para validação manual
+  // do timer + notificação. Remover (e a special-case em Fast.target,
+  // o tile no ProtocolBottomSheet e o branch em displayLabel) ao
+  // final dos smoke tests.
+  static const testTwoMinutes = FastingProtocol(
+    id: 'test:2min',
+    fastingHours: 0,
+    eatingHours: 0,
+    isCustom: false,
+  );
+
+  bool get isTestProtocol => id == testTwoMinutes.id;
+
+  /// Label legível usado em UI (pill da AppBar, cards do sheet).
+  /// Para o protocolo de teste retorna "2min"; caso contrário, "X:Y".
+  String get displayLabel =>
+      isTestProtocol ? '2min' : '$fastingHours:$eatingHours';
+
   factory FastingProtocol.custom({
     required int fastingHours,
     required int eatingHours,
@@ -38,6 +56,7 @@ class FastingProtocol {
   }
 
   factory FastingProtocol.parseId(String id) {
+    if (id == testTwoMinutes.id) return testTwoMinutes;
     for (final p in presets) {
       if (p.id == id) return p;
     }

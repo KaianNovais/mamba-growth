@@ -112,10 +112,12 @@ class _Body extends StatelessWidget {
         (MediaQuery.sizeOf(context).width * 0.62).clamp(200.0, 280.0);
 
     final eyebrow = fast != null
-        ? '${l10n.homeProtocolEyebrow} · ${protocol.fastingHours}:${protocol.eatingHours}'
-        : '${l10n.homeNextProtocolEyebrow} · ${protocol.fastingHours}:${protocol.eatingHours}';
+        ? '${l10n.homeProtocolEyebrow} · ${protocol.displayLabel}'
+        : '${l10n.homeNextProtocolEyebrow} · ${protocol.displayLabel}';
 
     final progress = fast?.progress(vm.now) ?? 0.0;
+
+    final idleCenterText = protocol.isTestProtocol ? '2min' : '${protocol.fastingHours}h';
 
     final centerChild = fast != null
         ? Column(
@@ -136,7 +138,7 @@ class _Body extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '${protocol.fastingHours}h',
+                idleCenterText,
                 style: typo.numericLarge.copyWith(color: colors.text),
               ),
               const SizedBox(height: AppSpacing.xs),
@@ -149,11 +151,17 @@ class _Body extends StatelessWidget {
 
     final subtitle = fast != null
         ? _ActiveSubtitle(fast: fast, now: vm.now)
-        : Text(
-            l10n.homeEatingWindow(protocol.eatingHours),
-            style: text.bodyMedium?.copyWith(color: colors.textDim),
-            textAlign: TextAlign.center,
-          );
+        : protocol.isTestProtocol
+            ? Text(
+                'Modo de teste · 2 minutos',
+                style: text.bodyMedium?.copyWith(color: colors.textDim),
+                textAlign: TextAlign.center,
+              )
+            : Text(
+                l10n.homeEatingWindow(protocol.eatingHours),
+                style: text.bodyMedium?.copyWith(color: colors.textDim),
+                textAlign: TextAlign.center,
+              );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
@@ -314,7 +322,7 @@ class _ProtocolAction extends StatelessWidget {
     final text = context.text;
     final l10n = AppLocalizations.of(context);
     final protocol = context.watch<FastingRepository>().selectedProtocol;
-    final label = '${protocol.fastingHours}:${protocol.eatingHours}';
+    final label = protocol.displayLabel;
 
     return Tooltip(
       message: l10n.homeProtocolAction,
