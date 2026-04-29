@@ -8,6 +8,8 @@ import 'data/repositories/auth/auth_repository.dart';
 import 'data/repositories/auth/auth_repository_firebase.dart';
 import 'data/repositories/fasting/fasting_repository.dart';
 import 'data/repositories/fasting/fasting_repository_local.dart';
+import 'data/repositories/meals/meals_repository.dart';
+import 'data/repositories/meals/meals_repository_local.dart';
 import 'data/services/auth/firebase_auth_service.dart';
 import 'data/services/auth/google_sign_in_service.dart';
 import 'data/services/database/local_database.dart';
@@ -53,9 +55,12 @@ Future<void> main() async {
     },
   );
 
+  final mealsRepository = MealsRepositoryLocal(database: localDatabase);
+
   runApp(MambaGrowthApp(
     authRepository: authRepository,
     fastingRepository: fastingRepository,
+    mealsRepository: mealsRepository,
     notificationService: notificationService,
     localDatabase: localDatabase,
   ));
@@ -66,12 +71,14 @@ class MambaGrowthApp extends StatelessWidget {
     super.key,
     required this.authRepository,
     required this.fastingRepository,
+    required this.mealsRepository,
     required this.notificationService,
     required this.localDatabase,
   });
 
   final AuthRepository authRepository;
   final FastingRepository fastingRepository;
+  final MealsRepository mealsRepository;
   final NotificationService notificationService;
   final LocalDatabase localDatabase;
 
@@ -86,6 +93,7 @@ class MambaGrowthApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AuthRepository>.value(value: authRepository),
         ChangeNotifierProvider<FastingRepository>.value(value: fastingRepository),
+        ChangeNotifierProvider<MealsRepository>.value(value: mealsRepository),
         Provider<NotificationService>.value(value: notificationService),
         Provider<LocalDatabase>.value(value: localDatabase),
       ],
