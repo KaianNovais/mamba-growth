@@ -308,8 +308,10 @@ class _ProtocolAction extends StatelessWidget {
 
     return Tooltip(
       message: l10n.homeProtocolAction,
-      child: OutlinedButton(
+      child: OutlinedButton.icon(
         onPressed: () => ProtocolBottomSheet.show(context),
+        icon: const Icon(Icons.tune_rounded, size: 16),
+        label: Text(label),
         style: OutlinedButton.styleFrom(
           foregroundColor: colors.text,
           side: BorderSide(color: colors.border),
@@ -320,7 +322,6 @@ class _ProtocolAction extends StatelessWidget {
           ),
           textStyle: text.labelMedium,
         ),
-        child: Text(label),
       ),
     );
   }
