@@ -93,11 +93,12 @@ class _SheetContentState extends State<_SheetContent> {
     final text = context.text;
     final l10n = AppLocalizations.of(context);
     final viewInsets = MediaQuery.viewInsetsOf(context).bottom;
+    final systemGestureInset = MediaQuery.viewPaddingOf(context).bottom;
     final initial = context.read<FastingRepository>().selectedProtocol;
     final changed = _selected != initial;
 
     return Padding(
-      padding: EdgeInsets.only(bottom: viewInsets),
+      padding: EdgeInsets.only(bottom: viewInsets + systemGestureInset + AppSpacing.md),
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(
