@@ -1,42 +1,301 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../data/repositories/auth/auth_repository.dart';
+import '../../../data/repositories/fasting/fasting_repository.dart';
+import '../../../domain/models/fast.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../routing/routes.dart';
+import '../../../utils/result.dart';
 import '../../core/themes/themes.dart';
-import '../../core/widgets/empty_feature_state.dart';
+import '../view_models/home_view_model.dart';
+import 'end_fast_dialog.dart';
+import 'fasting_ring.dart';
+import 'protocol_bottom_sheet.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider<HomeViewModel>(
+      create: (ctx) => HomeViewModel(
+        repository: ctx.read<FastingRepository>(),
+      ),
+      child: const _HomeView(),
+    );
+  }
+}
+
+class _HomeView extends StatelessWidget {
+  const _HomeView();
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    final repo = context.watch<AuthRepository>();
 
     return Scaffold(
       backgroundColor: colors.bg,
       appBar: AppBar(
-        title: Text(l10n.appName),
+        title: Text(l10n.homeFastingTitle),
         actions: [
           IconButton(
-            tooltip: l10n.homeSignOut,
-            icon: const Icon(Icons.logout_rounded),
-            onPressed: () => repo.signOut(),
+            tooltip: l10n.homeProfileAction,
+            icon: const Icon(Icons.person_outline_rounded),
+            onPressed: () => context.pushNamed(RouteNames.profile),
+          ),
+          IconButton(
+            tooltip: l10n.homeProtocolAction,
+            icon: const Icon(Icons.tune_rounded),
+            onPressed: () => ProtocolBottomSheet.show(context),
           ),
           const SizedBox(width: AppSpacing.xs),
         ],
       ),
       body: SafeArea(
         top: false,
-        child: EmptyFeatureState(
-          icon: Icons.cottage_outlined,
-          eyebrow: l10n.navHome,
-          title: l10n.homeEmptyTitle,
-          subtitle: l10n.homeEmptySubtitle,
+        child: Consumer<HomeViewModel>(
+          builder: (context, vm, _) {
+            if (!vm.isInitialized) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return _Body(vm: vm);
+          },
         ),
       ),
+    );
+  }
+}
+
+class _Body extends StatelessWidget {
+  const _Body({required this.vm});
+  final HomeViewModel vm;
+
+  String _formatElapsed(Duration d) {
+    final h = d.inHours;
+    final m = d.inMinutes % 60;
+    return '${h}h ${m.toString().padLeft(2, '0')}min';
+  }
+
+  Future<void> _onPrimaryPressed(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final fast = vm.activeFast;
+
+    if (fast == null) {
+      HapticFeedback.lightImpact();
+      await vm.startFast.execute();
+      final result = vm.startFast.result;
+      if (result is Error<Fast>) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.authErrorUnknown)),
+        );
+      }
+      return;
+    }
+
+    final confirmed = await EndFastDialog.show(
+      context,
+      fast: fast,
+      now: vm.now,
+    );
+    if (!confirmed) return;
+    await vm.endFast.execute();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colors = context.colors;
+    final text = context.text;
+    final typo = context.typo;
+    final fast = vm.activeFast;
+    final protocol = vm.selectedProtocol;
+    final ringDiameter =
+        (MediaQuery.sizeOf(context).width * 0.62).clamp(200.0, 280.0);
+
+    final eyebrow = fast != null
+        ? '${l10n.homeProtocolEyebrow} · ${protocol.fastingHours}:${protocol.eatingHours}'
+        : '${l10n.homeNextProtocolEyebrow} · ${protocol.fastingHours}:${protocol.eatingHours}';
+
+    final progress = fast?.progress(vm.now) ?? 0.0;
+
+    final centerChild = fast != null
+        ? Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _formatElapsed(fast.elapsed(vm.now)),
+                style: typo.numericLarge.copyWith(color: colors.accent),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                l10n.homeElapsedLabel,
+                style: typo.caption.copyWith(color: colors.textDim, letterSpacing: 1.6),
+              ),
+            ],
+          )
+        : Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '${protocol.fastingHours}h',
+                style: typo.numericLarge.copyWith(color: colors.text),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                l10n.homeFastingTargetLabel,
+                style: typo.caption.copyWith(color: colors.textDim, letterSpacing: 1.6),
+              ),
+            ],
+          );
+
+    final subtitle = fast != null
+        ? _ActiveSubtitle(fast: fast, now: vm.now)
+        : Text(
+            l10n.homeEatingWindow(protocol.eatingHours),
+            style: text.bodyMedium?.copyWith(color: colors.textDim),
+            textAlign: TextAlign.center,
+          );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+      child: Column(
+        children: [
+          const Spacer(),
+          Text(
+            eyebrow.toUpperCase(),
+            style: typo.caption.copyWith(
+              color: colors.textDim,
+              letterSpacing: 2.4,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xl),
+          Semantics(
+            label: fast != null
+                ? l10n.homeRingSemanticsActive(
+                    fast.elapsed(vm.now).inHours,
+                    fast.elapsed(vm.now).inMinutes % 60,
+                    fast.remaining(vm.now).inHours,
+                    fast.remaining(vm.now).inMinutes % 60,
+                    fast.targetHours,
+                  )
+                : l10n.homeRingSemanticsIdle(protocol.fastingHours),
+            child: FastingRing(
+              progress: progress,
+              size: ringDiameter,
+              child: centerChild,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xl),
+          subtitle,
+          const Spacer(),
+          AnimatedBuilder(
+            animation: Listenable.merge([vm.startFast, vm.endFast]),
+            builder: (context, _) {
+              final running = vm.startFast.running || vm.endFast.running;
+              final isActive = vm.activeFast != null;
+              return SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: FilledButton(
+                  onPressed: running ? null : () => _onPrimaryPressed(context),
+                  style: FilledButton.styleFrom(
+                    backgroundColor:
+                        isActive ? colors.surface2 : colors.accent,
+                    foregroundColor: isActive ? colors.text : colors.bg,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
+                    ),
+                  ),
+                  child: running
+                      ? SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation(
+                              isActive ? colors.text : colors.bg,
+                            ),
+                          ),
+                        )
+                      : Text(
+                          isActive ? l10n.homeEndFast : l10n.homeStartFast,
+                          style: text.labelLarge?.copyWith(
+                            color: isActive ? colors.text : colors.bg,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: AppSpacing.xl),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActiveSubtitle extends StatelessWidget {
+  const _ActiveSubtitle({required this.fast, required this.now});
+  final Fast fast;
+  final DateTime now;
+
+  String _formatRemaining(Duration d) {
+    final h = d.inHours;
+    final m = d.inMinutes % 60;
+    if (h <= 0) return '${m}min';
+    return '${h}h ${m.toString().padLeft(2, '0')}min';
+  }
+
+  String _formatClock(DateTime t) {
+    final hh = t.hour.toString().padLeft(2, '0');
+    final mm = t.minute.toString().padLeft(2, '0');
+    return '$hh:$mm';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colors = context.colors;
+    final text = context.text;
+
+    if (fast.overshot(now)) {
+      final over = now.difference(fast.plannedEndAt);
+      return Column(
+        children: [
+          Text(
+            l10n.homeGoalReached,
+            style: text.bodyLarge?.copyWith(
+              color: colors.accent,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            l10n.homeGoalReachedAgo(_formatRemaining(over)),
+            style: text.bodyMedium?.copyWith(color: colors.textDim),
+          ),
+        ],
+      );
+    }
+
+    return Column(
+      children: [
+        Text(
+          l10n.homeEndsIn(_formatRemaining(fast.remaining(now))),
+          style: text.bodyLarge?.copyWith(color: colors.text),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          l10n.homeEndsAt(_formatClock(fast.plannedEndAt)),
+          style: text.bodyMedium?.copyWith(color: colors.textDim),
+        ),
+      ],
     );
   }
 }
