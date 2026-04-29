@@ -128,17 +128,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get authErrorUnknown => 'Algo deu errado. Tente novamente.';
 
   @override
-  String homeWelcomeGreeting(String name) {
-    return 'Olá, $name';
-  }
-
-  @override
-  String get homeComingSoon => 'Sua tela inicial está chegando.';
-
-  @override
-  String get homeSignOut => 'Sair';
-
-  @override
   String get navHome => 'Início';
 
   @override
@@ -151,11 +140,123 @@ class AppLocalizationsPt extends AppLocalizations {
   String get navStats => 'Stats';
 
   @override
-  String get homeEmptyTitle => 'Seu dia começa aqui.';
+  String get homeFastingTitle => 'Jejum';
 
   @override
-  String get homeEmptySubtitle =>
-      'Quando você registrar um jejum ou uma refeição, os sinais de hoje vão viver aqui.';
+  String get homeProfileAction => 'Perfil';
+
+  @override
+  String get homeProtocolAction => 'Trocar protocolo';
+
+  @override
+  String get homeStartFast => 'Iniciar jejum';
+
+  @override
+  String get homeEndFast => 'Encerrar jejum';
+
+  @override
+  String get homeElapsedLabel => 'decorrido';
+
+  @override
+  String get homeFastingTargetLabel => 'meta de jejum';
+
+  @override
+  String get homeProtocolEyebrow => 'Protocolo';
+
+  @override
+  String get homeNextProtocolEyebrow => 'Próximo protocolo';
+
+  @override
+  String homeEndsIn(String duration) {
+    return 'Termina em $duration';
+  }
+
+  @override
+  String homeEndsAt(String time) {
+    return 'às $time';
+  }
+
+  @override
+  String get homeGoalReached => 'Meta atingida';
+
+  @override
+  String homeGoalReachedAgo(String duration) {
+    return 'há $duration';
+  }
+
+  @override
+  String homeEatingWindow(int hours) {
+    return 'Janela alimentar de ${hours}h';
+  }
+
+  @override
+  String get homeEndDialogTitle => 'Encerrar jejum?';
+
+  @override
+  String homeEndDialogBody(String elapsed, String target) {
+    return 'Você jejuou $elapsed de $target. Sua progressão será salva no histórico.';
+  }
+
+  @override
+  String homeEndDialogSurpassed(String over) {
+    return 'Você superou sua meta em $over · ótimo trabalho.';
+  }
+
+  @override
+  String get homeEndDialogCancel => 'Cancelar';
+
+  @override
+  String get homeEndDialogConfirm => 'Encerrar';
+
+  @override
+  String get homeProtocolSheetTitle => 'Protocolo de jejum';
+
+  @override
+  String get homeProtocolSheetSubtitle =>
+      'Escolha quanto tempo você vai jejuar.';
+
+  @override
+  String get homeProtocolBeginner => 'iniciante';
+
+  @override
+  String get homeProtocolPopular => 'popular';
+
+  @override
+  String get homeProtocolAdvanced => 'avançado';
+
+  @override
+  String get homeProtocolCustom => 'Personalizado';
+
+  @override
+  String homeProtocolCustomLabel(int fast, int eat) {
+    return '${fast}h jejum · ${eat}h alimentação';
+  }
+
+  @override
+  String get homeProtocolConfirm => 'Selecionar protocolo';
+
+  @override
+  String get homeNotificationFastEndTitle => 'Jejum concluído';
+
+  @override
+  String get homeNotificationFastEndBody =>
+      'Você atingiu sua meta. Quebre o jejum quando estiver pronto.';
+
+  @override
+  String homeRingSemanticsActive(
+    int elapsedH,
+    int elapsedM,
+    int remainingH,
+    int remainingM,
+    int target,
+  ) {
+    return 'Jejum $elapsedH horas e $elapsedM minutos. Faltam $remainingH horas e $remainingM minutos para a meta de $target horas.';
+  }
+
+  @override
+  String homeRingSemanticsIdle(int target) {
+    return 'Pronto para iniciar jejum de $target horas.';
+  }
 
   @override
   String get mealsEmptyTitle => 'Nenhuma refeição registrada.';
@@ -177,4 +278,17 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get statsEmptySubtitle =>
       'Com alguns dias registrados, você vê tendências honestas e seu progresso real aqui.';
+
+  @override
+  String get profileTitle => 'Perfil';
+
+  @override
+  String get profileEmptyTitle => 'Em breve.';
+
+  @override
+  String get profileEmptySubtitle =>
+      'Configurações da conta e personalizações vão morar aqui.';
+
+  @override
+  String get profileSignOut => 'Sair';
 }
