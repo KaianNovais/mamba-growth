@@ -67,6 +67,9 @@ class _StubFastingRepository extends ChangeNotifier
 
   @override
   Future<void> setProtocol(FastingProtocol protocol) async {}
+
+  @override
+  Stream<List<Fast>> watchCompletedFasts() => const Stream.empty();
 }
 
 class _StubLocalDatabase extends LocalDatabase {
@@ -133,9 +136,9 @@ void main() {
           .pumpWidget(_buildApp());
       await tester.pumpAndSettle();
 
-      expect(find.text('Eat with intention.\nFast with clarity.'), findsOneWidget);
+      expect(find.text('Eat with purpose.\nFast with clarity.'), findsOneWidget);
       expect(find.text('FASTING & CALORIES'), findsOneWidget);
-      expect(find.text('Start'), findsOneWidget);
+      expect(find.text('Get started'), findsOneWidget);
       expect(find.text('FASTING'), findsOneWidget);
     });
 
@@ -163,7 +166,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('FASTING & CALORIES'), findsOneWidget);
-      expect(find.text('Start'), findsOneWidget);
+      expect(find.text('Get started'), findsOneWidget);
     });
   });
 
@@ -175,17 +178,17 @@ void main() {
 
       expect(find.text('MAMBA GROWTH'), findsOneWidget);
       expect(find.text('FASTING & CALORIES'), findsOneWidget);
-      expect(find.text('Eat with intention.\nFast with clarity.'), findsOneWidget);
+      expect(find.text('Eat with purpose.\nFast with clarity.'), findsOneWidget);
       expect(
         find.text(
-          'Track every fast and every calorie in one calm space. '
-          'No noise, no shame — just honest numbers that show your real progress.',
+          'Track every fast and every calorie in one place. '
+          'No noise, no shame — just honest numbers showing your real progress.',
         ),
         findsOneWidget,
       );
       expect(find.text('AWARENESS'), findsOneWidget);
       expect(find.text('CONSISTENCY'), findsOneWidget);
-      expect(find.text('INSIGHT'), findsOneWidget);
+      expect(find.text('VISION'), findsOneWidget);
     });
 
     testWidgets('renders the FastingClock with caption, time and footnote',
@@ -199,11 +202,11 @@ void main() {
       expect(find.text('Sample day · 10h 24m of 16h'), findsOneWidget);
     });
 
-    testWidgets('renders primary CTA labelled "Start"', (tester) async {
+    testWidgets('renders primary CTA labelled "Get started"', (tester) async {
       await tester.pumpWidget(_harness());
       await tester.pumpAndSettle();
 
-      expect(find.text('Start'), findsOneWidget);
+      expect(find.text('Get started'), findsOneWidget);
       expect(find.byType(FilledButton), findsOneWidget);
     });
 
