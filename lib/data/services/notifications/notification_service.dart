@@ -1,3 +1,5 @@
+import 'dart:ui' show Color;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz_data;
@@ -21,7 +23,11 @@ class NotificationService {
   Future<void> init() async {
     if (_initialized) return;
     tz_data.initializeTimeZones();
-    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    // ic_notification é uma silhueta branca em fundo transparente
+    // (drawable XML em android/app/src/main/res/drawable/). O Android
+    // tinta o ícone e descarta cores, então o launcher cheio vira
+    // mancha — daí esse asset dedicado.
+    const android = AndroidInitializationSettings('@drawable/ic_notification');
     const ios = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -83,6 +89,9 @@ class NotificationService {
           channelDescription: _channelDescription,
           importance: Importance.high,
           priority: Priority.high,
+          // Cor da marca (AppColors.dark.accent). Aplica como tint do
+          // ícone monocromático e bg do círculo no Android 5+.
+          color: Color(0xFFD4A24C),
         ),
         iOS: DarwinNotificationDetails(),
       ),
