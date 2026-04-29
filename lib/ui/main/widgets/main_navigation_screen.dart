@@ -7,7 +7,6 @@ import '../../history/widgets/history_screen.dart';
 import '../../home/widgets/home_screen.dart';
 import '../../meals/widgets/meals_screen.dart';
 import '../../stats/widgets/stats_screen.dart';
-import 'app_bottom_bar.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -39,8 +38,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     super.dispose();
   }
 
-  void _onTabSelected(int index) {
+  void _onDestinationSelected(int index) {
     if (index == _currentIndex) return;
+    HapticFeedback.selectionClick();
     _pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 280),
@@ -58,29 +58,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
 
-    final items = <AppBottomBarItem>[
-      AppBottomBarItem(
-        icon: Icons.home_outlined,
-        activeIcon: Icons.home_rounded,
-        label: l10n.navHome,
-      ),
-      AppBottomBarItem(
-        icon: Icons.restaurant_outlined,
-        activeIcon: Icons.restaurant_rounded,
-        label: l10n.navMeals,
-      ),
-      AppBottomBarItem(
-        icon: Icons.history_rounded,
-        activeIcon: Icons.history_rounded,
-        label: l10n.navHistory,
-      ),
-      AppBottomBarItem(
-        icon: Icons.insights_outlined,
-        activeIcon: Icons.insights_rounded,
-        label: l10n.navStats,
-      ),
-    ];
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light.copyWith(
         statusBarColor: Colors.transparent,
@@ -91,17 +68,37 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       ),
       child: Scaffold(
         backgroundColor: colors.bg,
-        extendBody: true,
         body: PageView(
           controller: _pageController,
           onPageChanged: _onPageChanged,
           physics: const BouncingScrollPhysics(),
           children: _pages,
         ),
-        bottomNavigationBar: AppBottomBar(
-          items: items,
-          currentIndex: _currentIndex,
-          onItemSelected: _onTabSelected,
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: _currentIndex,
+          onDestinationSelected: _onDestinationSelected,
+          destinations: [
+            NavigationDestination(
+              icon: const Icon(Icons.home_outlined),
+              selectedIcon: const Icon(Icons.home_rounded),
+              label: l10n.navHome,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.restaurant_outlined),
+              selectedIcon: const Icon(Icons.restaurant_rounded),
+              label: l10n.navMeals,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.history_rounded),
+              selectedIcon: const Icon(Icons.history_rounded),
+              label: l10n.navHistory,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.insights_outlined),
+              selectedIcon: const Icon(Icons.insights_rounded),
+              label: l10n.navStats,
+            ),
+          ],
         ),
       ),
     );
