@@ -171,12 +171,14 @@ class _Body extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
           GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onTap: () {
-              HapticFeedback.selectionClick();
-              ProtocolBottomSheet.show(context);
-            },
+            onTap: fast == null
+                ? () {
+                    HapticFeedback.selectionClick();
+                    ProtocolBottomSheet.show(context);
+                  }
+                : null,
             child: Semantics(
-              button: true,
+              button: fast == null,
               label: fast != null
                   ? l10n.homeRingSemanticsActive(
                       fast.elapsed(vm.now).inHours,
