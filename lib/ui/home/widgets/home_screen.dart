@@ -11,9 +11,9 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../routing/routes.dart';
 import '../../../utils/result.dart';
 import '../../core/themes/themes.dart';
+import '../../core/widgets/progress_ring.dart';
 import '../view_models/home_view_model.dart';
 import 'end_fast_dialog.dart';
-import 'fasting_ring.dart';
 import 'protocol_bottom_sheet.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -150,7 +150,7 @@ class _BodyState extends State<_Body> {
                   remaining.inMinutes % 60,
                   fast.targetHours,
                 ),
-                child: FastingRing(
+                child: ProgressRing(
                   progress: fast.progress(now),
                   size: ringDiameter,
                   child: Column(
@@ -175,7 +175,7 @@ class _BodyState extends State<_Body> {
         : Semantics(
             button: true,
             label: l10n.homeRingSemanticsIdle(protocol.fastingHours),
-            child: FastingRing(
+            child: ProgressRing(
               progress: 0,
               size: ringDiameter,
               child: Column(
