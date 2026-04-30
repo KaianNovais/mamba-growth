@@ -1201,6 +1201,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} v{version} ({build})'**
   String profileAppVersion(String name, String version, String build);
+
+  /// No description provided for @homeOverviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get homeOverviewTitle;
+
+  /// No description provided for @homeTodayEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY · {date}'**
+  String homeTodayEyebrow(String date);
+
+  /// No description provided for @homeStatusOnTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'On target'**
+  String get homeStatusOnTarget;
+
+  /// No description provided for @homeStatusOverGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Over by {n} kcal'**
+  String homeStatusOverGoal(int n);
+
+  /// No description provided for @homeStatusNoGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a goal'**
+  String get homeStatusNoGoal;
+
+  /// No description provided for @homeFastingActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting for {duration}'**
+  String homeFastingActive(String duration);
+
+  /// No description provided for @homeFastingIdle.
+  ///
+  /// In en, this message translates to:
+  /// **'No fast right now'**
+  String get homeFastingIdle;
+
+  /// No description provided for @homeFastingIdleAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get homeFastingIdleAction;
+
+  /// No description provided for @homeFastingLast.
+  ///
+  /// In en, this message translates to:
+  /// **'Last · {duration} · {when}'**
+  String homeFastingLast(String duration, String when);
+
+  /// No description provided for @homeFastingStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get homeFastingStatusLabel;
+
+  /// No description provided for @homeFastingLastLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last'**
+  String get homeFastingLastLabel;
+
+  /// No description provided for @homeWeekEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'THIS WEEK'**
+  String get homeWeekEyebrow;
+
+  /// No description provided for @homeWeekOnTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'{on}/{closed} ON TARGET'**
+  String homeWeekOnTarget(int on, int closed);
+
+  /// No description provided for @homeWeekChartGoalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'goal {kcal}'**
+  String homeWeekChartGoalLabel(int kcal);
+
+  /// No description provided for @homeWeekFastingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'WEEKLY FASTING'**
+  String get homeWeekFastingTitle;
+
+  /// No description provided for @homeWeekFastingCompletedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get homeWeekFastingCompletedLabel;
+
+  /// No description provided for @homeWeekFastingTotalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get homeWeekFastingTotalLabel;
+
+  /// No description provided for @homeWeekFastingAverageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get homeWeekFastingAverageLabel;
+
+  /// No description provided for @homeWeekFastingEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No fasts this week'**
+  String get homeWeekFastingEmpty;
+
+  /// No description provided for @homeWeekdayLetters.
+  ///
+  /// In en, this message translates to:
+  /// **'SMTWTFS'**
+  String get homeWeekdayLetters;
+
+  /// No description provided for @homeChartA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Calorie chart, {on} of {closed} days on target. Selected: {day}, {kcal} kcal.'**
+  String homeChartA11y(int on, int closed, String day, int kcal);
 }
 
 class _AppLocalizationsDelegate

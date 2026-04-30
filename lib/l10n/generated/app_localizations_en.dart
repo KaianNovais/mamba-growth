@@ -631,4 +631,81 @@ class AppLocalizationsEn extends AppLocalizations {
   String profileAppVersion(String name, String version, String build) {
     return '$name v$version ($build)';
   }
+
+  @override
+  String get homeOverviewTitle => 'Home';
+
+  @override
+  String homeTodayEyebrow(String date) {
+    return 'TODAY · $date';
+  }
+
+  @override
+  String get homeStatusOnTarget => 'On target';
+
+  @override
+  String homeStatusOverGoal(int n) {
+    return 'Over by $n kcal';
+  }
+
+  @override
+  String get homeStatusNoGoal => 'Set a goal';
+
+  @override
+  String homeFastingActive(String duration) {
+    return 'Fasting for $duration';
+  }
+
+  @override
+  String get homeFastingIdle => 'No fast right now';
+
+  @override
+  String get homeFastingIdleAction => 'Start';
+
+  @override
+  String homeFastingLast(String duration, String when) {
+    return 'Last · $duration · $when';
+  }
+
+  @override
+  String get homeFastingStatusLabel => 'Status';
+
+  @override
+  String get homeFastingLastLabel => 'Last';
+
+  @override
+  String get homeWeekEyebrow => 'THIS WEEK';
+
+  @override
+  String homeWeekOnTarget(int on, int closed) {
+    return '$on/$closed ON TARGET';
+  }
+
+  @override
+  String homeWeekChartGoalLabel(int kcal) {
+    return 'goal $kcal';
+  }
+
+  @override
+  String get homeWeekFastingTitle => 'WEEKLY FASTING';
+
+  @override
+  String get homeWeekFastingCompletedLabel => 'Completed';
+
+  @override
+  String get homeWeekFastingTotalLabel => 'Total';
+
+  @override
+  String get homeWeekFastingAverageLabel => 'Average';
+
+  @override
+  String get homeWeekFastingEmpty => 'No fasts this week';
+
+  @override
+  String get homeWeekdayLetters => 'SMTWTFS';
+
+  @override
+  String homeChartA11y(int on, int closed, String day, int kcal) {
+    return 'Calorie chart, $on of $closed days on target. Selected: $day, $kcal kcal.';
+  }
 }

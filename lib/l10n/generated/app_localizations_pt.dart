@@ -635,4 +635,81 @@ class AppLocalizationsPt extends AppLocalizations {
   String profileAppVersion(String name, String version, String build) {
     return '$name v$version ($build)';
   }
+
+  @override
+  String get homeOverviewTitle => 'Início';
+
+  @override
+  String homeTodayEyebrow(String date) {
+    return 'HOJE · $date';
+  }
+
+  @override
+  String get homeStatusOnTarget => 'Na meta';
+
+  @override
+  String homeStatusOverGoal(int n) {
+    return '$n kcal acima';
+  }
+
+  @override
+  String get homeStatusNoGoal => 'Definir meta';
+
+  @override
+  String homeFastingActive(String duration) {
+    return 'Em jejum há $duration';
+  }
+
+  @override
+  String get homeFastingIdle => 'Sem jejum agora';
+
+  @override
+  String get homeFastingIdleAction => 'Iniciar';
+
+  @override
+  String homeFastingLast(String duration, String when) {
+    return 'Último · $duration · $when';
+  }
+
+  @override
+  String get homeFastingStatusLabel => 'Status';
+
+  @override
+  String get homeFastingLastLabel => 'Último';
+
+  @override
+  String get homeWeekEyebrow => 'ESTA SEMANA';
+
+  @override
+  String homeWeekOnTarget(int on, int closed) {
+    return '$on/$closed NA META';
+  }
+
+  @override
+  String homeWeekChartGoalLabel(int kcal) {
+    return 'meta $kcal';
+  }
+
+  @override
+  String get homeWeekFastingTitle => 'JEJUM DA SEMANA';
+
+  @override
+  String get homeWeekFastingCompletedLabel => 'Concluídos';
+
+  @override
+  String get homeWeekFastingTotalLabel => 'Total';
+
+  @override
+  String get homeWeekFastingAverageLabel => 'Média';
+
+  @override
+  String get homeWeekFastingEmpty => 'Nenhum jejum esta semana';
+
+  @override
+  String get homeWeekdayLetters => 'DSTQQSS';
+
+  @override
+  String homeChartA11y(int on, int closed, String day, int kcal) {
+    return 'Gráfico de calorias, $on de $closed dias na meta. Selecionado: $day, $kcal kcal.';
+  }
 }

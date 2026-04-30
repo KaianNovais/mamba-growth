@@ -298,5 +298,58 @@
       "version": { "type": "String" },
       "build": { "type": "String" }
     }
+  },
+  "homeOverviewTitle": "Início",
+  "homeTodayEyebrow": "HOJE · {date}",
+  "@homeTodayEyebrow": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "homeStatusOnTarget": "Na meta",
+  "homeStatusOverGoal": "{n} kcal acima",
+  "@homeStatusOverGoal": {
+    "placeholders": { "n": { "type": "int" } }
+  },
+  "homeStatusNoGoal": "Definir meta",
+  "homeFastingActive": "Em jejum há {duration}",
+  "@homeFastingActive": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeFastingIdle": "Sem jejum agora",
+  "homeFastingIdleAction": "Iniciar",
+  "homeFastingLast": "Último · {duration} · {when}",
+  "@homeFastingLast": {
+    "placeholders": {
+      "duration": { "type": "String" },
+      "when": { "type": "String" }
+    }
+  },
+  "homeFastingStatusLabel": "Status",
+  "homeFastingLastLabel": "Último",
+  "homeWeekEyebrow": "ESTA SEMANA",
+  "homeWeekOnTarget": "{on}/{closed} NA META",
+  "@homeWeekOnTarget": {
+    "placeholders": {
+      "on": { "type": "int" },
+      "closed": { "type": "int" }
+    }
+  },
+  "homeWeekChartGoalLabel": "meta {kcal}",
+  "@homeWeekChartGoalLabel": {
+    "placeholders": { "kcal": { "type": "int" } }
+  },
+  "homeWeekFastingTitle": "JEJUM DA SEMANA",
+  "homeWeekFastingCompletedLabel": "Concluídos",
+  "homeWeekFastingTotalLabel": "Total",
+  "homeWeekFastingAverageLabel": "Média",
+  "homeWeekFastingEmpty": "Nenhum jejum esta semana",
+  "homeWeekdayLetters": "DSTQQSS",
+  "homeChartA11y": "Gráfico de calorias, {on} de {closed} dias na meta. Selecionado: {day}, {kcal} kcal.",
+  "@homeChartA11y": {
+    "placeholders": {
+      "on": { "type": "int" },
+      "closed": { "type": "int" },
+      "day": { "type": "String" },
+      "kcal": { "type": "int" }
+    }
   }
 }

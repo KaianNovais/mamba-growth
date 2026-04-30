@@ -284,5 +284,58 @@
       "version": { "type": "String" },
       "build": { "type": "String" }
     }
+  },
+  "homeOverviewTitle": "Home",
+  "homeTodayEyebrow": "TODAY · {date}",
+  "@homeTodayEyebrow": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "homeStatusOnTarget": "On target",
+  "homeStatusOverGoal": "Over by {n} kcal",
+  "@homeStatusOverGoal": {
+    "placeholders": { "n": { "type": "int" } }
+  },
+  "homeStatusNoGoal": "Set a goal",
+  "homeFastingActive": "Fasting for {duration}",
+  "@homeFastingActive": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeFastingIdle": "No fast right now",
+  "homeFastingIdleAction": "Start",
+  "homeFastingLast": "Last · {duration} · {when}",
+  "@homeFastingLast": {
+    "placeholders": {
+      "duration": { "type": "String" },
+      "when": { "type": "String" }
+    }
+  },
+  "homeFastingStatusLabel": "Status",
+  "homeFastingLastLabel": "Last",
+  "homeWeekEyebrow": "THIS WEEK",
+  "homeWeekOnTarget": "{on}/{closed} ON TARGET",
+  "@homeWeekOnTarget": {
+    "placeholders": {
+      "on": { "type": "int" },
+      "closed": { "type": "int" }
+    }
+  },
+  "homeWeekChartGoalLabel": "goal {kcal}",
+  "@homeWeekChartGoalLabel": {
+    "placeholders": { "kcal": { "type": "int" } }
+  },
+  "homeWeekFastingTitle": "WEEKLY FASTING",
+  "homeWeekFastingCompletedLabel": "Completed",
+  "homeWeekFastingTotalLabel": "Total",
+  "homeWeekFastingAverageLabel": "Average",
+  "homeWeekFastingEmpty": "No fasts this week",
+  "homeWeekdayLetters": "SMTWTFS",
+  "homeChartA11y": "Calorie chart, {on} of {closed} days on target. Selected: {day}, {kcal} kcal.",
+  "@homeChartA11y": {
+    "placeholders": {
+      "on": { "type": "int" },
+      "closed": { "type": "int" },
+      "day": { "type": "String" },
+      "kcal": { "type": "int" }
+    }
   }
 }
