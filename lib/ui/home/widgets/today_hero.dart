@@ -234,6 +234,11 @@ class _FastingStatusRow extends StatelessWidget {
       selector: (_, vm) => DateTime.now(),
       builder: (context, now, _) {
         final elapsed = activeFast.elapsed(now);
+        final isCompleted = activeFast.overshot(now);
+        final message = isCompleted
+            ? l10n.homeFastingCompleted(_formatHM(elapsed))
+            : l10n.homeFastingActive(_formatHM(elapsed));
+        final messageColor = isCompleted ? colors.accent : colors.text;
         return Row(
           children: [
             SizedBox(
@@ -245,8 +250,8 @@ class _FastingStatusRow extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                l10n.homeFastingActive(_formatHM(elapsed)),
-                style: text.bodyMedium?.copyWith(color: colors.text),
+                message,
+                style: text.bodyMedium?.copyWith(color: messageColor),
               ),
             ),
           ],

@@ -1238,6 +1238,12 @@ abstract class AppLocalizations {
   /// **'Fasting for {duration}'**
   String homeFastingActive(String duration);
 
+  /// No description provided for @homeFastingCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed · {duration}'**
+  String homeFastingCompleted(String duration);
+
   /// No description provided for @homeFastingIdle.
   ///
   /// In en, this message translates to:

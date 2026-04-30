@@ -314,6 +314,10 @@
   "@homeFastingActive": {
     "placeholders": { "duration": { "type": "String" } }
   },
+  "homeFastingCompleted": "Concluído · {duration}",
+  "@homeFastingCompleted": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
   "homeFastingIdle": "Sem jejum agora",
   "homeFastingIdleAction": "Iniciar",
   "homeFastingLast": "Último · {duration} · {when}",

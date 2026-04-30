@@ -657,6 +657,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String homeFastingCompleted(String duration) {
+    return 'Completed · $duration';
+  }
+
+  @override
   String get homeFastingIdle => 'No fast right now';
 
   @override

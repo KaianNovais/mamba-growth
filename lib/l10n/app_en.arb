@@ -300,6 +300,10 @@
   "@homeFastingActive": {
     "placeholders": { "duration": { "type": "String" } }
   },
+  "homeFastingCompleted": "Completed · {duration}",
+  "@homeFastingCompleted": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
   "homeFastingIdle": "No fast right now",
   "homeFastingIdleAction": "Start",
   "homeFastingLast": "Last · {duration} · {when}",

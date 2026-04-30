@@ -661,6 +661,11 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String homeFastingCompleted(String duration) {
+    return 'Concluído · $duration';
+  }
+
+  @override
   String get homeFastingIdle => 'Sem jejum agora';
 
   @override
