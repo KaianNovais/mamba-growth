@@ -126,23 +126,26 @@ class _DayCircle extends StatelessWidget {
         day.day,
         state,
       ),
-      child: InkResponse(
-        onTap: onTap,
-        radius: _diameter,
-        customBorder: const CircleBorder(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              letter,
-              style: typo.caption.copyWith(
-                color: letterColor,
-                letterSpacing: 1.4,
-                fontWeight: FontWeight.w600,
-              ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            letter,
+            style: typo.caption.copyWith(
+              color: letterColor,
+              letterSpacing: 1.4,
+              fontWeight: FontWeight.w600,
             ),
-            const SizedBox(height: 6),
-            Container(
+          ),
+          const SizedBox(height: 6),
+          // InkResponse envolve só o círculo: splash respeita o raio
+          // do dia (não invade a letra acima) e fica centrado no
+          // próprio círculo em vez do centro da Column.
+          InkResponse(
+            onTap: onTap,
+            radius: _diameter / 2,
+            customBorder: const CircleBorder(),
+            child: Container(
               width: _diameter,
               height: _diameter,
               alignment: Alignment.center,
@@ -162,8 +165,8 @@ class _DayCircle extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
