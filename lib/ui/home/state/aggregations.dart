@@ -102,6 +102,17 @@ class WeeklyFastingSummary {
     totalDuration: Duration.zero,
     average: Duration.zero,
   );
+
+  @override
+  bool operator ==(Object other) =>
+      other is WeeklyFastingSummary &&
+      other.completed == completed &&
+      other.total == total &&
+      other.totalDuration == totalDuration &&
+      other.average == average;
+
+  @override
+  int get hashCode => Object.hash(completed, total, totalDuration, average);
 }
 
 /// Aggregates fasts whose `endAt` falls in `[weekStart, weekStart + 7d)`.
