@@ -6,7 +6,7 @@ import '../../../data/repositories/auth/auth_repository.dart';
 import '../../../domain/models/auth_user.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../core/themes/themes.dart';
-import '../../dashboard/widgets/dashboard_screen.dart';
+import '../../home/widgets/home_screen.dart';
 import '../../fasting/widgets/fasting_screen.dart';
 import '../../meals/widgets/meals_screen.dart';
 import '../../profile/widgets/profile_screen.dart';
@@ -23,7 +23,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
   static const _pages = <Widget>[
-    DashboardScreen(),
+    HomeScreen(),
     FastingScreen(),
     MealsScreen(),
     ProfileScreen(),

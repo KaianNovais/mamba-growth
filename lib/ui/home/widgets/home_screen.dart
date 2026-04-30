@@ -4,8 +4,8 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../core/themes/themes.dart';
 import '../../core/widgets/empty_feature_state.dart';
 
-class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
