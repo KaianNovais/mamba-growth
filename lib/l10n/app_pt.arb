@@ -157,8 +157,9 @@
     "placeholders": { "count": { "type": "int" } }
   },
   "mealsHistoryDayEmpty": "Nenhuma refeição neste dia.",
-  "mealsHistoryWeekSelectorA11y": "{weekday}, dia {day}{state, select, today{, hoje} selected{, selecionado} future{, dia futuro, indisponível} other{}}",
-  "@mealsHistoryWeekSelectorA11y": {
+  "historyDayEmpty": "Nenhum jejum neste dia.",
+  "weekSelectorDayA11y": "{weekday}, dia {day}{state, select, today{, hoje} selected{, selecionado} future{, dia futuro, indisponível} other{}}",
+  "@weekSelectorDayA11y": {
     "placeholders": {
       "weekday": { "type": "String" },
       "day": { "type": "int" },

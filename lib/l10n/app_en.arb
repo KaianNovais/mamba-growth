@@ -157,8 +157,9 @@
     "placeholders": { "count": { "type": "int" } }
   },
   "mealsHistoryDayEmpty": "No meals logged this day.",
-  "mealsHistoryWeekSelectorA11y": "{weekday}, day {day}{state, select, today{, today} selected{, selected} future{, future, not available} other{}}",
-  "@mealsHistoryWeekSelectorA11y": {
+  "historyDayEmpty": "No fasts logged this day.",
+  "weekSelectorDayA11y": "{weekday}, day {day}{state, select, today{, today} selected{, selected} future{, future, not available} other{}}",
+  "@weekSelectorDayA11y": {
     "placeholders": {
       "weekday": { "type": "String" },
       "day": { "type": "int" },

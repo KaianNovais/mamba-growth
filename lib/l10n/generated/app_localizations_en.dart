@@ -355,7 +355,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealsHistoryDayEmpty => 'No meals logged this day.';
 
   @override
-  String mealsHistoryWeekSelectorA11y(String weekday, int day, String state) {
+  String get historyDayEmpty => 'No fasts logged this day.';
+
+  @override
+  String weekSelectorDayA11y(String weekday, int day, String state) {
     String _temp0 = intl.Intl.selectLogic(state, {
       'today': ', today',
       'selected': ', selected',

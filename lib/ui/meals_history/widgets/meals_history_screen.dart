@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -7,6 +6,7 @@ import '../../../data/repositories/meals/meals_repository.dart';
 import '../../../domain/models/meal.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../core/themes/themes.dart';
+import '../../core/widgets/week_day_selector.dart';
 
 class MealsHistoryScreen extends StatefulWidget {
   const MealsHistoryScreen({super.key});
@@ -27,23 +27,13 @@ class _MealsHistoryScreenState extends State<MealsHistoryScreen> {
     super.initState();
     final now = DateTime.now();
     _today = DateTime(now.year, now.month, now.day);
-    _weekStart = _startOfWeekSunday(_today);
-    _weekDays = List.generate(
-      7,
-      (i) => _weekStart.add(Duration(days: i)),
-    );
+    _weekStart = WeekDaySelector.startOfWeekSunday(_today);
+    _weekDays = WeekDaySelector.currentWeekDays(_today);
     _selectedDay = _today;
 
     final repo = context.read<MealsRepository>();
     final end = _weekStart.add(const Duration(days: 7));
     _future = repo.getMealsBetween(_weekStart, end).then(_groupByDay);
-  }
-
-  /// Início da semana com domingo = dia 0 (padrão BR).
-  DateTime _startOfWeekSunday(DateTime d) {
-    final daysFromSunday = d.weekday % 7; // dom=0, seg=1, ..., sáb=6
-    return DateTime(d.year, d.month, d.day)
-        .subtract(Duration(days: daysFromSunday));
   }
 
   Map<DateTime, List<Meal>> _groupByDay(List<Meal> meals) {
@@ -53,12 +43,6 @@ class _MealsHistoryScreenState extends State<MealsHistoryScreen> {
       byDay.putIfAbsent(day, () => []).add(m);
     }
     return byDay;
-  }
-
-  void _onDaySelected(DateTime day) {
-    if (day.isAtSameMomentAs(_selectedDay)) return;
-    HapticFeedback.selectionClick();
-    setState(() => _selectedDay = day);
   }
 
   @override
@@ -88,12 +72,11 @@ class _MealsHistoryScreenState extends State<MealsHistoryScreen> {
                 AppSpacing.xl,
               ),
               children: [
-                _WeekSelector(
+                WeekDaySelector(
                   weekDays: _weekDays,
                   today: _today,
                   selectedDay: _selectedDay,
-                  daysWithData: byDay.keys.toSet(),
-                  onSelect: _onDaySelected,
+                  onSelect: (day) => setState(() => _selectedDay = day),
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 if (selectedMeals.isEmpty)
@@ -103,153 +86,6 @@ class _MealsHistoryScreenState extends State<MealsHistoryScreen> {
               ],
             );
           },
-        ),
-      ),
-    );
-  }
-}
-
-class _WeekSelector extends StatelessWidget {
-  const _WeekSelector({
-    required this.weekDays,
-    required this.today,
-    required this.selectedDay,
-    required this.daysWithData,
-    required this.onSelect,
-  });
-
-  final List<DateTime> weekDays;
-  final DateTime today;
-  final DateTime selectedDay;
-  final Set<DateTime> daysWithData;
-  final ValueChanged<DateTime> onSelect;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        for (final day in weekDays)
-          _WeekDayCircle(
-            day: day,
-            isToday: day.isAtSameMomentAs(today),
-            isSelected: day.isAtSameMomentAs(selectedDay),
-            isFuture: day.isAfter(today),
-            hasData: daysWithData.contains(day),
-            onTap: day.isAfter(today) ? null : () => onSelect(day),
-          ),
-      ],
-    );
-  }
-}
-
-class _WeekDayCircle extends StatelessWidget {
-  const _WeekDayCircle({
-    required this.day,
-    required this.isToday,
-    required this.isSelected,
-    required this.isFuture,
-    required this.hasData,
-    required this.onTap,
-  });
-
-  final DateTime day;
-  final bool isToday;
-  final bool isSelected;
-  final bool isFuture;
-  final bool hasData;
-  final VoidCallback? onTap;
-
-  static const _diameter = 40.0;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final text = context.text;
-    final typo = context.typo;
-    final l10n = AppLocalizations.of(context);
-    final locale = Localizations.localeOf(context).toLanguageTag();
-
-    final letter = DateFormat.EEEEE(locale).format(day).toUpperCase();
-    final dayNum = day.day.toString();
-
-    final Color bg;
-    final Color fg;
-    final Color borderColor;
-    if (isSelected) {
-      bg = colors.accent;
-      fg = colors.bg;
-      borderColor = colors.accent;
-    } else if (isToday) {
-      bg = Colors.transparent;
-      fg = colors.accent;
-      borderColor = colors.accent;
-    } else if (isFuture) {
-      bg = Colors.transparent;
-      fg = colors.textDimmer;
-      borderColor = colors.borderDim;
-    } else {
-      bg = Colors.transparent;
-      fg = colors.text;
-      borderColor = colors.border;
-    }
-
-    final letterColor =
-        isFuture ? colors.textDimmer : colors.textDim;
-
-    final state = isFuture
-        ? 'future'
-        : isSelected
-            ? 'selected'
-            : isToday
-                ? 'today'
-                : 'past';
-
-    return Semantics(
-      button: !isFuture,
-      enabled: !isFuture,
-      label: l10n.mealsHistoryWeekSelectorA11y(
-        DateFormat.EEEE(locale).format(day),
-        day.day,
-        state,
-      ),
-      child: InkResponse(
-        onTap: onTap,
-        radius: _diameter,
-        customBorder: const CircleBorder(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              letter,
-              style: typo.caption.copyWith(
-                color: letterColor,
-                letterSpacing: 1.4,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Container(
-              width: _diameter,
-              height: _diameter,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: bg,
-                border: Border.all(
-                  color: borderColor,
-                  width: isSelected || isToday ? 1.5 : 1,
-                ),
-              ),
-              child: Text(
-                dayNum,
-                style: text.titleMedium?.copyWith(
-                  color: fg,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );

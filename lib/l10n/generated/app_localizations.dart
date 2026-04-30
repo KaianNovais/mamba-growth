@@ -722,11 +722,17 @@ abstract class AppLocalizations {
   /// **'No meals logged this day.'**
   String get mealsHistoryDayEmpty;
 
-  /// No description provided for @mealsHistoryWeekSelectorA11y.
+  /// No description provided for @historyDayEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No fasts logged this day.'**
+  String get historyDayEmpty;
+
+  /// No description provided for @weekSelectorDayA11y.
   ///
   /// In en, this message translates to:
   /// **'{weekday}, day {day}{state, select, today{, today} selected{, selected} future{, future, not available} other{}}'**
-  String mealsHistoryWeekSelectorA11y(String weekday, int day, String state);
+  String weekSelectorDayA11y(String weekday, int day, String state);
 
   /// No description provided for @profileEmptyTitle.
   ///

@@ -358,7 +358,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mealsHistoryDayEmpty => 'Nenhuma refeição neste dia.';
 
   @override
-  String mealsHistoryWeekSelectorA11y(String weekday, int day, String state) {
+  String get historyDayEmpty => 'Nenhum jejum neste dia.';
+
+  @override
+  String weekSelectorDayA11y(String weekday, int day, String state) {
     String _temp0 = intl.Intl.selectLogic(state, {
       'today': ', hoje',
       'selected': ', selecionado',
