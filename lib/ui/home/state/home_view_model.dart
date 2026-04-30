@@ -177,6 +177,28 @@ class HomeViewModel extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
   }
 
+  Future<void> reload() async {
+    await _loadWeek();
+    notifyListeners();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) return;
+    final now = _nowProvider();
+    final newToday = startOfDay(now);
+    if (newToday == _state.today) return;
+    final newWeekStart = startOfWeekSunday(now);
+    _state = _state.copyWith(
+      today: newToday,
+      weekStart: newWeekStart,
+      selectedDayIndex: newToday.difference(newWeekStart).inDays,
+    );
+    _subscribeToday(newToday);
+    _loadWeek().then((_) => notifyListeners());
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     _todaySub?.cancel();
