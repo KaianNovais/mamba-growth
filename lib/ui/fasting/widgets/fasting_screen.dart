@@ -138,8 +138,7 @@ class _BodyState extends State<_Body> {
         ? '${l10n.homeProtocolEyebrow} · ${protocol.displayLabel}'
         : '${l10n.homeNextProtocolEyebrow} · ${protocol.displayLabel}';
 
-    final idleCenterText =
-        protocol.isTestProtocol ? '2min' : '${protocol.fastingHours}h';
+    final idleCenterText = '${protocol.fastingHours}h';
 
     // Ring + semantics + center child: dinâmico quando há jejum ativo
     // (depende de `now`), estático quando não há.
@@ -209,17 +208,11 @@ class _BodyState extends State<_Body> {
             valueListenable: vm.nowListenable,
             builder: (_, now, _) => _ActiveSubtitle(fast: fast, now: now),
           )
-        : protocol.isTestProtocol
-            ? Text(
-                'Modo de teste · 2 minutos',
-                style: text.bodyMedium?.copyWith(color: colors.textDim),
-                textAlign: TextAlign.center,
-              )
-            : Text(
-                l10n.homeEatingWindow(protocol.eatingHours),
-                style: text.bodyMedium?.copyWith(color: colors.textDim),
-                textAlign: TextAlign.center,
-              );
+        : Text(
+            l10n.homeEatingWindow(protocol.eatingHours),
+            style: text.bodyMedium?.copyWith(color: colors.textDim),
+            textAlign: TextAlign.center,
+          );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),

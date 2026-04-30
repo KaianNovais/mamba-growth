@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../data/repositories/auth/auth_repository.dart';
@@ -9,10 +10,14 @@ import '../ui/profile/widgets/profile_screen.dart';
 import '../ui/splash/widgets/splash_screen.dart';
 import 'routes.dart';
 
-GoRouter buildRouter({required AuthRepository authRepository}) {
+GoRouter buildRouter({
+  required AuthRepository authRepository,
+  List<NavigatorObserver> observers = const [],
+}) {
   return GoRouter(
     initialLocation: Routes.splash,
     refreshListenable: authRepository,
+    observers: observers,
     redirect: (context, state) {
       final loc = state.matchedLocation;
       final isInitialized = authRepository.isInitialized;

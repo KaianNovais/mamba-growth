@@ -1,4 +1,8 @@
+import 'dart:ui';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -25,6 +29,12 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   final firebaseAuthService = FirebaseAuthService();
   final googleSignInService = GoogleSignInService();
@@ -63,6 +73,9 @@ Future<void> main() async {
     mealsRepository: mealsRepository,
     notificationService: notificationService,
     localDatabase: localDatabase,
+    routerObservers: [
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+    ],
   ));
 }
 
@@ -74,6 +87,7 @@ class MambaGrowthApp extends StatelessWidget {
     required this.mealsRepository,
     required this.notificationService,
     required this.localDatabase,
+    this.routerObservers = const [],
   });
 
   final AuthRepository authRepository;
@@ -81,6 +95,7 @@ class MambaGrowthApp extends StatelessWidget {
   final MealsRepository mealsRepository;
   final NotificationService notificationService;
   final LocalDatabase localDatabase;
+  final List<NavigatorObserver> routerObservers;
 
   static const supportedLocales = <Locale>[
     Locale('en'),
@@ -109,7 +124,10 @@ class MambaGrowthApp extends StatelessWidget {
         ],
         supportedLocales: supportedLocales,
         localeResolutionCallback: _resolveLocale,
-        routerConfig: buildRouter(authRepository: authRepository),
+        routerConfig: buildRouter(
+          authRepository: authRepository,
+          observers: routerObservers,
+        ),
       ),
     );
   }

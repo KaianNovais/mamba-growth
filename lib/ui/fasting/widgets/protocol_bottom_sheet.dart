@@ -165,15 +165,6 @@ class _SheetContentState extends State<_SheetContent> {
                   24 - _customFasting,
                 ),
               ),
-              const SizedBox(height: AppSpacing.md),
-              // TODO(remove): tile do protocolo de teste de 2 minutos.
-              _TestProtocolTile(
-                selected: _selected.id == FastingProtocol.testTwoMinutes.id,
-                onTap: () {
-                  HapticFeedback.selectionClick();
-                  setState(() => _selected = FastingProtocol.testTwoMinutes);
-                },
-              ),
               const SizedBox(height: AppSpacing.xl),
               SizedBox(
                 width: double.infinity,
@@ -347,71 +338,3 @@ class _CustomCard extends StatelessWidget {
   }
 }
 
-// TODO(remove): tile temporário do protocolo de teste de 2 minutos.
-// Usado para validação manual do timer + notificação.
-class _TestProtocolTile extends StatelessWidget {
-  const _TestProtocolTile({
-    required this.selected,
-    required this.onTap,
-  });
-
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final text = context.text;
-    final typo = context.typo;
-    final borderColor = selected ? colors.accent : colors.border;
-    final bgColor = selected
-        ? colors.accent.withValues(alpha: 0.08)
-        : colors.surface;
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadius.lg),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        curve: Curves.easeOutCubic,
-        padding: const EdgeInsets.symmetric(
-          vertical: AppSpacing.md,
-          horizontal: AppSpacing.lg,
-        ),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          border: Border.all(color: borderColor, width: selected ? 1.5 : 1),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.science_outlined,
-              size: 18,
-              color: selected ? colors.accent : colors.textDim,
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Teste · 2 minutos',
-                    style: text.titleMedium?.copyWith(
-                      color: selected ? colors.accent : colors.text,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Apenas para validação manual',
-                    style: typo.caption.copyWith(color: colors.textDimmer),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

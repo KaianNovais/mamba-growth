@@ -36,9 +36,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     _weekDays = WeekDaySelector.currentWeekDays(_today);
     _selectedDay = _today;
 
-    // Janela limitada: só puxamos jejuns da semana exibida.
-    // Antes: watchCompletedFasts() carregava TODO o histórico em memória
-    // e a tela filtrava em O(n) a cada troca de dia.
     final repo = context.read<FastingRepository>();
     final end = _weekStart.add(const Duration(days: 7));
     _future = repo.getFastsBetween(_weekStart, end).then(_groupByEndDay);
@@ -175,12 +172,9 @@ class _HistoryItem extends StatelessWidget {
 
     final endAt = fast.endAt!;
     final elapsed = endAt.difference(fast.startAt);
-    final isTest = fast.targetHours == 0;
-    final targetLabel =
-        isTest ? l10n.historyItemTestProtocol : '${fast.targetHours}h';
     final summary = l10n.historyItemSummary(
       _formatElapsed(elapsed),
-      targetLabel,
+      '${fast.targetHours}h',
     );
 
     return Container(

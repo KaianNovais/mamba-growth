@@ -4,7 +4,9 @@ import 'package:flutter/widgets.dart';
 
 import '../../../data/repositories/meals/meals_repository.dart';
 import '../../../domain/models/meal.dart';
+import '../../../utils/analytics.dart';
 import '../../../utils/command.dart';
+import '../../../utils/result.dart';
 
 /// View model da tela de refeições.
 ///
@@ -25,7 +27,13 @@ class MealsViewModel extends ChangeNotifier with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     addMeal = Command1<Meal, ({String name, int calories})>(
-      (args) => _repo.addMeal(name: args.name, calories: args.calories),
+      (args) async {
+        final result = await _repo.addMeal(name: args.name, calories: args.calories);
+        if (result is Ok<Meal>) {
+          safeAnalytics((a) => a.logEvent(name: 'log_meal'));
+        }
+        return result;
+      },
     );
     updateMeal = Command1<Meal, Meal>(_repo.updateMeal);
     deleteMeal = Command1<void, Meal>((meal) => _repo.deleteMeal(meal.id));

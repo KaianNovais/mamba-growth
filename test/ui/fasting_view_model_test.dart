@@ -1,5 +1,4 @@
 import 'package:fake_async/fake_async.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mamba_growth/data/repositories/fasting/fasting_repository.dart';
@@ -12,7 +11,7 @@ class _FakeFastingRepository extends ChangeNotifier
     implements FastingRepository {
   Fast? _activeFast;
   FastingProtocol _selectedProtocol = FastingProtocol.defaultProtocol;
-  bool _isInitialized = true;
+  final bool _isInitialized = true;
 
   void setActiveFast(Fast? fast) {
     _activeFast = fast;

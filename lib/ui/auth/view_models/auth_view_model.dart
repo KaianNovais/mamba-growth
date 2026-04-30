@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../../data/repositories/auth/auth_repository.dart';
+import '../../../utils/analytics.dart';
 import '../../../utils/command.dart';
 import '../../../utils/result.dart';
 
@@ -37,13 +38,35 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Result<void>> _signInWithEmail(EmailPasswordInput input) =>
-      _authRepository.signInWithEmail(email: input.email, password: input.password);
+  Future<Result<void>> _signInWithEmail(EmailPasswordInput input) async {
+    final result = await _authRepository.signInWithEmail(
+      email: input.email,
+      password: input.password,
+    );
+    if (result is Ok<void>) {
+      safeAnalytics((a) => a.logLogin(loginMethod: 'email'));
+    }
+    return result;
+  }
 
-  Future<Result<void>> _signUpWithEmail(EmailPasswordInput input) =>
-      _authRepository.signUpWithEmail(email: input.email, password: input.password);
+  Future<Result<void>> _signUpWithEmail(EmailPasswordInput input) async {
+    final result = await _authRepository.signUpWithEmail(
+      email: input.email,
+      password: input.password,
+    );
+    if (result is Ok<void>) {
+      safeAnalytics((a) => a.logSignUp(signUpMethod: 'email'));
+    }
+    return result;
+  }
 
-  Future<Result<void>> _signInWithGoogle() => _authRepository.signInWithGoogle();
+  Future<Result<void>> _signInWithGoogle() async {
+    final result = await _authRepository.signInWithGoogle();
+    if (result is Ok<void>) {
+      safeAnalytics((a) => a.logLogin(loginMethod: 'google'));
+    }
+    return result;
+  }
 
   @override
   void dispose() {

@@ -301,9 +301,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyItemStatusEarly => 'Ended early';
 
   @override
-  String get historyItemTestProtocol => 'Test · 2 min';
-
-  @override
   String get historyDateToday => 'Today';
 
   @override

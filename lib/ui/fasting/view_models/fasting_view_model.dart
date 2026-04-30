@@ -6,7 +6,9 @@ import 'package:flutter/widgets.dart';
 import '../../../data/repositories/fasting/fasting_repository.dart';
 import '../../../domain/models/fast.dart';
 import '../../../domain/models/fasting_protocol.dart';
+import '../../../utils/analytics.dart';
 import '../../../utils/command.dart';
+import '../../../utils/result.dart';
 
 /// View model da tela de jejum.
 ///
@@ -20,8 +22,20 @@ class FastingViewModel extends ChangeNotifier with WidgetsBindingObserver {
   FastingViewModel({required FastingRepository repository})
       : _repo = repository {
     _repo.addListener(_onRepoChanged);
-    startFast = Command0<Fast>(_repo.startFast);
-    endFast = Command0<Fast>(_repo.endFast);
+    startFast = Command0<Fast>(() async {
+      final result = await _repo.startFast();
+      if (result is Ok<Fast>) {
+        safeAnalytics((a) => a.logEvent(name: 'start_fast'));
+      }
+      return result;
+    });
+    endFast = Command0<Fast>(() async {
+      final result = await _repo.endFast();
+      if (result is Ok<Fast>) {
+        safeAnalytics((a) => a.logEvent(name: 'end_fast'));
+      }
+      return result;
+    });
     WidgetsBinding.instance.addObserver(this);
     _onRepoChanged();
   }

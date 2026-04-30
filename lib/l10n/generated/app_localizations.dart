@@ -620,12 +620,6 @@ abstract class AppLocalizations {
   /// **'Ended early'**
   String get historyItemStatusEarly;
 
-  /// No description provided for @historyItemTestProtocol.
-  ///
-  /// In en, this message translates to:
-  /// **'Test · 2 min'**
-  String get historyItemTestProtocol;
-
   /// No description provided for @historyDateToday.
   ///
   /// In en, this message translates to:

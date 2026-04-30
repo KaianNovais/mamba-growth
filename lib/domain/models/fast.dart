@@ -20,12 +20,7 @@ class Fast {
 
   bool get isActive => endAt == null;
 
-  // TODO(remove): targetHours == 0 sinaliza o protocolo de teste de
-  // 2 minutos (ver FastingProtocol.testTwoMinutes). Remover essa
-  // special-case quando o protocolo de teste sair.
-  Duration get target => targetHours == 0
-      ? const Duration(minutes: 2)
-      : Duration(hours: targetHours);
+  Duration get target => Duration(hours: targetHours);
 
   Duration elapsed(DateTime now) {
     final e = now.difference(startAt);

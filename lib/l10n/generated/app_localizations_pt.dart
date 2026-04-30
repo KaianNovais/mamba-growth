@@ -304,9 +304,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get historyItemStatusEarly => 'Encerrado antes';
 
   @override
-  String get historyItemTestProtocol => 'Teste · 2 min';
-
-  @override
   String get historyDateToday => 'Hoje';
 
   @override
