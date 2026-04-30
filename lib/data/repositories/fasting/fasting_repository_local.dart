@@ -205,6 +205,21 @@ class FastingRepositoryLocal extends FastingRepository {
   }
 
   @override
+  Future<List<Fast>> getFastsBetween(DateTime start, DateTime end) async {
+    final db = await _localDb.database;
+    final rows = await db.query(
+      'fasts',
+      where: 'end_at IS NOT NULL AND end_at >= ? AND end_at < ?',
+      whereArgs: [
+        start.millisecondsSinceEpoch,
+        end.millisecondsSinceEpoch,
+      ],
+      orderBy: 'end_at DESC',
+    );
+    return List.unmodifiable(rows.map(_fastFromRow));
+  }
+
+  @override
   void dispose() {
     _completedFastsCtrl.close();
     super.dispose();

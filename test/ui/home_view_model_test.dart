@@ -48,6 +48,9 @@ class _FakeFastingRepository extends ChangeNotifier
 
   @override
   Stream<List<Fast>> watchCompletedFasts() => const Stream.empty();
+
+  @override
+  Future<List<Fast>> getFastsBetween(DateTime start, DateTime end) async => [];
 }
 
 Fast _activeFastNow() => Fast(

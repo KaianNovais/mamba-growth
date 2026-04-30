@@ -22,6 +22,10 @@ class _MealsHistoryScreenState extends State<MealsHistoryScreen> {
   late final Future<Map<DateTime, List<Meal>>> _future;
   late DateTime _selectedDay;
 
+  // DateFormat é caro; cacheamos por locale e renovamos só se mudar.
+  String? _cachedLocale;
+  late DateFormat _timeFormat;
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +38,16 @@ class _MealsHistoryScreenState extends State<MealsHistoryScreen> {
     final repo = context.read<MealsRepository>();
     final end = _weekStart.add(const Duration(days: 7));
     _future = repo.getMealsBetween(_weekStart, end).then(_groupByDay);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    if (_cachedLocale != locale) {
+      _cachedLocale = locale;
+      _timeFormat = DateFormat.Hm(locale);
+    }
   }
 
   Map<DateTime, List<Meal>> _groupByDay(List<Meal> meals) {
@@ -55,37 +69,51 @@ class _MealsHistoryScreenState extends State<MealsHistoryScreen> {
       appBar: AppBar(title: Text(l10n.mealsHistoryTitle)),
       body: SafeArea(
         top: false,
-        child: FutureBuilder<Map<DateTime, List<Meal>>>(
-          future: _future,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            final byDay = snapshot.data!;
-            final selectedMeals = byDay[_selectedDay] ?? const <Meal>[];
-
-            return ListView(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.lg,
-                AppSpacing.md,
-                AppSpacing.lg,
-                AppSpacing.xl,
-              ),
-              children: [
-                WeekDaySelector(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.lg,
+            AppSpacing.md,
+            AppSpacing.lg,
+            0,
+          ),
+          child: Column(
+            children: [
+              // Selector vive fora do FutureBuilder: completar o future
+              // não rebuilda os 7 círculos.
+              RepaintBoundary(
+                child: WeekDaySelector(
                   weekDays: _weekDays,
                   today: _today,
                   selectedDay: _selectedDay,
                   onSelect: (day) => setState(() => _selectedDay = day),
                 ),
-                const SizedBox(height: AppSpacing.lg),
-                if (selectedMeals.isEmpty)
-                  _EmptyDay(message: l10n.mealsHistoryDayEmpty)
-                else
-                  _DayCard(day: _selectedDay, meals: selectedMeals),
-              ],
-            );
-          },
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Expanded(
+                child: FutureBuilder<Map<DateTime, List<Meal>>>(
+                  future: _future,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    final byDay = snapshot.data!;
+                    final selectedMeals =
+                        byDay[_selectedDay] ?? const <Meal>[];
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.only(bottom: AppSpacing.xl),
+                      child: selectedMeals.isEmpty
+                          ? _EmptyDay(message: l10n.mealsHistoryDayEmpty)
+                          : _DayCard(
+                              day: _selectedDay,
+                              meals: selectedMeals,
+                              timeFormat: _timeFormat,
+                            ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -116,10 +144,15 @@ class _EmptyDay extends StatelessWidget {
 }
 
 class _DayCard extends StatelessWidget {
-  const _DayCard({required this.day, required this.meals});
+  const _DayCard({
+    required this.day,
+    required this.meals,
+    required this.timeFormat,
+  });
 
   final DateTime day;
   final List<Meal> meals;
+  final DateFormat timeFormat;
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +167,10 @@ class _DayCard extends StatelessWidget {
     final dayLabel = _formatDayLabel(context, day);
     final totalKcal = meals.fold<int>(0, (s, m) => s + m.calories);
 
+    // Lista do dia é bounded (<10 itens típicos, <30 worst-case) e
+    // visualmente faz parte deste card. Column com ValueKey é o
+    // certo aqui — ListView.builder aninhado em scroll com
+    // shrinkWrap defeats sua própria virtualização.
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
@@ -174,10 +211,12 @@ class _DayCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           Divider(color: colors.borderDim, height: 1),
           const SizedBox(height: AppSpacing.sm),
-          for (var i = 0; i < meals.length; i++) ...[
-            if (i > 0) const SizedBox(height: AppSpacing.sm),
-            _MealRow(meal: meals[i]),
-          ],
+          for (var i = 0; i < meals.length; i++)
+            Padding(
+              key: ValueKey(meals[i].id),
+              padding: EdgeInsets.only(top: i == 0 ? 0 : AppSpacing.sm),
+              child: _MealRow(meal: meals[i], timeFormat: timeFormat),
+            ),
         ],
       ),
     );
@@ -198,9 +237,10 @@ class _DayCard extends StatelessWidget {
 }
 
 class _MealRow extends StatelessWidget {
-  const _MealRow({required this.meal});
+  const _MealRow({required this.meal, required this.timeFormat});
 
   final Meal meal;
+  final DateFormat timeFormat;
 
   @override
   Widget build(BuildContext context) {
@@ -208,8 +248,7 @@ class _MealRow extends StatelessWidget {
     final text = context.text;
     final typo = context.typo;
     final l10n = AppLocalizations.of(context);
-    final locale = Localizations.localeOf(context).toLanguageTag();
-    final time = DateFormat.Hm(locale).format(meal.eatenAt);
+    final time = timeFormat.format(meal.eatenAt);
 
     return Row(
       children: [

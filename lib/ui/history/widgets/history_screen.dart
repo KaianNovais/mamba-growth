@@ -16,32 +16,53 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  late final Stream<List<Fast>> _stream;
   late final DateTime _today;
+  late final DateTime _weekStart;
   late final List<DateTime> _weekDays;
+  late final Future<Map<DateTime, List<Fast>>> _future;
   late DateTime _selectedDay;
+
+  // DateFormat é caro de instanciar e o locale só muda raramente.
+  // Cacheamos por locale e recalculamos em didChangeDependencies.
+  String? _cachedLocale;
+  late DateFormat _timeFormat;
 
   @override
   void initState() {
     super.initState();
     final now = DateTime.now();
     _today = DateTime(now.year, now.month, now.day);
+    _weekStart = WeekDaySelector.startOfWeekSunday(_today);
     _weekDays = WeekDaySelector.currentWeekDays(_today);
     _selectedDay = _today;
 
-    // Cacheado uma vez: watchCompletedFasts() é `async*` e cria uma
-    // nova stream a cada chamada — invocá-la dentro de build forçaria
-    // re-subscribe a cada rebuild. context.read também evita
-    // rebuildar a tela em qualquer notify do repo (start/end/protocolo);
-    // a stream já cobre o que essa tela precisa.
-    _stream = context.read<FastingRepository>().watchCompletedFasts();
+    // Janela limitada: só puxamos jejuns da semana exibida.
+    // Antes: watchCompletedFasts() carregava TODO o histórico em memória
+    // e a tela filtrava em O(n) a cada troca de dia.
+    final repo = context.read<FastingRepository>();
+    final end = _weekStart.add(const Duration(days: 7));
+    _future = repo.getFastsBetween(_weekStart, end).then(_groupByEndDay);
   }
 
-  bool _endedOn(Fast fast, DateTime day) {
-    final end = fast.endAt;
-    if (end == null) return false;
-    final endDay = DateTime(end.year, end.month, end.day);
-    return endDay.isAtSameMomentAs(day);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    if (_cachedLocale != locale) {
+      _cachedLocale = locale;
+      _timeFormat = DateFormat.Hm(locale);
+    }
+  }
+
+  Map<DateTime, List<Fast>> _groupByEndDay(List<Fast> fasts) {
+    final byDay = <DateTime, List<Fast>>{};
+    for (final f in fasts) {
+      final end = f.endAt;
+      if (end == null) continue;
+      final day = DateTime(end.year, end.month, end.day);
+      byDay.putIfAbsent(day, () => []).add(f);
+    }
+    return byDay;
   }
 
   @override
@@ -54,41 +75,62 @@ class _HistoryScreenState extends State<HistoryScreen> {
       appBar: AppBar(title: Text(l10n.navHistory)),
       body: SafeArea(
         top: false,
-        child: StreamBuilder<List<Fast>>(
-          stream: _stream,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            final fasts = snapshot.data!;
-            final dayFasts =
-                fasts.where((f) => _endedOn(f, _selectedDay)).toList();
-
-            return ListView(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.lg,
-                AppSpacing.md,
-                AppSpacing.lg,
-                AppSpacing.xl,
-              ),
-              children: [
-                WeekDaySelector(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.lg,
+            AppSpacing.md,
+            AppSpacing.lg,
+            0,
+          ),
+          child: Column(
+            children: [
+              // Selector vive fora do FutureBuilder: completar o future
+              // (ou re-render do snapshot) não rebuilda os 7 círculos.
+              RepaintBoundary(
+                child: WeekDaySelector(
                   weekDays: _weekDays,
                   today: _today,
                   selectedDay: _selectedDay,
                   onSelect: (day) => setState(() => _selectedDay = day),
                 ),
-                const SizedBox(height: AppSpacing.lg),
-                if (dayFasts.isEmpty)
-                  _EmptyDay(message: l10n.historyDayEmpty)
-                else
-                  for (var i = 0; i < dayFasts.length; i++) ...[
-                    if (i > 0) const SizedBox(height: AppSpacing.md),
-                    _HistoryItem(fast: dayFasts[i]),
-                  ],
-              ],
-            );
-          },
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Expanded(
+                child: FutureBuilder<Map<DateTime, List<Fast>>>(
+                  future: _future,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    final byDay = snapshot.data!;
+                    final dayFasts = byDay[_selectedDay] ?? const <Fast>[];
+
+                    if (dayFasts.isEmpty) {
+                      return _EmptyDay(message: l10n.historyDayEmpty);
+                    }
+
+                    return ListView.builder(
+                      padding: const EdgeInsets.only(bottom: AppSpacing.xl),
+                      itemCount: dayFasts.length,
+                      itemBuilder: (ctx, i) {
+                        final fast = dayFasts[i];
+                        return Padding(
+                          key: ValueKey(fast.id),
+                          padding: EdgeInsets.only(
+                            top: i == 0 ? 0 : AppSpacing.md,
+                          ),
+                          child: _HistoryItem(
+                            fast: fast,
+                            timeFormat: _timeFormat,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -119,9 +161,10 @@ class _EmptyDay extends StatelessWidget {
 }
 
 class _HistoryItem extends StatelessWidget {
-  const _HistoryItem({required this.fast});
+  const _HistoryItem({required this.fast, required this.timeFormat});
 
   final Fast fast;
+  final DateFormat timeFormat;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +197,7 @@ class _HistoryItem extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  _formatTimeHeader(context, endAt),
+                  timeFormat.format(endAt),
                   style: typo.caption.copyWith(
                     color: colors.textDim,
                     letterSpacing: 1.6,
@@ -180,11 +223,6 @@ class _HistoryItem extends StatelessWidget {
     final m = d.inMinutes % 60;
     if (h <= 0) return '${m}min';
     return '${h}h ${m.toString().padLeft(2, '0')}min';
-  }
-
-  String _formatTimeHeader(BuildContext context, DateTime endAt) {
-    final locale = Localizations.localeOf(context).toLanguageTag();
-    return DateFormat.Hm(locale).format(endAt);
   }
 }
 

@@ -43,21 +43,24 @@ class MealsViewModel extends ChangeNotifier with WidgetsBindingObserver {
   DateTime _day = DateTime.now();
   StreamSubscription<List<Meal>>? _sub;
   List<Meal> _meals = const [];
+  // Cacheado: o getter era chamado 3-4× por rebuild (progress, overGoal,
+  // _RingHero) e o fold é O(n). Recalculado só quando a lista emite.
+  int _totalKcal = 0;
 
   bool get isInitialized => _repo.isInitialized;
   DateTime get day => _day;
   List<Meal> get meals => _meals;
-  int get totalKcal => _meals.fold(0, (sum, m) => sum + m.calories);
+  int get totalKcal => _totalKcal;
   int? get goal => _repo.currentGoal;
   double get progress {
     final g = goal;
     if (g == null || g == 0) return 0;
-    return totalKcal / g;
+    return _totalKcal / g;
   }
 
   bool get overGoal {
     final g = goal;
-    return g != null && totalKcal > g;
+    return g != null && _totalKcal > g;
   }
 
   /// Reinsere uma refeição deletada (undo do snackbar).
@@ -71,6 +74,7 @@ class MealsViewModel extends ChangeNotifier with WidgetsBindingObserver {
     _sub?.cancel();
     _sub = _repo.watchMealsForDay(_day).listen((list) {
       _meals = list;
+      _totalKcal = list.fold(0, (sum, m) => sum + m.calories);
       notifyListeners();
     });
   }
