@@ -174,6 +174,9 @@ class _Body extends StatelessWidget {
           side: BorderSide(color: colors.borderDim),
         ),
         duration: const Duration(milliseconds: 2600),
+        // Material 3 mantém SnackBars com action persistentes por padrão;
+        // forçamos auto-dismiss para que o "Desfazer" não trave a UI.
+        persist: false,
         content: Row(
           children: [
             Icon(
@@ -287,39 +290,32 @@ class _Body extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          decoration: BoxDecoration(
-            color: colors.bg,
-            border: Border(
-              top: BorderSide(color: colors.borderDim),
+        SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.xl,
+              AppSpacing.md,
+              AppSpacing.xl,
+              AppSpacing.md,
             ),
-          ),
-          child: SafeArea(
-            top: false,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.xl,
-                AppSpacing.md,
-                AppSpacing.xl,
-                AppSpacing.md,
-              ),
-              child: SizedBox(
-                height: 56,
-                child: FilledButton.icon(
-                  onPressed: () => _openAdd(context),
-                  icon: Icon(Icons.add_rounded, color: colors.bg),
-                  label: Text(
-                    l10n.mealsAddCta,
-                    style: text.labelLarge?.copyWith(
-                      color: colors.bg,
-                      fontWeight: FontWeight.w600,
-                    ),
+            child: SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: FilledButton.icon(
+                onPressed: () => _openAdd(context),
+                icon: Icon(Icons.add_rounded, color: colors.bg),
+                label: Text(
+                  l10n.mealsAddCta,
+                  style: text.labelLarge?.copyWith(
+                    color: colors.bg,
+                    fontWeight: FontWeight.w600,
                   ),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: colors.accent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.lg),
-                    ),
+                ),
+                style: FilledButton.styleFrom(
+                  backgroundColor: colors.accent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.lg),
                   ),
                 ),
               ),
