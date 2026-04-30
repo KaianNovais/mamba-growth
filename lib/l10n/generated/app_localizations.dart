@@ -332,6 +332,12 @@ abstract class AppLocalizations {
   /// **'Home'**
   String get navHome;
 
+  /// No description provided for @navFasting.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting'**
+  String get navFasting;
+
   /// No description provided for @navMeals.
   ///
   /// In en, this message translates to:
@@ -344,11 +350,11 @@ abstract class AppLocalizations {
   /// **'History'**
   String get navHistory;
 
-  /// No description provided for @navStats.
+  /// No description provided for @navProfile.
   ///
   /// In en, this message translates to:
-  /// **'Stats'**
-  String get navStats;
+  /// **'Profile'**
+  String get navProfile;
 
   /// No description provided for @homeFastingTitle.
   ///
@@ -437,7 +443,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeEndDialogTitle.
   ///
   /// In en, this message translates to:
-  /// **'End fast?'**
+  /// **'Don\'t give up now'**
   String get homeEndDialogTitle;
 
   /// No description provided for @homeEndDialogBody.
@@ -446,11 +452,23 @@ abstract class AppLocalizations {
   /// **'You fasted {elapsed} of {target}. Your progress will be saved to history.'**
   String homeEndDialogBody(String elapsed, String target);
 
-  /// No description provided for @homeEndDialogSurpassed.
+  /// No description provided for @homeEndDialogProgress.
   ///
   /// In en, this message translates to:
-  /// **'You beat your goal by {over} · great work.'**
-  String homeEndDialogSurpassed(String over);
+  /// **'{percent}% complete · {remaining} to go'**
+  String homeEndDialogProgress(int percent, String remaining);
+
+  /// No description provided for @homeEndDialogStayCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep fasting'**
+  String get homeEndDialogStayCta;
+
+  /// No description provided for @homeEndDialogQuitCta.
+  ///
+  /// In en, this message translates to:
+  /// **'End anyway'**
+  String get homeEndDialogQuitCta;
 
   /// No description provided for @homeEndDialogCancel.
   ///
@@ -463,6 +481,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'End'**
   String get homeEndDialogConfirm;
+
+  /// No description provided for @homeFastCompletedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast complete!'**
+  String get homeFastCompletedTitle;
+
+  /// No description provided for @homeFastCompletedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You fasted {duration}. Saved to your history.'**
+  String homeFastCompletedBody(String duration);
+
+  /// No description provided for @homeFastCompletedDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get homeFastCompletedDismiss;
 
   /// No description provided for @homeProtocolSheetTitle.
   ///
@@ -602,23 +638,101 @@ abstract class AppLocalizations {
   /// **'Yesterday'**
   String get historyDateYesterday;
 
-  /// No description provided for @statsEmptyTitle.
+  /// No description provided for @homeNewEmptyTitle.
   ///
   /// In en, this message translates to:
-  /// **'Insights on the way.'**
-  String get statsEmptyTitle;
+  /// **'Coming soon.'**
+  String get homeNewEmptyTitle;
 
-  /// No description provided for @statsEmptySubtitle.
+  /// No description provided for @homeNewEmptySubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Once you log a few days, you\'ll see honest trends and real progress here.'**
-  String get statsEmptySubtitle;
+  /// **'Your daily snapshot will live here.'**
+  String get homeNewEmptySubtitle;
 
   /// No description provided for @profileTitle.
   ///
   /// In en, this message translates to:
   /// **'Profile'**
   String get profileTitle;
+
+  /// No description provided for @profileHistorySectionEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'ACTIVITY'**
+  String get profileHistorySectionEyebrow;
+
+  /// No description provided for @profileHistoryRowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting history'**
+  String get profileHistoryRowTitle;
+
+  /// No description provided for @profileHistoryRowSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View your past fasts'**
+  String get profileHistoryRowSubtitle;
+
+  /// No description provided for @profileMealsHistoryRowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calorie history'**
+  String get profileMealsHistoryRowTitle;
+
+  /// No description provided for @profileMealsHistoryRowSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your past days'**
+  String get profileMealsHistoryRowSubtitle;
+
+  /// No description provided for @mealsHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calorie history'**
+  String get mealsHistoryTitle;
+
+  /// No description provided for @mealsHistoryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet.'**
+  String get mealsHistoryEmptyTitle;
+
+  /// No description provided for @mealsHistoryEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your logged meals will appear here as you build a track record.'**
+  String get mealsHistoryEmptySubtitle;
+
+  /// No description provided for @mealsHistoryMealsCountOne.
+  ///
+  /// In en, this message translates to:
+  /// **'1 meal'**
+  String get mealsHistoryMealsCountOne;
+
+  /// No description provided for @mealsHistoryMealsCountMany.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} meals'**
+  String mealsHistoryMealsCountMany(int count);
+
+  /// No description provided for @mealsHistoryDayEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No meals logged this day.'**
+  String get mealsHistoryDayEmpty;
+
+  /// No description provided for @historyDayEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No fasts logged this day.'**
+  String get historyDayEmpty;
+
+  /// No description provided for @weekSelectorDayA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'{weekday}, day {day}{state, select, today{, today} selected{, selected} future{, future, not available} other{}}'**
+  String weekSelectorDayA11y(String weekday, int day, String state);
 
   /// No description provided for @profileEmptyTitle.
   ///
@@ -955,6 +1069,270 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Between 500 and 9999'**
   String get profileGoalValidationRange;
+
+  /// No description provided for @profileGroupGoalsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals & tracking'**
+  String get profileGroupGoalsTitle;
+
+  /// No description provided for @profileGroupPreferencesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get profileGroupPreferencesTitle;
+
+  /// No description provided for @profileGroupAboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get profileGroupAboutTitle;
+
+  /// No description provided for @profileGoalRowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily calorie goal'**
+  String get profileGoalRowTitle;
+
+  /// No description provided for @profileGoalRowEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set yet'**
+  String get profileGoalRowEmptySubtitle;
+
+  /// No description provided for @profileGoalRowValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{kcal} kcal'**
+  String profileGoalRowValue(int kcal);
+
+  /// No description provided for @profileRowAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get profileRowAppearance;
+
+  /// No description provided for @profileRowAppearanceValueDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get profileRowAppearanceValueDark;
+
+  /// No description provided for @profileRowNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get profileRowNotifications;
+
+  /// No description provided for @profileRowLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get profileRowLanguage;
+
+  /// No description provided for @profileRowLanguageValueAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get profileRowLanguageValueAuto;
+
+  /// No description provided for @profileRowUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'Units'**
+  String get profileRowUnits;
+
+  /// No description provided for @profileRowUnitsValue.
+  ///
+  /// In en, this message translates to:
+  /// **'kcal'**
+  String get profileRowUnitsValue;
+
+  /// No description provided for @profileRowPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get profileRowPrivacy;
+
+  /// No description provided for @profileRowTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of use'**
+  String get profileRowTerms;
+
+  /// No description provided for @profileRowSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & feedback'**
+  String get profileRowSupport;
+
+  /// No description provided for @profileComingSoonSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon.'**
+  String get profileComingSoonSnack;
+
+  /// No description provided for @profileSignOutDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out?'**
+  String get profileSignOutDialogTitle;
+
+  /// No description provided for @profileSignOutDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll need to sign in again to access your data.'**
+  String get profileSignOutDialogBody;
+
+  /// No description provided for @profileSignOutDialogCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get profileSignOutDialogCancel;
+
+  /// No description provided for @profileSignOutDialogConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get profileSignOutDialogConfirm;
+
+  /// No description provided for @profileAppVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} v{version} ({build})'**
+  String profileAppVersion(String name, String version, String build);
+
+  /// No description provided for @homeOverviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get homeOverviewTitle;
+
+  /// No description provided for @homeTodayEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY · {date}'**
+  String homeTodayEyebrow(String date);
+
+  /// No description provided for @homeStatusOnTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'On target'**
+  String get homeStatusOnTarget;
+
+  /// No description provided for @homeStatusOverGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Over by {n} kcal'**
+  String homeStatusOverGoal(int n);
+
+  /// No description provided for @homeStatusNoGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a goal'**
+  String get homeStatusNoGoal;
+
+  /// No description provided for @homeFastingActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting for {duration}'**
+  String homeFastingActive(String duration);
+
+  /// No description provided for @homeFastingCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed · {duration}'**
+  String homeFastingCompleted(String duration);
+
+  /// No description provided for @homeFastingIdle.
+  ///
+  /// In en, this message translates to:
+  /// **'No fast right now'**
+  String get homeFastingIdle;
+
+  /// No description provided for @homeFastingIdleAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get homeFastingIdleAction;
+
+  /// No description provided for @homeFastingLast.
+  ///
+  /// In en, this message translates to:
+  /// **'Last · {duration} · {when}'**
+  String homeFastingLast(String duration, String when);
+
+  /// No description provided for @homeFastingStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get homeFastingStatusLabel;
+
+  /// No description provided for @homeFastingLastLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last'**
+  String get homeFastingLastLabel;
+
+  /// No description provided for @homeWeekEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'THIS WEEK'**
+  String get homeWeekEyebrow;
+
+  /// No description provided for @homeWeekOnTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'{on}/{closed} ON TARGET'**
+  String homeWeekOnTarget(int on, int closed);
+
+  /// No description provided for @homeWeekChartGoalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'goal {kcal}'**
+  String homeWeekChartGoalLabel(int kcal);
+
+  /// No description provided for @homeWeekFastingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'WEEKLY FASTING'**
+  String get homeWeekFastingTitle;
+
+  /// No description provided for @homeWeekFastingCompletedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get homeWeekFastingCompletedLabel;
+
+  /// No description provided for @homeWeekFastingTotalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get homeWeekFastingTotalLabel;
+
+  /// No description provided for @homeWeekFastingAverageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get homeWeekFastingAverageLabel;
+
+  /// No description provided for @homeWeekFastingEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No fasts this week'**
+  String get homeWeekFastingEmpty;
+
+  /// No description provided for @homeWeekdayLetters.
+  ///
+  /// In en, this message translates to:
+  /// **'SMTWTFS'**
+  String get homeWeekdayLetters;
+
+  /// No description provided for @homeChartA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Calorie chart, {on} of {closed} days on target. Selected: {day}, {kcal} kcal.'**
+  String homeChartA11y(int on, int closed, String day, int kcal);
 }
 
 class _AppLocalizationsDelegate

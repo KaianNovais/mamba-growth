@@ -129,13 +129,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navHome => 'Home';
 
   @override
+  String get navFasting => 'Fasting';
+
+  @override
   String get navMeals => 'Meals';
 
   @override
   String get navHistory => 'History';
 
   @override
-  String get navStats => 'Stats';
+  String get navProfile => 'Profile';
 
   @override
   String get homeFastingTitle => 'Fasting';
@@ -188,7 +191,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get homeEndDialogTitle => 'End fast?';
+  String get homeEndDialogTitle => 'Don\'t give up now';
 
   @override
   String homeEndDialogBody(String elapsed, String target) {
@@ -196,15 +199,32 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String homeEndDialogSurpassed(String over) {
-    return 'You beat your goal by $over · great work.';
+  String homeEndDialogProgress(int percent, String remaining) {
+    return '$percent% complete · $remaining to go';
   }
+
+  @override
+  String get homeEndDialogStayCta => 'Keep fasting';
+
+  @override
+  String get homeEndDialogQuitCta => 'End anyway';
 
   @override
   String get homeEndDialogCancel => 'Cancel';
 
   @override
   String get homeEndDialogConfirm => 'End';
+
+  @override
+  String get homeFastCompletedTitle => 'Fast complete!';
+
+  @override
+  String homeFastCompletedBody(String duration) {
+    return 'You fasted $duration. Saved to your history.';
+  }
+
+  @override
+  String get homeFastCompletedDismiss => 'Continue';
 
   @override
   String get homeProtocolSheetTitle => 'Fasting protocol';
@@ -290,14 +310,63 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyDateYesterday => 'Yesterday';
 
   @override
-  String get statsEmptyTitle => 'Insights on the way.';
+  String get homeNewEmptyTitle => 'Coming soon.';
 
   @override
-  String get statsEmptySubtitle =>
-      'Once you log a few days, you\'ll see honest trends and real progress here.';
+  String get homeNewEmptySubtitle => 'Your daily snapshot will live here.';
 
   @override
   String get profileTitle => 'Profile';
+
+  @override
+  String get profileHistorySectionEyebrow => 'ACTIVITY';
+
+  @override
+  String get profileHistoryRowTitle => 'Fasting history';
+
+  @override
+  String get profileHistoryRowSubtitle => 'View your past fasts';
+
+  @override
+  String get profileMealsHistoryRowTitle => 'Calorie history';
+
+  @override
+  String get profileMealsHistoryRowSubtitle => 'Review your past days';
+
+  @override
+  String get mealsHistoryTitle => 'Calorie history';
+
+  @override
+  String get mealsHistoryEmptyTitle => 'Nothing here yet.';
+
+  @override
+  String get mealsHistoryEmptySubtitle =>
+      'Your logged meals will appear here as you build a track record.';
+
+  @override
+  String get mealsHistoryMealsCountOne => '1 meal';
+
+  @override
+  String mealsHistoryMealsCountMany(int count) {
+    return '$count meals';
+  }
+
+  @override
+  String get mealsHistoryDayEmpty => 'No meals logged this day.';
+
+  @override
+  String get historyDayEmpty => 'No fasts logged this day.';
+
+  @override
+  String weekSelectorDayA11y(String weekday, int day, String state) {
+    String _temp0 = intl.Intl.selectLogic(state, {
+      'today': ', today',
+      'selected': ', selected',
+      'future': ', future, not available',
+      'other': '',
+    });
+    return '$weekday, day $day$_temp0';
+  }
 
   @override
   String get profileEmptyTitle => 'Coming soon.';
@@ -491,4 +560,157 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileGoalValidationRange => 'Between 500 and 9999';
+
+  @override
+  String get profileGroupGoalsTitle => 'Goals & tracking';
+
+  @override
+  String get profileGroupPreferencesTitle => 'Preferences';
+
+  @override
+  String get profileGroupAboutTitle => 'About';
+
+  @override
+  String get profileGoalRowTitle => 'Daily calorie goal';
+
+  @override
+  String get profileGoalRowEmptySubtitle => 'Not set yet';
+
+  @override
+  String profileGoalRowValue(int kcal) {
+    return '$kcal kcal';
+  }
+
+  @override
+  String get profileRowAppearance => 'Appearance';
+
+  @override
+  String get profileRowAppearanceValueDark => 'Dark';
+
+  @override
+  String get profileRowNotifications => 'Notifications';
+
+  @override
+  String get profileRowLanguage => 'Language';
+
+  @override
+  String get profileRowLanguageValueAuto => 'System';
+
+  @override
+  String get profileRowUnits => 'Units';
+
+  @override
+  String get profileRowUnitsValue => 'kcal';
+
+  @override
+  String get profileRowPrivacy => 'Privacy';
+
+  @override
+  String get profileRowTerms => 'Terms of use';
+
+  @override
+  String get profileRowSupport => 'Help & feedback';
+
+  @override
+  String get profileComingSoonSnack => 'Coming soon.';
+
+  @override
+  String get profileSignOutDialogTitle => 'Sign out?';
+
+  @override
+  String get profileSignOutDialogBody =>
+      'You\'ll need to sign in again to access your data.';
+
+  @override
+  String get profileSignOutDialogCancel => 'Cancel';
+
+  @override
+  String get profileSignOutDialogConfirm => 'Sign out';
+
+  @override
+  String profileAppVersion(String name, String version, String build) {
+    return '$name v$version ($build)';
+  }
+
+  @override
+  String get homeOverviewTitle => 'Home';
+
+  @override
+  String homeTodayEyebrow(String date) {
+    return 'TODAY · $date';
+  }
+
+  @override
+  String get homeStatusOnTarget => 'On target';
+
+  @override
+  String homeStatusOverGoal(int n) {
+    return 'Over by $n kcal';
+  }
+
+  @override
+  String get homeStatusNoGoal => 'Set a goal';
+
+  @override
+  String homeFastingActive(String duration) {
+    return 'Fasting for $duration';
+  }
+
+  @override
+  String homeFastingCompleted(String duration) {
+    return 'Completed · $duration';
+  }
+
+  @override
+  String get homeFastingIdle => 'No fast right now';
+
+  @override
+  String get homeFastingIdleAction => 'Start';
+
+  @override
+  String homeFastingLast(String duration, String when) {
+    return 'Last · $duration · $when';
+  }
+
+  @override
+  String get homeFastingStatusLabel => 'Status';
+
+  @override
+  String get homeFastingLastLabel => 'Last';
+
+  @override
+  String get homeWeekEyebrow => 'THIS WEEK';
+
+  @override
+  String homeWeekOnTarget(int on, int closed) {
+    return '$on/$closed ON TARGET';
+  }
+
+  @override
+  String homeWeekChartGoalLabel(int kcal) {
+    return 'goal $kcal';
+  }
+
+  @override
+  String get homeWeekFastingTitle => 'WEEKLY FASTING';
+
+  @override
+  String get homeWeekFastingCompletedLabel => 'Completed';
+
+  @override
+  String get homeWeekFastingTotalLabel => 'Total';
+
+  @override
+  String get homeWeekFastingAverageLabel => 'Average';
+
+  @override
+  String get homeWeekFastingEmpty => 'No fasts this week';
+
+  @override
+  String get homeWeekdayLetters => 'SMTWTFS';
+
+  @override
+  String homeChartA11y(int on, int closed, String day, int kcal) {
+    return 'Calorie chart, $on of $closed days on target. Selected: $day, $kcal kcal.';
+  }
 }

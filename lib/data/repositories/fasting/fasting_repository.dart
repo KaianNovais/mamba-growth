@@ -23,6 +23,11 @@ abstract class FastingRepository extends ChangeNotifier {
   /// o estado atual no momento da assinatura e depois cada vez que um
   /// jejum é encerrado. Tela de histórico consome via `StreamBuilder`.
   Stream<List<Fast>> watchCompletedFasts();
+
+  /// Lê jejuns concluídos com `endAt` em `[start, end)`, ordenados
+  /// desc por `endAt`. Janela cobre apenas o intervalo solicitado —
+  /// não carrega histórico inteiro em memória.
+  Future<List<Fast>> getFastsBetween(DateTime start, DateTime end);
 }
 
 class FastingException implements Exception {

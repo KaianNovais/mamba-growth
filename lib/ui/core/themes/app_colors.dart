@@ -14,6 +14,8 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.accent,
     required this.accentDim,
     required this.accentWarm,
+    required this.danger,
+    required this.dangerDim,
   });
 
   final Color bg;
@@ -27,6 +29,8 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color accent;
   final Color accentDim;
   final Color accentWarm;
+  final Color danger;
+  final Color dangerDim;
 
   static const dark = AppColors(
     bg: Color(0xFF0A0A0B),
@@ -40,6 +44,8 @@ class AppColors extends ThemeExtension<AppColors> {
     accent: Color(0xFFD4A24C),
     accentDim: Color(0xFF8A6A30),
     accentWarm: Color(0xFFE08A4C),
+    danger: Color(0xFFE5484D),
+    dangerDim: Color(0xFF8C2A2C),
   );
 
   @override
@@ -55,6 +61,8 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? accent,
     Color? accentDim,
     Color? accentWarm,
+    Color? danger,
+    Color? dangerDim,
   }) {
     return AppColors(
       bg: bg ?? this.bg,
@@ -68,6 +76,8 @@ class AppColors extends ThemeExtension<AppColors> {
       accent: accent ?? this.accent,
       accentDim: accentDim ?? this.accentDim,
       accentWarm: accentWarm ?? this.accentWarm,
+      danger: danger ?? this.danger,
+      dangerDim: dangerDim ?? this.dangerDim,
     );
   }
 
@@ -86,6 +96,8 @@ class AppColors extends ThemeExtension<AppColors> {
       accent: Color.lerp(accent, other.accent, t)!,
       accentDim: Color.lerp(accentDim, other.accentDim, t)!,
       accentWarm: Color.lerp(accentWarm, other.accentWarm, t)!,
+      danger: Color.lerp(danger, other.danger, t)!,
+      dangerDim: Color.lerp(dangerDim, other.dangerDim, t)!,
     );
   }
 }

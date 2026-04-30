@@ -43,6 +43,14 @@ class _FakeMealsRepository extends ChangeNotifier implements MealsRepository {
   }
 
   @override
+  Future<List<Meal>> getMealsBetween(DateTime start, DateTime end) async {
+    return _meals
+        .where((m) =>
+            !m.eatenAt.isBefore(start) && m.eatenAt.isBefore(end))
+        .toList();
+  }
+
+  @override
   Future<Result<Meal>> addMeal({
     required String name,
     required int calories,

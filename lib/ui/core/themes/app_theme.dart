@@ -196,7 +196,11 @@ class AppTheme {
         backgroundColor: c.surface2,
         selectedColor: c.accent,
         disabledColor: c.surface,
-        labelStyle: textTheme.labelMedium,
+        labelStyle: textTheme.labelMedium?.copyWith(color: c.text),
+        secondaryLabelStyle: textTheme.labelMedium?.copyWith(
+          color: c.bg,
+          fontWeight: FontWeight.w600,
+        ),
         side: BorderSide(color: c.border),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.full),

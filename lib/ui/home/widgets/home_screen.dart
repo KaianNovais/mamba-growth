@@ -1,430 +1,173 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../data/repositories/auth/auth_repository.dart';
 import '../../../data/repositories/fasting/fasting_repository.dart';
-import '../../../domain/models/auth_user.dart';
-import '../../../domain/models/fast.dart';
+import '../../../data/repositories/meals/meals_repository.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../../../routing/routes.dart';
-import '../../../utils/result.dart';
 import '../../core/themes/themes.dart';
-import '../../core/widgets/progress_ring.dart';
-import '../view_models/home_view_model.dart';
-import 'end_fast_dialog.dart';
-import 'protocol_bottom_sheet.dart';
+import '../state/aggregations.dart';
+import '../state/home_state.dart';
+import '../state/home_view_model.dart';
+import 'today_hero.dart';
+import 'week_kcal_chart.dart';
+import 'weekly_fasting_card.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.onSwitchToFastingTab});
+
+  final VoidCallback onSwitchToFastingTab;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HomeViewModel>(
       create: (ctx) => HomeViewModel(
-        repository: ctx.read<FastingRepository>(),
+        meals: ctx.read<MealsRepository>(),
+        fasting: ctx.read<FastingRepository>(),
       ),
-      child: const _HomeView(),
+      child: _HomeScreenBody(onSwitchToFastingTab: onSwitchToFastingTab),
     );
   }
 }
 
-class _HomeView extends StatelessWidget {
-  const _HomeView();
+class _HomeScreenBody extends StatelessWidget {
+  const _HomeScreenBody({required this.onSwitchToFastingTab});
+
+  final VoidCallback onSwitchToFastingTab;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
+    final vm = context.read<HomeViewModel>();
 
     return Scaffold(
       backgroundColor: colors.bg,
-      appBar: AppBar(
-        title: Text(l10n.homeFastingTitle),
-        actions: const [
-          _ProtocolAction(),
-          SizedBox(width: AppSpacing.sm),
-          _UserAvatarAction(),
-          SizedBox(width: AppSpacing.lg),
-        ],
-      ),
+      appBar: AppBar(title: Text(l10n.homeOverviewTitle)),
       body: SafeArea(
         top: false,
-        child: Consumer<HomeViewModel>(
-          builder: (context, vm, _) {
-            if (!vm.isInitialized) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return _Body(vm: vm);
-          },
+        child: RefreshIndicator(
+          onRefresh: () => vm.reload(),
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.xl,
+              AppSpacing.lg,
+              AppSpacing.xl,
+              AppSpacing.xl,
+            ),
+            children: [
+              TodayHero(onStartFastTap: onSwitchToFastingTab),
+              const SizedBox(height: AppSpacing.xl),
+              const _WeekChartSection(),
+              const SizedBox(height: AppSpacing.xl),
+              const WeeklyFastingCard(),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class _Body extends StatefulWidget {
-  const _Body({required this.vm});
-  final HomeViewModel vm;
-
-  @override
-  State<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends State<_Body> {
-  late final Listenable _commands;
-
-  @override
-  void initState() {
-    super.initState();
-    _commands = Listenable.merge([widget.vm.startFast, widget.vm.endFast]);
-  }
-
-  String _formatElapsed(Duration d) {
-    final h = d.inHours;
-    final m = d.inMinutes % 60;
-    return '${h}h ${m.toString().padLeft(2, '0')}min';
-  }
-
-  Future<void> _onPrimaryPressed(BuildContext context) async {
-    final vm = widget.vm;
-    final l10n = AppLocalizations.of(context);
-    final messenger = ScaffoldMessenger.of(context);
-    final fast = vm.activeFast;
-
-    if (fast == null) {
-      HapticFeedback.lightImpact();
-      await vm.startFast.execute();
-      final result = vm.startFast.result;
-      if (result is Error<Fast>) {
-        messenger.showSnackBar(
-          SnackBar(content: Text(l10n.authErrorUnknown)),
-        );
-      }
-      return;
-    }
-
-    final confirmed = await EndFastDialog.show(
-      context,
-      fast: fast,
-      now: vm.now,
-    );
-    if (!confirmed) return;
-    await vm.endFast.execute();
-  }
+class _WeekChartSection extends StatelessWidget {
+  const _WeekChartSection();
 
   @override
   Widget build(BuildContext context) {
-    final vm = widget.vm;
     final l10n = AppLocalizations.of(context);
     final colors = context.colors;
-    final text = context.text;
     final typo = context.typo;
-    final fast = vm.activeFast;
-    final protocol = vm.selectedProtocol;
-    final ringDiameter =
-        (MediaQuery.sizeOf(context).width * 0.62).clamp(200.0, 280.0);
 
-    final eyebrow = fast != null
-        ? '${l10n.homeProtocolEyebrow} · ${protocol.displayLabel}'
-        : '${l10n.homeNextProtocolEyebrow} · ${protocol.displayLabel}';
-
-    final idleCenterText =
-        protocol.isTestProtocol ? '2min' : '${protocol.fastingHours}h';
-
-    // Ring + semantics + center child: dinâmico quando há jejum ativo
-    // (depende de `now`), estático quando não há.
-    final Widget ringWidget = fast != null
-        ? ValueListenableBuilder<DateTime>(
-            valueListenable: vm.nowListenable,
-            builder: (context, now, _) {
-              final elapsed = fast.elapsed(now);
-              final remaining = fast.remaining(now);
-              return Semantics(
-                button: false,
-                label: l10n.homeRingSemanticsActive(
-                  elapsed.inHours,
-                  elapsed.inMinutes % 60,
-                  remaining.inHours,
-                  remaining.inMinutes % 60,
-                  fast.targetHours,
-                ),
-                child: ProgressRing(
-                  progress: fast.progress(now),
-                  size: ringDiameter,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        _formatElapsed(elapsed),
-                        style: typo.numericLarge.copyWith(color: colors.accent),
-                      ),
-                      const SizedBox(height: AppSpacing.xs),
-                      Text(
-                        l10n.homeElapsedLabel,
-                        style: typo.caption
-                            .copyWith(color: colors.textDim, letterSpacing: 1.6),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          )
-        : Semantics(
-            button: true,
-            label: l10n.homeRingSemanticsIdle(protocol.fastingHours),
-            child: ProgressRing(
-              progress: 0,
-              size: ringDiameter,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    idleCenterText,
-                    style: typo.numericLarge.copyWith(color: colors.text),
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    l10n.homeFastingTargetLabel,
-                    style: typo.caption
-                        .copyWith(color: colors.textDim, letterSpacing: 1.6),
-                  ),
-                ],
+    return Selector<HomeViewModel, _ChartData>(
+      selector: (_, vm) => _ChartData.fromState(vm.state),
+      shouldRebuild: (a, b) => !a.equals(b),
+      builder: (context, d, _) {
+        final eyebrow = d.daysClosed == 0
+            ? l10n.homeWeekEyebrow
+            : '${l10n.homeWeekEyebrow} · ${l10n.homeWeekOnTarget(d.daysOnTarget, d.daysClosed)}';
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              eyebrow,
+              style: typo.caption.copyWith(
+                color: colors.textDim,
+                letterSpacing: 2.4,
+                fontWeight: FontWeight.w500,
               ),
             ),
-          );
-
-    final Widget subtitle = fast != null
-        ? ValueListenableBuilder<DateTime>(
-            valueListenable: vm.nowListenable,
-            builder: (_, now, _) => _ActiveSubtitle(fast: fast, now: now),
-          )
-        : protocol.isTestProtocol
-            ? Text(
-                'Modo de teste · 2 minutos',
-                style: text.bodyMedium?.copyWith(color: colors.textDim),
-                textAlign: TextAlign.center,
-              )
-            : Text(
-                l10n.homeEatingWindow(protocol.eatingHours),
-                style: text.bodyMedium?.copyWith(color: colors.textDim),
-                textAlign: TextAlign.center,
-              );
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-      child: Column(
-        children: [
-          const Spacer(),
-          Text(
-            eyebrow.toUpperCase(),
-            style: typo.caption.copyWith(
-              color: colors.textDim,
-              letterSpacing: 2.4,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.xl),
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: fast == null
-                ? () {
-                    HapticFeedback.selectionClick();
-                    ProtocolBottomSheet.show(context);
-                  }
-                : null,
-            child: ringWidget,
-          ),
-          const SizedBox(height: AppSpacing.xl),
-          subtitle,
-          const Spacer(),
-          AnimatedBuilder(
-            animation: _commands,
-            builder: (context, _) {
-              final running = vm.startFast.running || vm.endFast.running;
-              final isActive = vm.activeFast != null;
-              return SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: FilledButton(
-                  onPressed: running ? null : () => _onPrimaryPressed(context),
-                  style: FilledButton.styleFrom(
-                    backgroundColor:
-                        isActive ? colors.surface2 : colors.accent,
-                    foregroundColor: isActive ? colors.text : colors.bg,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.lg),
-                    ),
-                  ),
-                  child: running
-                      ? SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation(
-                              isActive ? colors.text : colors.bg,
-                            ),
-                          ),
-                        )
-                      : Text(
-                          isActive ? l10n.homeEndFast : l10n.homeStartFast,
-                          style: text.labelLarge?.copyWith(
-                            color: isActive ? colors.text : colors.bg,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+            const SizedBox(height: AppSpacing.md),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.lg,
+              ),
+              decoration: BoxDecoration(
+                color: colors.surface,
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+                border: Border.all(color: colors.borderDim),
+              ),
+              child: WeekKcalChart(
+                data: WeekKcalChartData(
+                  days: d.days,
+                  goal: d.goal,
+                  todayIndex: d.todayIndex,
+                  selectedIndex: d.selectedIndex,
+                  firstFutureIndex: d.firstFutureIndex,
                 ),
-              );
-            },
-          ),
-          const SizedBox(height: AppSpacing.xl),
-        ],
-      ),
+                onSelectDay: (i) =>
+                    context.read<HomeViewModel>().selectDay(i),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
-class _ActiveSubtitle extends StatelessWidget {
-  const _ActiveSubtitle({required this.fast, required this.now});
-  final Fast fast;
-  final DateTime now;
+class _ChartData {
+  const _ChartData({
+    required this.days,
+    required this.goal,
+    required this.todayIndex,
+    required this.selectedIndex,
+    required this.firstFutureIndex,
+    required this.daysOnTarget,
+    required this.daysClosed,
+  });
 
-  String _formatRemaining(Duration d) {
-    final h = d.inHours;
-    final m = d.inMinutes % 60;
-    if (h <= 0) return '${m}min';
-    return '${h}h ${m.toString().padLeft(2, '0')}min';
-  }
+  final List<DayKcal> days;
+  final int? goal;
+  final int todayIndex;
+  final int selectedIndex;
+  final int firstFutureIndex;
+  final int daysOnTarget;
+  final int daysClosed;
 
-  String _formatClock(DateTime t) {
-    final hh = t.hour.toString().padLeft(2, '0');
-    final mm = t.minute.toString().padLeft(2, '0');
-    return '$hh:$mm';
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
-    final text = context.text;
-
-    if (fast.overshot(now)) {
-      final over = now.difference(fast.plannedEndAt);
-      return Column(
-        children: [
-          Text(
-            l10n.homeGoalReached,
-            style: text.bodyLarge?.copyWith(
-              color: colors.accent,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            l10n.homeGoalReachedAgo(_formatRemaining(over)),
-            style: text.bodyMedium?.copyWith(color: colors.textDim),
-          ),
-        ],
+  factory _ChartData.fromState(HomeState s) => _ChartData(
+        days: s.weekDays,
+        goal: s.goal,
+        todayIndex: s.todayIndex,
+        selectedIndex: s.selectedDayIndex,
+        firstFutureIndex: s.firstFutureIndex,
+        daysOnTarget: s.daysOnTargetClosed,
+        daysClosed: s.daysClosedThisWeek,
       );
-    }
 
-    return Column(
-      children: [
-        Text(
-          l10n.homeEndsIn(_formatRemaining(fast.remaining(now))),
-          style: text.bodyLarge?.copyWith(color: colors.text),
-        ),
-        const SizedBox(height: AppSpacing.xs),
-        Text(
-          l10n.homeEndsAt(_formatClock(fast.plannedEndAt)),
-          style: text.bodyMedium?.copyWith(color: colors.textDim),
-        ),
-      ],
-    );
-  }
+  bool equals(_ChartData o) =>
+      goal == o.goal &&
+      todayIndex == o.todayIndex &&
+      selectedIndex == o.selectedIndex &&
+      firstFutureIndex == o.firstFutureIndex &&
+      daysOnTarget == o.daysOnTarget &&
+      daysClosed == o.daysClosed &&
+      _listEqual(days, o.days);
 }
 
-class _ProtocolAction extends StatelessWidget {
-  const _ProtocolAction();
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final text = context.text;
-    final l10n = AppLocalizations.of(context);
-    final protocol = context.watch<FastingRepository>().selectedProtocol;
-    final label = protocol.displayLabel;
-
-    return Tooltip(
-      message: l10n.homeProtocolAction,
-      child: OutlinedButton.icon(
-        onPressed: () => ProtocolBottomSheet.show(context),
-        icon: const Icon(Icons.tune_rounded, size: 18),
-        label: Text(label),
-        style: OutlinedButton.styleFrom(
-          foregroundColor: colors.text,
-          side: BorderSide(color: colors.border),
-          minimumSize: const Size(0, 36),
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.full),
-          ),
-          textStyle: text.labelLarge?.copyWith(fontWeight: FontWeight.w600),
-        ),
-      ),
-    );
+bool _listEqual(List<DayKcal> a, List<DayKcal> b) {
+  if (a.length != b.length) return false;
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] != b[i]) return false;
   }
-}
-
-class _UserAvatarAction extends StatelessWidget {
-  const _UserAvatarAction();
-
-  static const _size = 36.0;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final text = context.text;
-    final l10n = AppLocalizations.of(context);
-    final user = context.watch<AuthRepository>().currentUser;
-    final photo = user?.photoUrl;
-    final initials = _initialsFor(user);
-
-    return Tooltip(
-      message: l10n.homeProfileAction,
-      child: InkWell(
-        onTap: () => context.pushNamed(RouteNames.profile),
-        customBorder: const CircleBorder(),
-        child: CircleAvatar(
-          radius: _size / 2,
-          backgroundColor: colors.surface2,
-          foregroundImage: (photo != null && photo.isNotEmpty)
-              ? NetworkImage(photo)
-              : null,
-          child: Text(
-            initials,
-            style: text.labelMedium?.copyWith(
-              color: colors.text,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  static String _initialsFor(AuthUser? user) {
-    if (user == null) return '?';
-    final name = (user.displayName ?? '').trim();
-    if (name.isNotEmpty) {
-      final parts = name.split(RegExp(r'\s+'));
-      if (parts.length == 1) return parts.first[0].toUpperCase();
-      return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
-    }
-    final email = user.email.trim();
-    return email.isNotEmpty ? email[0].toUpperCase() : '?';
-  }
+  return true;
 }

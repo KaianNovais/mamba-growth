@@ -131,13 +131,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get navHome => 'Início';
 
   @override
+  String get navFasting => 'Jejum';
+
+  @override
   String get navMeals => 'Refeições';
 
   @override
   String get navHistory => 'Histórico';
 
   @override
-  String get navStats => 'Stats';
+  String get navProfile => 'Perfil';
 
   @override
   String get homeFastingTitle => 'Jejum';
@@ -190,7 +193,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get homeEndDialogTitle => 'Encerrar jejum?';
+  String get homeEndDialogTitle => 'Não desista agora';
 
   @override
   String homeEndDialogBody(String elapsed, String target) {
@@ -198,15 +201,32 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String homeEndDialogSurpassed(String over) {
-    return 'Você superou sua meta em $over · ótimo trabalho.';
+  String homeEndDialogProgress(int percent, String remaining) {
+    return '$percent% completo · faltam $remaining';
   }
+
+  @override
+  String get homeEndDialogStayCta => 'Continuar jejuando';
+
+  @override
+  String get homeEndDialogQuitCta => 'Encerrar mesmo assim';
 
   @override
   String get homeEndDialogCancel => 'Cancelar';
 
   @override
   String get homeEndDialogConfirm => 'Encerrar';
+
+  @override
+  String get homeFastCompletedTitle => 'Jejum concluído!';
+
+  @override
+  String homeFastCompletedBody(String duration) {
+    return 'Você jejuou $duration. Salvo no seu histórico.';
+  }
+
+  @override
+  String get homeFastCompletedDismiss => 'Continuar';
 
   @override
   String get homeProtocolSheetTitle => 'Protocolo de jejum';
@@ -293,14 +313,63 @@ class AppLocalizationsPt extends AppLocalizations {
   String get historyDateYesterday => 'Ontem';
 
   @override
-  String get statsEmptyTitle => 'Insights a caminho.';
+  String get homeNewEmptyTitle => 'Em breve.';
 
   @override
-  String get statsEmptySubtitle =>
-      'Com alguns dias registrados, você vê tendências honestas e seu progresso real aqui.';
+  String get homeNewEmptySubtitle => 'Seu resumo do dia vai morar aqui.';
 
   @override
   String get profileTitle => 'Perfil';
+
+  @override
+  String get profileHistorySectionEyebrow => 'ATIVIDADE';
+
+  @override
+  String get profileHistoryRowTitle => 'Histórico de jejuns';
+
+  @override
+  String get profileHistoryRowSubtitle => 'Veja seus jejuns concluídos';
+
+  @override
+  String get profileMealsHistoryRowTitle => 'Histórico de calorias';
+
+  @override
+  String get profileMealsHistoryRowSubtitle => 'Revise seus dias anteriores';
+
+  @override
+  String get mealsHistoryTitle => 'Histórico de calorias';
+
+  @override
+  String get mealsHistoryEmptyTitle => 'Nada por aqui ainda.';
+
+  @override
+  String get mealsHistoryEmptySubtitle =>
+      'Suas refeições registradas vão aparecer aqui conforme você acumula histórico.';
+
+  @override
+  String get mealsHistoryMealsCountOne => '1 refeição';
+
+  @override
+  String mealsHistoryMealsCountMany(int count) {
+    return '$count refeições';
+  }
+
+  @override
+  String get mealsHistoryDayEmpty => 'Nenhuma refeição neste dia.';
+
+  @override
+  String get historyDayEmpty => 'Nenhum jejum neste dia.';
+
+  @override
+  String weekSelectorDayA11y(String weekday, int day, String state) {
+    String _temp0 = intl.Intl.selectLogic(state, {
+      'today': ', hoje',
+      'selected': ', selecionado',
+      'future': ', dia futuro, indisponível',
+      'other': '',
+    });
+    return '$weekday, dia $day$_temp0';
+  }
 
   @override
   String get profileEmptyTitle => 'Em breve.';
@@ -495,4 +564,157 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get profileGoalValidationRange => 'Entre 500 e 9999';
+
+  @override
+  String get profileGroupGoalsTitle => 'Metas e acompanhamento';
+
+  @override
+  String get profileGroupPreferencesTitle => 'Preferências';
+
+  @override
+  String get profileGroupAboutTitle => 'Sobre';
+
+  @override
+  String get profileGoalRowTitle => 'Meta diária de calorias';
+
+  @override
+  String get profileGoalRowEmptySubtitle => 'Ainda não definida';
+
+  @override
+  String profileGoalRowValue(int kcal) {
+    return '$kcal kcal';
+  }
+
+  @override
+  String get profileRowAppearance => 'Aparência';
+
+  @override
+  String get profileRowAppearanceValueDark => 'Escuro';
+
+  @override
+  String get profileRowNotifications => 'Notificações';
+
+  @override
+  String get profileRowLanguage => 'Idioma';
+
+  @override
+  String get profileRowLanguageValueAuto => 'Sistema';
+
+  @override
+  String get profileRowUnits => 'Unidades';
+
+  @override
+  String get profileRowUnitsValue => 'kcal';
+
+  @override
+  String get profileRowPrivacy => 'Privacidade';
+
+  @override
+  String get profileRowTerms => 'Termos de uso';
+
+  @override
+  String get profileRowSupport => 'Ajuda e feedback';
+
+  @override
+  String get profileComingSoonSnack => 'Em breve.';
+
+  @override
+  String get profileSignOutDialogTitle => 'Sair da conta?';
+
+  @override
+  String get profileSignOutDialogBody =>
+      'Você precisará entrar novamente para acessar seus dados.';
+
+  @override
+  String get profileSignOutDialogCancel => 'Cancelar';
+
+  @override
+  String get profileSignOutDialogConfirm => 'Sair';
+
+  @override
+  String profileAppVersion(String name, String version, String build) {
+    return '$name v$version ($build)';
+  }
+
+  @override
+  String get homeOverviewTitle => 'Início';
+
+  @override
+  String homeTodayEyebrow(String date) {
+    return 'HOJE · $date';
+  }
+
+  @override
+  String get homeStatusOnTarget => 'Na meta';
+
+  @override
+  String homeStatusOverGoal(int n) {
+    return '$n kcal acima';
+  }
+
+  @override
+  String get homeStatusNoGoal => 'Definir meta';
+
+  @override
+  String homeFastingActive(String duration) {
+    return 'Em jejum há $duration';
+  }
+
+  @override
+  String homeFastingCompleted(String duration) {
+    return 'Concluído · $duration';
+  }
+
+  @override
+  String get homeFastingIdle => 'Sem jejum agora';
+
+  @override
+  String get homeFastingIdleAction => 'Iniciar';
+
+  @override
+  String homeFastingLast(String duration, String when) {
+    return 'Último · $duration · $when';
+  }
+
+  @override
+  String get homeFastingStatusLabel => 'Status';
+
+  @override
+  String get homeFastingLastLabel => 'Último';
+
+  @override
+  String get homeWeekEyebrow => 'ESTA SEMANA';
+
+  @override
+  String homeWeekOnTarget(int on, int closed) {
+    return '$on/$closed NA META';
+  }
+
+  @override
+  String homeWeekChartGoalLabel(int kcal) {
+    return 'meta $kcal';
+  }
+
+  @override
+  String get homeWeekFastingTitle => 'JEJUM DA SEMANA';
+
+  @override
+  String get homeWeekFastingCompletedLabel => 'Concluídos';
+
+  @override
+  String get homeWeekFastingTotalLabel => 'Total';
+
+  @override
+  String get homeWeekFastingAverageLabel => 'Média';
+
+  @override
+  String get homeWeekFastingEmpty => 'Nenhum jejum esta semana';
+
+  @override
+  String get homeWeekdayLetters => 'DSTQQSS';
+
+  @override
+  String homeChartA11y(int on, int closed, String day, int kcal) {
+    return 'Gráfico de calorias, $on de $closed dias na meta. Selecionado: $day, $kcal kcal.';
+  }
 }

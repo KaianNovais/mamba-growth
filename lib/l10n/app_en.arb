@@ -39,9 +39,10 @@
   "authErrorGoogleSignInFailed": "Couldn't sign in with Google.",
   "authErrorUnknown": "Something went wrong. Try again.",
   "navHome": "Home",
+  "navFasting": "Fasting",
   "navMeals": "Meals",
   "navHistory": "History",
-  "navStats": "Stats",
+  "navProfile": "Profile",
   "homeFastingTitle": "Fasting",
   "homeProfileAction": "Profile",
   "homeProtocolAction": "Change protocol",
@@ -68,7 +69,7 @@
   "@homeEatingWindow": {
     "placeholders": { "hours": { "type": "int" } }
   },
-  "homeEndDialogTitle": "End fast?",
+  "homeEndDialogTitle": "Don't give up now",
   "homeEndDialogBody": "You fasted {elapsed} of {target}. Your progress will be saved to history.",
   "@homeEndDialogBody": {
     "placeholders": {
@@ -76,12 +77,23 @@
       "target": { "type": "String" }
     }
   },
-  "homeEndDialogSurpassed": "You beat your goal by {over} · great work.",
-  "@homeEndDialogSurpassed": {
-    "placeholders": { "over": { "type": "String" } }
+  "homeEndDialogProgress": "{percent}% complete · {remaining} to go",
+  "@homeEndDialogProgress": {
+    "placeholders": {
+      "percent": { "type": "int" },
+      "remaining": { "type": "String" }
+    }
   },
+  "homeEndDialogStayCta": "Keep fasting",
+  "homeEndDialogQuitCta": "End anyway",
   "homeEndDialogCancel": "Cancel",
   "homeEndDialogConfirm": "End",
+  "homeFastCompletedTitle": "Fast complete!",
+  "homeFastCompletedBody": "You fasted {duration}. Saved to your history.",
+  "@homeFastCompletedBody": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeFastCompletedDismiss": "Continue",
   "homeProtocolSheetTitle": "Fasting protocol",
   "homeProtocolSheetSubtitle": "Choose how long you'll fast.",
   "homeProtocolBeginner": "beginner",
@@ -128,9 +140,32 @@
   "historyItemTestProtocol": "Test · 2 min",
   "historyDateToday": "Today",
   "historyDateYesterday": "Yesterday",
-  "statsEmptyTitle": "Insights on the way.",
-  "statsEmptySubtitle": "Once you log a few days, you'll see honest trends and real progress here.",
+  "homeNewEmptyTitle": "Coming soon.",
+  "homeNewEmptySubtitle": "Your daily snapshot will live here.",
   "profileTitle": "Profile",
+  "profileHistorySectionEyebrow": "ACTIVITY",
+  "profileHistoryRowTitle": "Fasting history",
+  "profileHistoryRowSubtitle": "View your past fasts",
+  "profileMealsHistoryRowTitle": "Calorie history",
+  "profileMealsHistoryRowSubtitle": "Review your past days",
+  "mealsHistoryTitle": "Calorie history",
+  "mealsHistoryEmptyTitle": "Nothing here yet.",
+  "mealsHistoryEmptySubtitle": "Your logged meals will appear here as you build a track record.",
+  "mealsHistoryMealsCountOne": "1 meal",
+  "mealsHistoryMealsCountMany": "{count} meals",
+  "@mealsHistoryMealsCountMany": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "mealsHistoryDayEmpty": "No meals logged this day.",
+  "historyDayEmpty": "No fasts logged this day.",
+  "weekSelectorDayA11y": "{weekday}, day {day}{state, select, today{, today} selected{, selected} future{, future, not available} other{}}",
+  "@weekSelectorDayA11y": {
+    "placeholders": {
+      "weekday": { "type": "String" },
+      "day": { "type": "int" },
+      "state": { "type": "String" }
+    }
+  },
   "profileEmptyTitle": "Coming soon.",
   "profileEmptySubtitle": "Account settings and customizations will live here.",
   "profileSignOut": "Sign out",
@@ -217,5 +252,94 @@
   "profileGoalSheetSuggestionsLabel": "Suggestions",
   "profileGoalSheetSave": "Save",
   "profileGoalSheetRemove": "Remove goal",
-  "profileGoalValidationRange": "Between 500 and 9999"
+  "profileGoalValidationRange": "Between 500 and 9999",
+  "profileGroupGoalsTitle": "Goals & tracking",
+  "profileGroupPreferencesTitle": "Preferences",
+  "profileGroupAboutTitle": "About",
+  "profileGoalRowTitle": "Daily calorie goal",
+  "profileGoalRowEmptySubtitle": "Not set yet",
+  "profileGoalRowValue": "{kcal} kcal",
+  "@profileGoalRowValue": {
+    "placeholders": { "kcal": { "type": "int" } }
+  },
+  "profileRowAppearance": "Appearance",
+  "profileRowAppearanceValueDark": "Dark",
+  "profileRowNotifications": "Notifications",
+  "profileRowLanguage": "Language",
+  "profileRowLanguageValueAuto": "System",
+  "profileRowUnits": "Units",
+  "profileRowUnitsValue": "kcal",
+  "profileRowPrivacy": "Privacy",
+  "profileRowTerms": "Terms of use",
+  "profileRowSupport": "Help & feedback",
+  "profileComingSoonSnack": "Coming soon.",
+  "profileSignOutDialogTitle": "Sign out?",
+  "profileSignOutDialogBody": "You'll need to sign in again to access your data.",
+  "profileSignOutDialogCancel": "Cancel",
+  "profileSignOutDialogConfirm": "Sign out",
+  "profileAppVersion": "{name} v{version} ({build})",
+  "@profileAppVersion": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "version": { "type": "String" },
+      "build": { "type": "String" }
+    }
+  },
+  "homeOverviewTitle": "Home",
+  "homeTodayEyebrow": "TODAY · {date}",
+  "@homeTodayEyebrow": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "homeStatusOnTarget": "On target",
+  "homeStatusOverGoal": "Over by {n} kcal",
+  "@homeStatusOverGoal": {
+    "placeholders": { "n": { "type": "int" } }
+  },
+  "homeStatusNoGoal": "Set a goal",
+  "homeFastingActive": "Fasting for {duration}",
+  "@homeFastingActive": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeFastingCompleted": "Completed · {duration}",
+  "@homeFastingCompleted": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeFastingIdle": "No fast right now",
+  "homeFastingIdleAction": "Start",
+  "homeFastingLast": "Last · {duration} · {when}",
+  "@homeFastingLast": {
+    "placeholders": {
+      "duration": { "type": "String" },
+      "when": { "type": "String" }
+    }
+  },
+  "homeFastingStatusLabel": "Status",
+  "homeFastingLastLabel": "Last",
+  "homeWeekEyebrow": "THIS WEEK",
+  "homeWeekOnTarget": "{on}/{closed} ON TARGET",
+  "@homeWeekOnTarget": {
+    "placeholders": {
+      "on": { "type": "int" },
+      "closed": { "type": "int" }
+    }
+  },
+  "homeWeekChartGoalLabel": "goal {kcal}",
+  "@homeWeekChartGoalLabel": {
+    "placeholders": { "kcal": { "type": "int" } }
+  },
+  "homeWeekFastingTitle": "WEEKLY FASTING",
+  "homeWeekFastingCompletedLabel": "Completed",
+  "homeWeekFastingTotalLabel": "Total",
+  "homeWeekFastingAverageLabel": "Average",
+  "homeWeekFastingEmpty": "No fasts this week",
+  "homeWeekdayLetters": "SMTWTFS",
+  "homeChartA11y": "Calorie chart, {on} of {closed} days on target. Selected: {day}, {kcal} kcal.",
+  "@homeChartA11y": {
+    "placeholders": {
+      "on": { "type": "int" },
+      "closed": { "type": "int" },
+      "day": { "type": "String" },
+      "kcal": { "type": "int" }
+    }
+  }
 }

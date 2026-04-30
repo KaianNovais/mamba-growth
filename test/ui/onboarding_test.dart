@@ -73,6 +73,9 @@ class _StubFastingRepository extends ChangeNotifier
 
   @override
   Stream<List<Fast>> watchCompletedFasts() => const Stream.empty();
+
+  @override
+  Future<List<Fast>> getFastsBetween(DateTime start, DateTime end) async => [];
 }
 
 class _StubMealsRepository extends ChangeNotifier implements MealsRepository {
@@ -89,6 +92,9 @@ class _StubMealsRepository extends ChangeNotifier implements MealsRepository {
 
   @override
   Stream<List<Meal>> watchMealsForDay(DateTime day) => const Stream.empty();
+
+  @override
+  Future<List<Meal>> getMealsBetween(DateTime start, DateTime end) async => [];
 
   @override
   Future<Result<Meal>> addMeal({

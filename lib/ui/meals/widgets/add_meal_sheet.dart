@@ -136,10 +136,10 @@ class _AddMealSheetState extends State<AddMealSheet> {
     final locale = Localizations.localeOf(context).toLanguageTag();
     final timeStr = DateFormat.Hm(locale).format(_frozenNow);
 
+    final viewInsets = MediaQuery.viewInsetsOf(context).bottom;
+    final safeBottom = MediaQuery.viewPaddingOf(context).bottom;
     return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.viewInsetsOf(context).bottom,
-      ),
+      padding: EdgeInsets.only(bottom: viewInsets),
       child: Container(
         decoration: BoxDecoration(
           color: colors.surface,
@@ -147,27 +147,49 @@ class _AddMealSheetState extends State<AddMealSheet> {
             top: Radius.circular(AppRadius.xl),
           ),
         ),
-        padding: const EdgeInsets.fromLTRB(
+        padding: EdgeInsets.fromLTRB(
           AppSpacing.xl,
-          AppSpacing.md,
+          AppSpacing.sm,
           AppSpacing.xl,
-          AppSpacing.xl,
+          AppSpacing.xl + (viewInsets > 0 ? 0 : safeBottom),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: colors.borderDim,
-                  borderRadius: BorderRadius.circular(2),
+            Row(
+              children: [
+                const SizedBox(width: 40),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: colors.borderDim,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: IconButton(
+                    onPressed: _saving ? null : () => Navigator.of(context).pop(),
+                    icon: Icon(
+                      Icons.close_rounded,
+                      color: colors.textDim,
+                      size: 22,
+                    ),
+                    tooltip: l10n.mealSheetCancel,
+                    padding: EdgeInsets.zero,
+                    splashRadius: 20,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: AppSpacing.lg),
+            const SizedBox(height: AppSpacing.sm),
             Text(
               isEdit ? l10n.mealSheetEditTitle : l10n.mealSheetNewTitle,
               style: text.headlineSmall?.copyWith(color: colors.text),
@@ -258,17 +280,6 @@ class _AddMealSheetState extends State<AddMealSheet> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-              ),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            SizedBox(
-              height: 48,
-              child: TextButton(
-                onPressed: _saving ? null : () => Navigator.of(context).pop(),
-                child: Text(
-                  l10n.mealSheetCancel,
-                  style: text.labelLarge?.copyWith(color: colors.textDim),
-                ),
               ),
             ),
           ],

@@ -39,9 +39,10 @@
   "authErrorGoogleSignInFailed": "Não foi possível entrar com Google.",
   "authErrorUnknown": "Algo deu errado. Tente novamente.",
   "navHome": "Início",
+  "navFasting": "Jejum",
   "navMeals": "Refeições",
   "navHistory": "Histórico",
-  "navStats": "Stats",
+  "navProfile": "Perfil",
   "homeFastingTitle": "Jejum",
   "homeProfileAction": "Perfil",
   "homeProtocolAction": "Trocar protocolo",
@@ -68,7 +69,7 @@
   "@homeEatingWindow": {
     "placeholders": { "hours": { "type": "int" } }
   },
-  "homeEndDialogTitle": "Encerrar jejum?",
+  "homeEndDialogTitle": "Não desista agora",
   "homeEndDialogBody": "Você jejuou {elapsed} de {target}. Sua progressão será salva no histórico.",
   "@homeEndDialogBody": {
     "placeholders": {
@@ -76,12 +77,23 @@
       "target": { "type": "String" }
     }
   },
-  "homeEndDialogSurpassed": "Você superou sua meta em {over} · ótimo trabalho.",
-  "@homeEndDialogSurpassed": {
-    "placeholders": { "over": { "type": "String" } }
+  "homeEndDialogProgress": "{percent}% completo · faltam {remaining}",
+  "@homeEndDialogProgress": {
+    "placeholders": {
+      "percent": { "type": "int" },
+      "remaining": { "type": "String" }
+    }
   },
+  "homeEndDialogStayCta": "Continuar jejuando",
+  "homeEndDialogQuitCta": "Encerrar mesmo assim",
   "homeEndDialogCancel": "Cancelar",
   "homeEndDialogConfirm": "Encerrar",
+  "homeFastCompletedTitle": "Jejum concluído!",
+  "homeFastCompletedBody": "Você jejuou {duration}. Salvo no seu histórico.",
+  "@homeFastCompletedBody": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeFastCompletedDismiss": "Continuar",
   "homeProtocolSheetTitle": "Protocolo de jejum",
   "homeProtocolSheetSubtitle": "Escolha quanto tempo você vai jejuar.",
   "homeProtocolBeginner": "iniciante",
@@ -128,9 +140,32 @@
   "historyItemTestProtocol": "Teste · 2 min",
   "historyDateToday": "Hoje",
   "historyDateYesterday": "Ontem",
-  "statsEmptyTitle": "Insights a caminho.",
-  "statsEmptySubtitle": "Com alguns dias registrados, você vê tendências honestas e seu progresso real aqui.",
+  "homeNewEmptyTitle": "Em breve.",
+  "homeNewEmptySubtitle": "Seu resumo do dia vai morar aqui.",
   "profileTitle": "Perfil",
+  "profileHistorySectionEyebrow": "ATIVIDADE",
+  "profileHistoryRowTitle": "Histórico de jejuns",
+  "profileHistoryRowSubtitle": "Veja seus jejuns concluídos",
+  "profileMealsHistoryRowTitle": "Histórico de calorias",
+  "profileMealsHistoryRowSubtitle": "Revise seus dias anteriores",
+  "mealsHistoryTitle": "Histórico de calorias",
+  "mealsHistoryEmptyTitle": "Nada por aqui ainda.",
+  "mealsHistoryEmptySubtitle": "Suas refeições registradas vão aparecer aqui conforme você acumula histórico.",
+  "mealsHistoryMealsCountOne": "1 refeição",
+  "mealsHistoryMealsCountMany": "{count} refeições",
+  "@mealsHistoryMealsCountMany": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "mealsHistoryDayEmpty": "Nenhuma refeição neste dia.",
+  "historyDayEmpty": "Nenhum jejum neste dia.",
+  "weekSelectorDayA11y": "{weekday}, dia {day}{state, select, today{, hoje} selected{, selecionado} future{, dia futuro, indisponível} other{}}",
+  "@weekSelectorDayA11y": {
+    "placeholders": {
+      "weekday": { "type": "String" },
+      "day": { "type": "int" },
+      "state": { "type": "String" }
+    }
+  },
   "profileEmptyTitle": "Em breve.",
   "profileEmptySubtitle": "Configurações da conta e personalizações vão morar aqui.",
   "profileSignOut": "Sair",
@@ -231,5 +266,94 @@
   "profileGoalSheetSuggestionsLabel": "Sugestões",
   "profileGoalSheetSave": "Salvar",
   "profileGoalSheetRemove": "Remover meta",
-  "profileGoalValidationRange": "Entre 500 e 9999"
+  "profileGoalValidationRange": "Entre 500 e 9999",
+  "profileGroupGoalsTitle": "Metas e acompanhamento",
+  "profileGroupPreferencesTitle": "Preferências",
+  "profileGroupAboutTitle": "Sobre",
+  "profileGoalRowTitle": "Meta diária de calorias",
+  "profileGoalRowEmptySubtitle": "Ainda não definida",
+  "profileGoalRowValue": "{kcal} kcal",
+  "@profileGoalRowValue": {
+    "placeholders": { "kcal": { "type": "int" } }
+  },
+  "profileRowAppearance": "Aparência",
+  "profileRowAppearanceValueDark": "Escuro",
+  "profileRowNotifications": "Notificações",
+  "profileRowLanguage": "Idioma",
+  "profileRowLanguageValueAuto": "Sistema",
+  "profileRowUnits": "Unidades",
+  "profileRowUnitsValue": "kcal",
+  "profileRowPrivacy": "Privacidade",
+  "profileRowTerms": "Termos de uso",
+  "profileRowSupport": "Ajuda e feedback",
+  "profileComingSoonSnack": "Em breve.",
+  "profileSignOutDialogTitle": "Sair da conta?",
+  "profileSignOutDialogBody": "Você precisará entrar novamente para acessar seus dados.",
+  "profileSignOutDialogCancel": "Cancelar",
+  "profileSignOutDialogConfirm": "Sair",
+  "profileAppVersion": "{name} v{version} ({build})",
+  "@profileAppVersion": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "version": { "type": "String" },
+      "build": { "type": "String" }
+    }
+  },
+  "homeOverviewTitle": "Início",
+  "homeTodayEyebrow": "HOJE · {date}",
+  "@homeTodayEyebrow": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "homeStatusOnTarget": "Na meta",
+  "homeStatusOverGoal": "{n} kcal acima",
+  "@homeStatusOverGoal": {
+    "placeholders": { "n": { "type": "int" } }
+  },
+  "homeStatusNoGoal": "Definir meta",
+  "homeFastingActive": "Em jejum há {duration}",
+  "@homeFastingActive": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeFastingCompleted": "Concluído · {duration}",
+  "@homeFastingCompleted": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeFastingIdle": "Sem jejum agora",
+  "homeFastingIdleAction": "Iniciar",
+  "homeFastingLast": "Último · {duration} · {when}",
+  "@homeFastingLast": {
+    "placeholders": {
+      "duration": { "type": "String" },
+      "when": { "type": "String" }
+    }
+  },
+  "homeFastingStatusLabel": "Status",
+  "homeFastingLastLabel": "Último",
+  "homeWeekEyebrow": "ESTA SEMANA",
+  "homeWeekOnTarget": "{on}/{closed} NA META",
+  "@homeWeekOnTarget": {
+    "placeholders": {
+      "on": { "type": "int" },
+      "closed": { "type": "int" }
+    }
+  },
+  "homeWeekChartGoalLabel": "meta {kcal}",
+  "@homeWeekChartGoalLabel": {
+    "placeholders": { "kcal": { "type": "int" } }
+  },
+  "homeWeekFastingTitle": "JEJUM DA SEMANA",
+  "homeWeekFastingCompletedLabel": "Concluídos",
+  "homeWeekFastingTotalLabel": "Total",
+  "homeWeekFastingAverageLabel": "Média",
+  "homeWeekFastingEmpty": "Nenhum jejum esta semana",
+  "homeWeekdayLetters": "DSTQQSS",
+  "homeChartA11y": "Gráfico de calorias, {on} de {closed} dias na meta. Selecionado: {day}, {kcal} kcal.",
+  "@homeChartA11y": {
+    "placeholders": {
+      "on": { "type": "int" },
+      "closed": { "type": "int" },
+      "day": { "type": "String" },
+      "kcal": { "type": "int" }
+    }
+  }
 }
