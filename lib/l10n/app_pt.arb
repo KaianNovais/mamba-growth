@@ -68,7 +68,7 @@
   "@homeEatingWindow": {
     "placeholders": { "hours": { "type": "int" } }
   },
-  "homeEndDialogTitle": "Encerrar jejum?",
+  "homeEndDialogTitle": "Não desista agora",
   "homeEndDialogBody": "Você jejuou {elapsed} de {target}. Sua progressão será salva no histórico.",
   "@homeEndDialogBody": {
     "placeholders": {
@@ -76,12 +76,23 @@
       "target": { "type": "String" }
     }
   },
-  "homeEndDialogSurpassed": "Você superou sua meta em {over} · ótimo trabalho.",
-  "@homeEndDialogSurpassed": {
-    "placeholders": { "over": { "type": "String" } }
+  "homeEndDialogProgress": "{percent}% completo · faltam {remaining}",
+  "@homeEndDialogProgress": {
+    "placeholders": {
+      "percent": { "type": "int" },
+      "remaining": { "type": "String" }
+    }
   },
+  "homeEndDialogStayCta": "Continuar jejuando",
+  "homeEndDialogQuitCta": "Encerrar mesmo assim",
   "homeEndDialogCancel": "Cancelar",
   "homeEndDialogConfirm": "Encerrar",
+  "homeFastCompletedTitle": "Jejum concluído!",
+  "homeFastCompletedBody": "Você jejuou {duration}. Salvo no seu histórico.",
+  "@homeFastCompletedBody": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeFastCompletedDismiss": "Continuar",
   "homeProtocolSheetTitle": "Protocolo de jejum",
   "homeProtocolSheetSubtitle": "Escolha quanto tempo você vai jejuar.",
   "homeProtocolBeginner": "iniciante",

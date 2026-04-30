@@ -14,6 +14,7 @@ import '../../core/themes/themes.dart';
 import '../../core/widgets/progress_ring.dart';
 import '../view_models/home_view_model.dart';
 import 'end_fast_dialog.dart';
+import 'fast_completed_sheet.dart';
 import 'protocol_bottom_sheet.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -105,6 +106,19 @@ class _BodyState extends State<_Body> {
       return;
     }
 
+    // Jejum atingiu a meta → encerra direto e celebra. Sem dialog de
+    // confirmação porque não há nada a "desfazer": o usuário cumpriu.
+    if (fast.overshot(vm.now) || fast.progress(vm.now) >= 1.0) {
+      HapticFeedback.lightImpact();
+      final elapsed = fast.elapsed(vm.now);
+      await vm.endFast.execute();
+      if (vm.endFast.completed && context.mounted) {
+        await FastCompletedSheet.show(context, duration: elapsed);
+      }
+      return;
+    }
+
+    // Encerramento antecipado → dialog de freio com hierarquia invertida.
     final confirmed = await EndFastDialog.show(
       context,
       fast: fast,

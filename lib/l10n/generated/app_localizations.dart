@@ -437,7 +437,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeEndDialogTitle.
   ///
   /// In en, this message translates to:
-  /// **'End fast?'**
+  /// **'Don\'t give up now'**
   String get homeEndDialogTitle;
 
   /// No description provided for @homeEndDialogBody.
@@ -446,11 +446,23 @@ abstract class AppLocalizations {
   /// **'You fasted {elapsed} of {target}. Your progress will be saved to history.'**
   String homeEndDialogBody(String elapsed, String target);
 
-  /// No description provided for @homeEndDialogSurpassed.
+  /// No description provided for @homeEndDialogProgress.
   ///
   /// In en, this message translates to:
-  /// **'You beat your goal by {over} · great work.'**
-  String homeEndDialogSurpassed(String over);
+  /// **'{percent}% complete · {remaining} to go'**
+  String homeEndDialogProgress(int percent, String remaining);
+
+  /// No description provided for @homeEndDialogStayCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep fasting'**
+  String get homeEndDialogStayCta;
+
+  /// No description provided for @homeEndDialogQuitCta.
+  ///
+  /// In en, this message translates to:
+  /// **'End anyway'**
+  String get homeEndDialogQuitCta;
 
   /// No description provided for @homeEndDialogCancel.
   ///
@@ -463,6 +475,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'End'**
   String get homeEndDialogConfirm;
+
+  /// No description provided for @homeFastCompletedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast complete!'**
+  String get homeFastCompletedTitle;
+
+  /// No description provided for @homeFastCompletedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You fasted {duration}. Saved to your history.'**
+  String homeFastCompletedBody(String duration);
+
+  /// No description provided for @homeFastCompletedDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get homeFastCompletedDismiss;
 
   /// No description provided for @homeProtocolSheetTitle.
   ///

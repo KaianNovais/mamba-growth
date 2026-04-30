@@ -188,7 +188,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get homeEndDialogTitle => 'End fast?';
+  String get homeEndDialogTitle => 'Don\'t give up now';
 
   @override
   String homeEndDialogBody(String elapsed, String target) {
@@ -196,15 +196,32 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String homeEndDialogSurpassed(String over) {
-    return 'You beat your goal by $over · great work.';
+  String homeEndDialogProgress(int percent, String remaining) {
+    return '$percent% complete · $remaining to go';
   }
+
+  @override
+  String get homeEndDialogStayCta => 'Keep fasting';
+
+  @override
+  String get homeEndDialogQuitCta => 'End anyway';
 
   @override
   String get homeEndDialogCancel => 'Cancel';
 
   @override
   String get homeEndDialogConfirm => 'End';
+
+  @override
+  String get homeFastCompletedTitle => 'Fast complete!';
+
+  @override
+  String homeFastCompletedBody(String duration) {
+    return 'You fasted $duration. Saved to your history.';
+  }
+
+  @override
+  String get homeFastCompletedDismiss => 'Continue';
 
   @override
   String get homeProtocolSheetTitle => 'Fasting protocol';

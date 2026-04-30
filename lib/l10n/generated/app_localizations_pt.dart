@@ -190,7 +190,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get homeEndDialogTitle => 'Encerrar jejum?';
+  String get homeEndDialogTitle => 'Não desista agora';
 
   @override
   String homeEndDialogBody(String elapsed, String target) {
@@ -198,15 +198,32 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String homeEndDialogSurpassed(String over) {
-    return 'Você superou sua meta em $over · ótimo trabalho.';
+  String homeEndDialogProgress(int percent, String remaining) {
+    return '$percent% completo · faltam $remaining';
   }
+
+  @override
+  String get homeEndDialogStayCta => 'Continuar jejuando';
+
+  @override
+  String get homeEndDialogQuitCta => 'Encerrar mesmo assim';
 
   @override
   String get homeEndDialogCancel => 'Cancelar';
 
   @override
   String get homeEndDialogConfirm => 'Encerrar';
+
+  @override
+  String get homeFastCompletedTitle => 'Jejum concluído!';
+
+  @override
+  String homeFastCompletedBody(String duration) {
+    return 'Você jejuou $duration. Salvo no seu histórico.';
+  }
+
+  @override
+  String get homeFastCompletedDismiss => 'Continuar';
 
   @override
   String get homeProtocolSheetTitle => 'Protocolo de jejum';

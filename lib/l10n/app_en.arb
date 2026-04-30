@@ -68,7 +68,7 @@
   "@homeEatingWindow": {
     "placeholders": { "hours": { "type": "int" } }
   },
-  "homeEndDialogTitle": "End fast?",
+  "homeEndDialogTitle": "Don't give up now",
   "homeEndDialogBody": "You fasted {elapsed} of {target}. Your progress will be saved to history.",
   "@homeEndDialogBody": {
     "placeholders": {
@@ -76,12 +76,23 @@
       "target": { "type": "String" }
     }
   },
-  "homeEndDialogSurpassed": "You beat your goal by {over} · great work.",
-  "@homeEndDialogSurpassed": {
-    "placeholders": { "over": { "type": "String" } }
+  "homeEndDialogProgress": "{percent}% complete · {remaining} to go",
+  "@homeEndDialogProgress": {
+    "placeholders": {
+      "percent": { "type": "int" },
+      "remaining": { "type": "String" }
+    }
   },
+  "homeEndDialogStayCta": "Keep fasting",
+  "homeEndDialogQuitCta": "End anyway",
   "homeEndDialogCancel": "Cancel",
   "homeEndDialogConfirm": "End",
+  "homeFastCompletedTitle": "Fast complete!",
+  "homeFastCompletedBody": "You fasted {duration}. Saved to your history.",
+  "@homeFastCompletedBody": {
+    "placeholders": { "duration": { "type": "String" } }
+  },
+  "homeFastCompletedDismiss": "Continue",
   "homeProtocolSheetTitle": "Fasting protocol",
   "homeProtocolSheetSubtitle": "Choose how long you'll fast.",
   "homeProtocolBeginner": "beginner",
