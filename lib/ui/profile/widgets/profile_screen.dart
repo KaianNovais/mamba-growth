@@ -5,6 +5,7 @@ import '../../../data/repositories/auth/auth_repository.dart';
 import '../../../data/repositories/meals/meals_repository.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../core/themes/themes.dart';
+import '../../history/widgets/history_screen.dart';
 import 'calorie_goal_sheet.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -33,6 +34,8 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 children: const [
                   _CalorieGoalSection(),
+                  SizedBox(height: AppSpacing.xl),
+                  _HistorySection(),
                 ],
               ),
             ),
@@ -55,6 +58,75 @@ class ProfileScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _HistorySection extends StatelessWidget {
+  const _HistorySection();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colors = context.colors;
+    final text = context.text;
+    final typo = context.typo;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          l10n.profileHistorySectionEyebrow,
+          style: typo.caption.copyWith(
+            color: colors.textDim,
+            letterSpacing: 2.4,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Material(
+          color: colors.surface,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const HistoryScreen(),
+              ),
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+                border: Border.all(color: colors.borderDim),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.profileHistoryRowTitle,
+                          style:
+                              text.titleMedium?.copyWith(color: colors.text),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          l10n.profileHistoryRowSubtitle,
+                          style: text.bodyMedium
+                              ?.copyWith(color: colors.textDim),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(Icons.chevron_right_rounded, color: colors.textDim),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

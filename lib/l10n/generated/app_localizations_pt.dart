@@ -131,13 +131,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get navHome => 'Início';
 
   @override
+  String get navFasting => 'Jejum';
+
+  @override
   String get navMeals => 'Refeições';
 
   @override
   String get navHistory => 'Histórico';
 
   @override
-  String get navStats => 'Stats';
+  String get navProfile => 'Perfil';
 
   @override
   String get homeFastingTitle => 'Jejum';
@@ -310,14 +313,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get historyDateYesterday => 'Ontem';
 
   @override
-  String get statsEmptyTitle => 'Insights a caminho.';
+  String get homeNewEmptyTitle => 'Em breve.';
 
   @override
-  String get statsEmptySubtitle =>
-      'Com alguns dias registrados, você vê tendências honestas e seu progresso real aqui.';
+  String get homeNewEmptySubtitle => 'Seu resumo do dia vai morar aqui.';
 
   @override
   String get profileTitle => 'Perfil';
+
+  @override
+  String get profileHistorySectionEyebrow => 'ATIVIDADE';
+
+  @override
+  String get profileHistoryRowTitle => 'Histórico de jejuns';
+
+  @override
+  String get profileHistoryRowSubtitle => 'Veja seus jejuns concluídos';
 
   @override
   String get profileEmptyTitle => 'Em breve.';

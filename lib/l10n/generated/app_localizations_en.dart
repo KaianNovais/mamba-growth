@@ -129,13 +129,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navHome => 'Home';
 
   @override
+  String get navFasting => 'Fasting';
+
+  @override
   String get navMeals => 'Meals';
 
   @override
   String get navHistory => 'History';
 
   @override
-  String get navStats => 'Stats';
+  String get navProfile => 'Profile';
 
   @override
   String get homeFastingTitle => 'Fasting';
@@ -307,14 +310,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyDateYesterday => 'Yesterday';
 
   @override
-  String get statsEmptyTitle => 'Insights on the way.';
+  String get homeNewEmptyTitle => 'Coming soon.';
 
   @override
-  String get statsEmptySubtitle =>
-      'Once you log a few days, you\'ll see honest trends and real progress here.';
+  String get homeNewEmptySubtitle => 'Your daily snapshot will live here.';
 
   @override
   String get profileTitle => 'Profile';
+
+  @override
+  String get profileHistorySectionEyebrow => 'ACTIVITY';
+
+  @override
+  String get profileHistoryRowTitle => 'Fasting history';
+
+  @override
+  String get profileHistoryRowSubtitle => 'View your past fasts';
 
   @override
   String get profileEmptyTitle => 'Coming soon.';

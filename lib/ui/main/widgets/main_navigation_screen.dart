@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
+import '../../../data/repositories/auth/auth_repository.dart';
+import '../../../domain/models/auth_user.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../core/themes/themes.dart';
-import '../../history/widgets/history_screen.dart';
+import '../../dashboard/widgets/dashboard_screen.dart';
 import '../../home/widgets/home_screen.dart';
 import '../../meals/widgets/meals_screen.dart';
-import '../../stats/widgets/stats_screen.dart';
+import '../../profile/widgets/profile_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -20,10 +23,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
   static const _pages = <Widget>[
+    DashboardScreen(),
     HomeScreen(),
     MealsScreen(),
-    HistoryScreen(),
-    StatsScreen(),
+    ProfileScreen(),
   ];
 
   @override
@@ -84,23 +87,78 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               label: l10n.navHome,
             ),
             NavigationDestination(
+              icon: const Icon(Icons.local_fire_department_outlined),
+              selectedIcon: const Icon(Icons.local_fire_department_rounded),
+              label: l10n.navFasting,
+            ),
+            NavigationDestination(
               icon: const Icon(Icons.restaurant_outlined),
               selectedIcon: const Icon(Icons.restaurant_rounded),
               label: l10n.navMeals,
             ),
             NavigationDestination(
-              icon: const Icon(Icons.history_rounded),
-              selectedIcon: const Icon(Icons.history_rounded),
-              label: l10n.navHistory,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.insights_outlined),
-              selectedIcon: const Icon(Icons.insights_rounded),
-              label: l10n.navStats,
+              icon: const _ProfileNavIcon(selected: false),
+              selectedIcon: const _ProfileNavIcon(selected: true),
+              label: l10n.navProfile,
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+class _ProfileNavIcon extends StatelessWidget {
+  const _ProfileNavIcon({required this.selected});
+
+  final bool selected;
+
+  static const _size = 24.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final text = context.text;
+    final user = context.watch<AuthRepository>().currentUser;
+    final photo = user?.photoUrl;
+    final initials = _initialsFor(user);
+
+    final borderColor = selected ? colors.accent : Colors.transparent;
+
+    return Container(
+      width: _size,
+      height: _size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: borderColor, width: 1.5),
+      ),
+      padding: const EdgeInsets.all(1.5),
+      child: CircleAvatar(
+        backgroundColor: colors.surface2,
+        foregroundImage: (photo != null && photo.isNotEmpty)
+            ? NetworkImage(photo)
+            : null,
+        child: Text(
+          initials,
+          style: text.labelSmall?.copyWith(
+            color: colors.text,
+            fontWeight: FontWeight.w600,
+            fontSize: 10,
+          ),
+        ),
+      ),
+    );
+  }
+
+  static String _initialsFor(AuthUser? user) {
+    if (user == null) return '?';
+    final name = (user.displayName ?? '').trim();
+    if (name.isNotEmpty) {
+      final parts = name.split(RegExp(r'\s+'));
+      if (parts.length == 1) return parts.first[0].toUpperCase();
+      return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
+    }
+    final email = user.email.trim();
+    return email.isNotEmpty ? email[0].toUpperCase() : '?';
   }
 }

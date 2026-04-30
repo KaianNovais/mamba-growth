@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../data/repositories/auth/auth_repository.dart';
 import '../../../data/repositories/fasting/fasting_repository.dart';
-import '../../../domain/models/auth_user.dart';
 import '../../../domain/models/fast.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../../../routing/routes.dart';
 import '../../../utils/result.dart';
 import '../../core/themes/themes.dart';
 import '../../core/widgets/progress_ring.dart';
@@ -45,8 +41,6 @@ class _HomeView extends StatelessWidget {
         title: Text(l10n.homeFastingTitle),
         actions: const [
           _ProtocolAction(),
-          SizedBox(width: AppSpacing.sm),
-          _UserAvatarAction(),
           SizedBox(width: AppSpacing.lg),
         ],
       ),
@@ -393,52 +387,3 @@ class _ProtocolAction extends StatelessWidget {
   }
 }
 
-class _UserAvatarAction extends StatelessWidget {
-  const _UserAvatarAction();
-
-  static const _size = 36.0;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final text = context.text;
-    final l10n = AppLocalizations.of(context);
-    final user = context.watch<AuthRepository>().currentUser;
-    final photo = user?.photoUrl;
-    final initials = _initialsFor(user);
-
-    return Tooltip(
-      message: l10n.homeProfileAction,
-      child: InkWell(
-        onTap: () => context.pushNamed(RouteNames.profile),
-        customBorder: const CircleBorder(),
-        child: CircleAvatar(
-          radius: _size / 2,
-          backgroundColor: colors.surface2,
-          foregroundImage: (photo != null && photo.isNotEmpty)
-              ? NetworkImage(photo)
-              : null,
-          child: Text(
-            initials,
-            style: text.labelMedium?.copyWith(
-              color: colors.text,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  static String _initialsFor(AuthUser? user) {
-    if (user == null) return '?';
-    final name = (user.displayName ?? '').trim();
-    if (name.isNotEmpty) {
-      final parts = name.split(RegExp(r'\s+'));
-      if (parts.length == 1) return parts.first[0].toUpperCase();
-      return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
-    }
-    final email = user.email.trim();
-    return email.isNotEmpty ? email[0].toUpperCase() : '?';
-  }
-}

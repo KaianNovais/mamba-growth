@@ -332,6 +332,12 @@ abstract class AppLocalizations {
   /// **'Home'**
   String get navHome;
 
+  /// No description provided for @navFasting.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting'**
+  String get navFasting;
+
   /// No description provided for @navMeals.
   ///
   /// In en, this message translates to:
@@ -344,11 +350,11 @@ abstract class AppLocalizations {
   /// **'History'**
   String get navHistory;
 
-  /// No description provided for @navStats.
+  /// No description provided for @navProfile.
   ///
   /// In en, this message translates to:
-  /// **'Stats'**
-  String get navStats;
+  /// **'Profile'**
+  String get navProfile;
 
   /// No description provided for @homeFastingTitle.
   ///
@@ -632,23 +638,41 @@ abstract class AppLocalizations {
   /// **'Yesterday'**
   String get historyDateYesterday;
 
-  /// No description provided for @statsEmptyTitle.
+  /// No description provided for @homeNewEmptyTitle.
   ///
   /// In en, this message translates to:
-  /// **'Insights on the way.'**
-  String get statsEmptyTitle;
+  /// **'Coming soon.'**
+  String get homeNewEmptyTitle;
 
-  /// No description provided for @statsEmptySubtitle.
+  /// No description provided for @homeNewEmptySubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Once you log a few days, you\'ll see honest trends and real progress here.'**
-  String get statsEmptySubtitle;
+  /// **'Your daily snapshot will live here.'**
+  String get homeNewEmptySubtitle;
 
   /// No description provided for @profileTitle.
   ///
   /// In en, this message translates to:
   /// **'Profile'**
   String get profileTitle;
+
+  /// No description provided for @profileHistorySectionEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'ACTIVITY'**
+  String get profileHistorySectionEyebrow;
+
+  /// No description provided for @profileHistoryRowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting history'**
+  String get profileHistoryRowTitle;
+
+  /// No description provided for @profileHistoryRowSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View your past fasts'**
+  String get profileHistoryRowSubtitle;
 
   /// No description provided for @profileEmptyTitle.
   ///

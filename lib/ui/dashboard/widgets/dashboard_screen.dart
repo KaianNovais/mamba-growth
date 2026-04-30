@@ -4,8 +4,8 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../core/themes/themes.dart';
 import '../../core/widgets/empty_feature_state.dart';
 
-class StatsScreen extends StatelessWidget {
-  const StatsScreen({super.key});
+class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +14,14 @@ class StatsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: colors.bg,
-      appBar: AppBar(title: Text(l10n.navStats)),
+      appBar: AppBar(title: Text(l10n.navHome)),
       body: SafeArea(
         top: false,
         child: EmptyFeatureState(
-          icon: Icons.insights_outlined,
-          eyebrow: l10n.navStats,
-          title: l10n.statsEmptyTitle,
-          subtitle: l10n.statsEmptySubtitle,
+          icon: Icons.home_rounded,
+          eyebrow: l10n.navHome,
+          title: l10n.homeNewEmptyTitle,
+          subtitle: l10n.homeNewEmptySubtitle,
         ),
       ),
     );
