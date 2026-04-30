@@ -22,11 +22,13 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   late final PageController _pageController;
   int _currentIndex = 0;
 
-  static const _pages = <Widget>[
-    HomeScreen(),
-    FastingScreen(),
-    MealsScreen(),
-    ProfileScreen(),
+  late final List<Widget> _pages = [
+    HomeScreen(
+      onSwitchToFastingTab: () => _onDestinationSelected(1),
+    ),
+    const FastingScreen(),
+    const MealsScreen(),
+    const ProfileScreen(),
   ];
 
   @override
