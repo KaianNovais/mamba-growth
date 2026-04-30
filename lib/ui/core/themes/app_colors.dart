@@ -13,6 +13,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.textDimmer,
     required this.accent,
     required this.accentDim,
+    required this.accentWarm,
   });
 
   final Color bg;
@@ -25,6 +26,7 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color textDimmer;
   final Color accent;
   final Color accentDim;
+  final Color accentWarm;
 
   static const dark = AppColors(
     bg: Color(0xFF0A0A0B),
@@ -37,6 +39,7 @@ class AppColors extends ThemeExtension<AppColors> {
     textDimmer: Color(0xFF7A7A82),
     accent: Color(0xFFD4A24C),
     accentDim: Color(0xFF8A6A30),
+    accentWarm: Color(0xFFE08A4C),
   );
 
   @override
@@ -51,6 +54,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? textDimmer,
     Color? accent,
     Color? accentDim,
+    Color? accentWarm,
   }) {
     return AppColors(
       bg: bg ?? this.bg,
@@ -63,6 +67,7 @@ class AppColors extends ThemeExtension<AppColors> {
       textDimmer: textDimmer ?? this.textDimmer,
       accent: accent ?? this.accent,
       accentDim: accentDim ?? this.accentDim,
+      accentWarm: accentWarm ?? this.accentWarm,
     );
   }
 
@@ -80,6 +85,7 @@ class AppColors extends ThemeExtension<AppColors> {
       textDimmer: Color.lerp(textDimmer, other.textDimmer, t)!,
       accent: Color.lerp(accent, other.accent, t)!,
       accentDim: Color.lerp(accentDim, other.accentDim, t)!,
+      accentWarm: Color.lerp(accentWarm, other.accentWarm, t)!,
     );
   }
 }

@@ -1,13 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mamba_growth/data/repositories/auth/auth_repository.dart';
 import 'package:mamba_growth/data/repositories/fasting/fasting_repository.dart';
+import 'package:mamba_growth/data/repositories/meals/meals_repository.dart';
 import 'package:mamba_growth/data/services/database/local_database.dart';
 import 'package:mamba_growth/data/services/notifications/notification_service.dart';
 import 'package:mamba_growth/domain/models/auth_user.dart';
 import 'package:mamba_growth/domain/models/fast.dart';
 import 'package:mamba_growth/domain/models/fasting_protocol.dart';
+import 'package:mamba_growth/domain/models/meal.dart';
 import 'package:mamba_growth/l10n/generated/app_localizations.dart';
 import 'package:mamba_growth/main.dart';
 import 'package:mamba_growth/ui/core/themes/themes.dart';
@@ -72,6 +75,46 @@ class _StubFastingRepository extends ChangeNotifier
   Stream<List<Fast>> watchCompletedFasts() => const Stream.empty();
 }
 
+class _StubMealsRepository extends ChangeNotifier implements MealsRepository {
+  final ValueNotifier<int?> _goal = ValueNotifier<int?>(null);
+
+  @override
+  bool get isInitialized => true;
+
+  @override
+  ValueListenable<int?> get goalListenable => _goal;
+
+  @override
+  int? get currentGoal => null;
+
+  @override
+  Stream<List<Meal>> watchMealsForDay(DateTime day) => const Stream.empty();
+
+  @override
+  Future<Result<Meal>> addMeal({
+    required String name,
+    required int calories,
+  }) async =>
+      const Result.error(MealsException('stub'));
+
+  @override
+  Future<Result<Meal>> updateMeal(Meal meal) async =>
+      const Result.error(MealsException('stub'));
+
+  @override
+  Future<Result<void>> deleteMeal(int id) async => const Result.ok(null);
+
+  @override
+  Future<Result<Meal>> reinsertMeal(Meal meal) async =>
+      const Result.error(MealsException('stub'));
+
+  @override
+  Future<void> setGoal(int kcal) async {}
+
+  @override
+  Future<void> clearGoal() async {}
+}
+
 class _StubLocalDatabase extends LocalDatabase {
   @override
   Future<void> close() async {}
@@ -95,6 +138,7 @@ class _StubNotificationService extends NotificationService {
 MambaGrowthApp _buildApp({AuthRepository? auth}) => MambaGrowthApp(
       authRepository: auth ?? _StubAuthRepository(),
       fastingRepository: _StubFastingRepository(),
+      mealsRepository: _StubMealsRepository(),
       notificationService: _StubNotificationService(),
       localDatabase: _StubLocalDatabase(),
     );

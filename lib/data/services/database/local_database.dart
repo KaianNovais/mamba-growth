@@ -9,11 +9,12 @@ import 'package:synchronized/synchronized.dart';
 /// `database` durante o cold start). A doc oficial do tekartik/sqflite
 /// recomenda exatamente esse padrão.
 class LocalDatabase {
-  LocalDatabase();
+  LocalDatabase({String? pathOverride}) : _pathOverride = pathOverride;
 
   static const _filename = 'mamba_growth.db';
-  static const _version = 1;
+  static const _version = 2;
 
+  final String? _pathOverride;
   Database? _db;
   final Lock _lock = Lock();
 
@@ -30,8 +31,7 @@ class LocalDatabase {
   }
 
   Future<Database> _open() async {
-    final dir = await getDatabasesPath();
-    final path = p.join(dir, _filename);
+    final path = _pathOverride ?? p.join(await getDatabasesPath(), _filename);
     return openDatabase(
       path,
       version: _version,
@@ -40,6 +40,7 @@ class LocalDatabase {
         await db.execute('PRAGMA foreign_keys = ON');
       },
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -66,6 +67,27 @@ class LocalDatabase {
         value TEXT NOT NULL
       )
     ''');
+    await _createMealsTable(db);
+  }
+
+  Future<void> _onUpgrade(Database db, int from, int to) async {
+    if (from < 2) {
+      await _createMealsTable(db);
+    }
+  }
+
+  Future<void> _createMealsTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE meals (
+        id        INTEGER PRIMARY KEY AUTOINCREMENT,
+        name      TEXT    NOT NULL,
+        calories  INTEGER NOT NULL CHECK (calories > 0),
+        eaten_at  INTEGER NOT NULL
+      )
+    ''');
+    await db.execute(
+      'CREATE INDEX idx_meals_eaten_at ON meals(eaten_at DESC)',
+    );
   }
 
   Future<void> close() async {

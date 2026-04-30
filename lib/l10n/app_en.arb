@@ -133,5 +133,89 @@
   "profileTitle": "Profile",
   "profileEmptyTitle": "Coming soon.",
   "profileEmptySubtitle": "Account settings and customizations will live here.",
-  "profileSignOut": "Sign out"
+  "profileSignOut": "Sign out",
+  "mealsTodayEyebrowWithGoal": "TODAY · GOAL {goal} KCAL",
+  "@mealsTodayEyebrowWithGoal": { "placeholders": { "goal": { "type": "int" } } },
+  "mealsTodayEyebrowNoGoal": "TODAY",
+  "mealsKcalUnit": "kcal",
+  "mealsRemainingLabel": "{n} kcal remaining",
+  "@mealsRemainingLabel": { "placeholders": { "n": { "type": "int" } } },
+  "mealsOfGoalLabel": "of {goal} kcal",
+  "@mealsOfGoalLabel": { "placeholders": { "goal": { "type": "int" } } },
+  "mealsOverGoalLabel": "{n} kcal over goal",
+  "@mealsOverGoalLabel": { "placeholders": { "n": { "type": "int" } } },
+  "mealsAtGoalLabel": "Goal reached",
+  "mealsListEyebrowOne": "TODAY · 1 MEAL",
+  "mealsListEyebrowMany": "TODAY · {count} MEALS",
+  "@mealsListEyebrowMany": { "placeholders": { "count": { "type": "int" } } },
+  "mealsAddCta": "Add meal",
+  "mealsEmptyTodayTitle": "No meals logged today.",
+  "mealsEmptyTodaySubtitle": "Tap the button below to log your first meal of the day.",
+  "mealsNoGoalHint": "Set a goal in your profile to track progress",
+  "mealSheetNewTitle": "New meal",
+  "mealSheetEditTitle": "Edit meal",
+  "mealSheetTimeLabel": "Today · {time}",
+  "@mealSheetTimeLabel": { "placeholders": { "time": { "type": "String" } } },
+  "mealSheetNameLabel": "Name",
+  "mealSheetNameHint": "Breakfast",
+  "mealSheetCaloriesLabel": "Calories",
+  "mealSheetSave": "Save",
+  "mealSheetSaveEdit": "Save changes",
+  "mealSheetCancel": "Cancel",
+  "mealItemMenuEdit": "Edit",
+  "mealItemMenuDelete": "Delete",
+  "mealDeleteDialogTitle": "Delete meal?",
+  "mealDeleteDialogBody": "You can undo right after deleting.",
+  "mealDeleteDialogConfirm": "Delete",
+  "mealDeleteDialogCancel": "Cancel",
+  "mealDeletedSnackbar": "Meal removed",
+  "mealDeletedSnackbarUndo": "Undo",
+  "mealAddedSnackbar": "Meal added",
+  "mealUpdatedSnackbar": "Meal updated",
+  "mealsErrorGeneric": "Something went wrong. Try again.",
+  "mealValidationNameRequired": "Enter a name",
+  "mealValidationNameTooLong": "Max 60 characters",
+  "mealValidationCaloriesRequired": "Enter calories",
+  "mealValidationCaloriesRange": "Between 1 and 9999",
+  "mealItemA11y": "{name}, {calories} kcal, logged at {time}. Tap to edit.",
+  "@mealItemA11y": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "calories": { "type": "int" },
+      "time": { "type": "String" }
+    }
+  },
+  "mealsRingA11yWithGoal": "{consumed} kcal of {goal}. {remaining} remaining.",
+  "@mealsRingA11yWithGoal": {
+    "placeholders": {
+      "consumed": { "type": "int" },
+      "goal": { "type": "int" },
+      "remaining": { "type": "int" }
+    }
+  },
+  "mealsRingA11yOverGoal": "{consumed} kcal. {over} over goal of {goal}.",
+  "@mealsRingA11yOverGoal": {
+    "placeholders": {
+      "consumed": { "type": "int" },
+      "over": { "type": "int" },
+      "goal": { "type": "int" }
+    }
+  },
+  "mealsRingA11yNoGoal": "{consumed} kcal today.",
+  "@mealsRingA11yNoGoal": {
+    "placeholders": { "consumed": { "type": "int" } }
+  },
+  "profileGoalSectionEyebrow": "CALORIES",
+  "profileGoalCardTitle": "Daily goal",
+  "profileGoalCardValue": "{kcal} kcal per day",
+  "@profileGoalCardValue": { "placeholders": { "kcal": { "type": "int" } } },
+  "profileGoalCardEmptyValue": "Track your daily progress",
+  "profileGoalCardActionDefine": "Set",
+  "profileGoalCardActionEdit": "Edit",
+  "profileGoalSheetTitle": "Daily goal",
+  "profileGoalSheetSubtitle": "How many calories do you want to consume per day?",
+  "profileGoalSheetSuggestionsLabel": "Suggestions",
+  "profileGoalSheetSave": "Save",
+  "profileGoalSheetRemove": "Remove goal",
+  "profileGoalValidationRange": "Between 500 and 9999"
 }

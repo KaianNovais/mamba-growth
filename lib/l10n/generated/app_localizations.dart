@@ -637,6 +637,324 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign out'**
   String get profileSignOut;
+
+  /// No description provided for @mealsTodayEyebrowWithGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY · GOAL {goal} KCAL'**
+  String mealsTodayEyebrowWithGoal(int goal);
+
+  /// No description provided for @mealsTodayEyebrowNoGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY'**
+  String get mealsTodayEyebrowNoGoal;
+
+  /// No description provided for @mealsKcalUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'kcal'**
+  String get mealsKcalUnit;
+
+  /// No description provided for @mealsRemainingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} kcal remaining'**
+  String mealsRemainingLabel(int n);
+
+  /// No description provided for @mealsOfGoalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'of {goal} kcal'**
+  String mealsOfGoalLabel(int goal);
+
+  /// No description provided for @mealsOverGoalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} kcal over goal'**
+  String mealsOverGoalLabel(int n);
+
+  /// No description provided for @mealsAtGoalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached'**
+  String get mealsAtGoalLabel;
+
+  /// No description provided for @mealsListEyebrowOne.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY · 1 MEAL'**
+  String get mealsListEyebrowOne;
+
+  /// No description provided for @mealsListEyebrowMany.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY · {count} MEALS'**
+  String mealsListEyebrowMany(int count);
+
+  /// No description provided for @mealsAddCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Add meal'**
+  String get mealsAddCta;
+
+  /// No description provided for @mealsEmptyTodayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No meals logged today.'**
+  String get mealsEmptyTodayTitle;
+
+  /// No description provided for @mealsEmptyTodaySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the button below to log your first meal of the day.'**
+  String get mealsEmptyTodaySubtitle;
+
+  /// No description provided for @mealsNoGoalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a goal in your profile to track progress'**
+  String get mealsNoGoalHint;
+
+  /// No description provided for @mealSheetNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New meal'**
+  String get mealSheetNewTitle;
+
+  /// No description provided for @mealSheetEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit meal'**
+  String get mealSheetEditTitle;
+
+  /// No description provided for @mealSheetTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Today · {time}'**
+  String mealSheetTimeLabel(String time);
+
+  /// No description provided for @mealSheetNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get mealSheetNameLabel;
+
+  /// No description provided for @mealSheetNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakfast'**
+  String get mealSheetNameHint;
+
+  /// No description provided for @mealSheetCaloriesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories'**
+  String get mealSheetCaloriesLabel;
+
+  /// No description provided for @mealSheetSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get mealSheetSave;
+
+  /// No description provided for @mealSheetSaveEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get mealSheetSaveEdit;
+
+  /// No description provided for @mealSheetCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get mealSheetCancel;
+
+  /// No description provided for @mealItemMenuEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get mealItemMenuEdit;
+
+  /// No description provided for @mealItemMenuDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get mealItemMenuDelete;
+
+  /// No description provided for @mealDeleteDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete meal?'**
+  String get mealDeleteDialogTitle;
+
+  /// No description provided for @mealDeleteDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You can undo right after deleting.'**
+  String get mealDeleteDialogBody;
+
+  /// No description provided for @mealDeleteDialogConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get mealDeleteDialogConfirm;
+
+  /// No description provided for @mealDeleteDialogCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get mealDeleteDialogCancel;
+
+  /// No description provided for @mealDeletedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal removed'**
+  String get mealDeletedSnackbar;
+
+  /// No description provided for @mealDeletedSnackbarUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get mealDeletedSnackbarUndo;
+
+  /// No description provided for @mealAddedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal added'**
+  String get mealAddedSnackbar;
+
+  /// No description provided for @mealUpdatedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal updated'**
+  String get mealUpdatedSnackbar;
+
+  /// No description provided for @mealsErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Try again.'**
+  String get mealsErrorGeneric;
+
+  /// No description provided for @mealValidationNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name'**
+  String get mealValidationNameRequired;
+
+  /// No description provided for @mealValidationNameTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Max 60 characters'**
+  String get mealValidationNameTooLong;
+
+  /// No description provided for @mealValidationCaloriesRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter calories'**
+  String get mealValidationCaloriesRequired;
+
+  /// No description provided for @mealValidationCaloriesRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Between 1 and 9999'**
+  String get mealValidationCaloriesRange;
+
+  /// No description provided for @mealItemA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, {calories} kcal, logged at {time}. Tap to edit.'**
+  String mealItemA11y(String name, int calories, String time);
+
+  /// No description provided for @mealsRingA11yWithGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'{consumed} kcal of {goal}. {remaining} remaining.'**
+  String mealsRingA11yWithGoal(int consumed, int goal, int remaining);
+
+  /// No description provided for @mealsRingA11yOverGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'{consumed} kcal. {over} over goal of {goal}.'**
+  String mealsRingA11yOverGoal(int consumed, int over, int goal);
+
+  /// No description provided for @mealsRingA11yNoGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'{consumed} kcal today.'**
+  String mealsRingA11yNoGoal(int consumed);
+
+  /// No description provided for @profileGoalSectionEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'CALORIES'**
+  String get profileGoalSectionEyebrow;
+
+  /// No description provided for @profileGoalCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily goal'**
+  String get profileGoalCardTitle;
+
+  /// No description provided for @profileGoalCardValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{kcal} kcal per day'**
+  String profileGoalCardValue(int kcal);
+
+  /// No description provided for @profileGoalCardEmptyValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your daily progress'**
+  String get profileGoalCardEmptyValue;
+
+  /// No description provided for @profileGoalCardActionDefine.
+  ///
+  /// In en, this message translates to:
+  /// **'Set'**
+  String get profileGoalCardActionDefine;
+
+  /// No description provided for @profileGoalCardActionEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get profileGoalCardActionEdit;
+
+  /// No description provided for @profileGoalSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily goal'**
+  String get profileGoalSheetTitle;
+
+  /// No description provided for @profileGoalSheetSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How many calories do you want to consume per day?'**
+  String get profileGoalSheetSubtitle;
+
+  /// No description provided for @profileGoalSheetSuggestionsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions'**
+  String get profileGoalSheetSuggestionsLabel;
+
+  /// No description provided for @profileGoalSheetSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get profileGoalSheetSave;
+
+  /// No description provided for @profileGoalSheetRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove goal'**
+  String get profileGoalSheetRemove;
+
+  /// No description provided for @profileGoalValidationRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Between 500 and 9999'**
+  String get profileGoalValidationRange;
 }
 
 class _AppLocalizationsDelegate

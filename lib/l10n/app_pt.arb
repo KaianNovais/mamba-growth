@@ -133,5 +133,103 @@
   "profileTitle": "Perfil",
   "profileEmptyTitle": "Em breve.",
   "profileEmptySubtitle": "Configurações da conta e personalizações vão morar aqui.",
-  "profileSignOut": "Sair"
+  "profileSignOut": "Sair",
+  "mealsTodayEyebrowWithGoal": "HOJE · META {goal} KCAL",
+  "@mealsTodayEyebrowWithGoal": {
+    "placeholders": { "goal": { "type": "int" } }
+  },
+  "mealsTodayEyebrowNoGoal": "HOJE",
+  "mealsKcalUnit": "kcal",
+  "mealsRemainingLabel": "{n} kcal restantes",
+  "@mealsRemainingLabel": {
+    "placeholders": { "n": { "type": "int" } }
+  },
+  "mealsOfGoalLabel": "de {goal} kcal",
+  "@mealsOfGoalLabel": {
+    "placeholders": { "goal": { "type": "int" } }
+  },
+  "mealsOverGoalLabel": "{n} kcal acima da meta",
+  "@mealsOverGoalLabel": {
+    "placeholders": { "n": { "type": "int" } }
+  },
+  "mealsAtGoalLabel": "Meta atingida",
+  "mealsListEyebrowOne": "HOJE · 1 REFEIÇÃO",
+  "mealsListEyebrowMany": "HOJE · {count} REFEIÇÕES",
+  "@mealsListEyebrowMany": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "mealsAddCta": "Adicionar refeição",
+  "mealsEmptyTodayTitle": "Nenhuma refeição registrada hoje.",
+  "mealsEmptyTodaySubtitle": "Toque no botão abaixo para registrar sua primeira refeição do dia.",
+  "mealsNoGoalHint": "Defina uma meta no perfil para acompanhar seu progresso",
+  "mealSheetNewTitle": "Nova refeição",
+  "mealSheetEditTitle": "Editar refeição",
+  "mealSheetTimeLabel": "Hoje · {time}",
+  "@mealSheetTimeLabel": {
+    "placeholders": { "time": { "type": "String" } }
+  },
+  "mealSheetNameLabel": "Nome",
+  "mealSheetNameHint": "Café da manhã",
+  "mealSheetCaloriesLabel": "Calorias",
+  "mealSheetSave": "Salvar",
+  "mealSheetSaveEdit": "Salvar alterações",
+  "mealSheetCancel": "Cancelar",
+  "mealItemMenuEdit": "Editar",
+  "mealItemMenuDelete": "Excluir",
+  "mealDeleteDialogTitle": "Excluir refeição?",
+  "mealDeleteDialogBody": "Você pode desfazer logo após excluir.",
+  "mealDeleteDialogConfirm": "Excluir",
+  "mealDeleteDialogCancel": "Cancelar",
+  "mealDeletedSnackbar": "Refeição removida",
+  "mealDeletedSnackbarUndo": "Desfazer",
+  "mealUpdatedSnackbar": "Refeição atualizada",
+  "mealsErrorGeneric": "Não consegui salvar. Tente novamente.",
+  "mealAddedSnackbar": "Refeição adicionada",
+  "mealValidationNameRequired": "Informe o nome",
+  "mealValidationNameTooLong": "Máximo 60 caracteres",
+  "mealValidationCaloriesRequired": "Informe as calorias",
+  "mealValidationCaloriesRange": "Entre 1 e 9999",
+  "mealItemA11y": "{name}, {calories} kcal, registrado às {time}. Toque para editar.",
+  "@mealItemA11y": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "calories": { "type": "int" },
+      "time": { "type": "String" }
+    }
+  },
+  "mealsRingA11yWithGoal": "{consumed} kcal de {goal}. {remaining} restantes.",
+  "@mealsRingA11yWithGoal": {
+    "placeholders": {
+      "consumed": { "type": "int" },
+      "goal": { "type": "int" },
+      "remaining": { "type": "int" }
+    }
+  },
+  "mealsRingA11yOverGoal": "{consumed} kcal. {over} acima da meta de {goal}.",
+  "@mealsRingA11yOverGoal": {
+    "placeholders": {
+      "consumed": { "type": "int" },
+      "over": { "type": "int" },
+      "goal": { "type": "int" }
+    }
+  },
+  "mealsRingA11yNoGoal": "{consumed} kcal hoje.",
+  "@mealsRingA11yNoGoal": {
+    "placeholders": { "consumed": { "type": "int" } }
+  },
+  "profileGoalSectionEyebrow": "CALORIAS",
+  "profileGoalCardTitle": "Meta diária",
+  "profileGoalCardValue": "{kcal} kcal por dia",
+  "@profileGoalCardValue": {
+    "placeholders": { "kcal": { "type": "int" } }
+  },
+  "profileGoalCardEmptyValue": "Acompanhe seu progresso diário",
+  "profileGoalCardActionDefine": "Definir",
+  "profileGoalCardActionEdit": "Editar",
+  "profileGoalSheetTitle": "Meta diária",
+  "profileGoalSheetSubtitle": "Quantas calorias você quer consumir por dia?",
+  "profileGoalSheetSuggestionsLabel": "Sugestões",
+  "profileGoalSheetSave": "Salvar",
+  "profileGoalSheetRemove": "Remover meta",
+  "profileGoalValidationRange": "Entre 500 e 9999"
 }

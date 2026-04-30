@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../core/themes/themes.dart';
+import '../themes/themes.dart';
 
-/// Anel circular que representa o progresso do jejum.
+/// Anel circular reutilizável que representa progresso (0..∞).
 ///
 /// Inspirado no waveform do Material 3 expressive — o arco ativo é
 /// perturbado por uma seno com fase animando devagar (4s/loop). A
@@ -12,24 +12,34 @@ import '../../core/themes/themes.dart';
 /// arredondado se feche limpo. Quando `progress == 0` a fase para de
 /// animar pra não desperdiçar frames.
 ///
-/// API externa idêntica à versão anterior.
-class FastingRing extends StatefulWidget {
-  const FastingRing({
+/// Quando `progress > 1` desenha um segundo arco em [overflowColor]
+/// sobre o principal, representando excesso (ex.: kcal acima da meta).
+/// O overflow começa do mesmo ângulo inicial e se sobrepõe — não
+/// "continua" do fim do arco principal.
+///
+/// [color] e [overflowColor] caem no tema (`accent` e `accentWarm`)
+/// quando omitidos.
+class ProgressRing extends StatefulWidget {
+  const ProgressRing({
     super.key,
     required this.progress,
     required this.size,
-    required this.child,
+    this.child,
+    this.color,
+    this.overflowColor,
   });
 
   final double progress;
   final double size;
-  final Widget child;
+  final Widget? child;
+  final Color? color;
+  final Color? overflowColor;
 
   @override
-  State<FastingRing> createState() => _FastingRingState();
+  State<ProgressRing> createState() => _ProgressRingState();
 }
 
-class _FastingRingState extends State<FastingRing>
+class _ProgressRingState extends State<ProgressRing>
     with TickerProviderStateMixin {
   static const _phaseDuration = Duration(seconds: 4);
   static const _progressDuration = Duration(milliseconds: 320);
@@ -46,7 +56,7 @@ class _FastingRingState extends State<FastingRing>
   @override
   void initState() {
     super.initState();
-    final initial = widget.progress.clamp(0.0, 1.0);
+    final initial = math.max(0.0, widget.progress);
     _phaseCtrl = AnimationController(vsync: this, duration: _phaseDuration);
     _progressCtrl =
         AnimationController(vsync: this, duration: _progressDuration);
@@ -55,9 +65,9 @@ class _FastingRingState extends State<FastingRing>
   }
 
   @override
-  void didUpdateWidget(covariant FastingRing oldWidget) {
+  void didUpdateWidget(covariant ProgressRing oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final next = widget.progress.clamp(0.0, 1.0);
+    final next = math.max(0.0, widget.progress);
     final current = _progressAnim.value;
     final delta = (next - current).abs();
     if (delta > _animateDeltaThreshold) {
@@ -88,6 +98,9 @@ class _FastingRingState extends State<FastingRing>
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final main = widget.color ?? colors.accent;
+    final overflow = widget.overflowColor ?? colors.accentWarm;
+    final child = widget.child;
     return RepaintBoundary(
       child: SizedBox(
         width: widget.size,
@@ -99,9 +112,10 @@ class _FastingRingState extends State<FastingRing>
               progress: _progressAnim.value,
               phase: _phaseCtrl.value * 2 * math.pi,
               trackColor: colors.borderDim,
-              progressColor: colors.accent,
+              progressColor: main,
+              overflowColor: overflow,
             ),
-            child: Center(child: widget.child),
+            child: child == null ? null : Center(child: child),
           ),
         ),
       ),
@@ -115,6 +129,7 @@ class _WavyRingPainter extends CustomPainter {
     required this.phase,
     required this.trackColor,
     required this.progressColor,
+    required this.overflowColor,
   });
 
   static const _strokeWidth = 6.0;
@@ -125,6 +140,7 @@ class _WavyRingPainter extends CustomPainter {
   final double phase;
   final Color trackColor;
   final Color progressColor;
+  final Color overflowColor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -142,8 +158,36 @@ class _WavyRingPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
     canvas.drawCircle(center, radius, trackPaint);
 
-    if (progress <= 0) return;
+    final mainProgress = progress.clamp(0.0, 1.0);
+    final overflowProgress = (progress - 1.0).clamp(0.0, 1.0);
+    if (mainProgress <= 0) return;
 
+    _drawWavyArc(
+      canvas: canvas,
+      center: center,
+      radius: radius,
+      progress: mainProgress,
+      color: progressColor,
+    );
+
+    if (overflowProgress > 0) {
+      _drawWavyArc(
+        canvas: canvas,
+        center: center,
+        radius: radius,
+        progress: overflowProgress,
+        color: overflowColor,
+      );
+    }
+  }
+
+  void _drawWavyArc({
+    required Canvas canvas,
+    required Offset center,
+    required double radius,
+    required double progress,
+    required Color color,
+  }) {
     final start = -math.pi / 2;
     final sweep = 2 * math.pi * progress;
     final arcLength = sweep * radius;
@@ -173,7 +217,7 @@ class _WavyRingPainter extends CustomPainter {
     }
 
     final fgPaint = Paint()
-      ..color = progressColor
+      ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = _strokeWidth
       ..strokeCap = StrokeCap.round
@@ -186,5 +230,6 @@ class _WavyRingPainter extends CustomPainter {
       old.progress != progress ||
       old.phase != phase ||
       old.trackColor != trackColor ||
-      old.progressColor != progressColor;
+      old.progressColor != progressColor ||
+      old.overflowColor != overflowColor;
 }

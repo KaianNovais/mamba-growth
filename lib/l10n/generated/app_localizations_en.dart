@@ -308,4 +308,187 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileSignOut => 'Sign out';
+
+  @override
+  String mealsTodayEyebrowWithGoal(int goal) {
+    return 'TODAY · GOAL $goal KCAL';
+  }
+
+  @override
+  String get mealsTodayEyebrowNoGoal => 'TODAY';
+
+  @override
+  String get mealsKcalUnit => 'kcal';
+
+  @override
+  String mealsRemainingLabel(int n) {
+    return '$n kcal remaining';
+  }
+
+  @override
+  String mealsOfGoalLabel(int goal) {
+    return 'of $goal kcal';
+  }
+
+  @override
+  String mealsOverGoalLabel(int n) {
+    return '$n kcal over goal';
+  }
+
+  @override
+  String get mealsAtGoalLabel => 'Goal reached';
+
+  @override
+  String get mealsListEyebrowOne => 'TODAY · 1 MEAL';
+
+  @override
+  String mealsListEyebrowMany(int count) {
+    return 'TODAY · $count MEALS';
+  }
+
+  @override
+  String get mealsAddCta => 'Add meal';
+
+  @override
+  String get mealsEmptyTodayTitle => 'No meals logged today.';
+
+  @override
+  String get mealsEmptyTodaySubtitle =>
+      'Tap the button below to log your first meal of the day.';
+
+  @override
+  String get mealsNoGoalHint => 'Set a goal in your profile to track progress';
+
+  @override
+  String get mealSheetNewTitle => 'New meal';
+
+  @override
+  String get mealSheetEditTitle => 'Edit meal';
+
+  @override
+  String mealSheetTimeLabel(String time) {
+    return 'Today · $time';
+  }
+
+  @override
+  String get mealSheetNameLabel => 'Name';
+
+  @override
+  String get mealSheetNameHint => 'Breakfast';
+
+  @override
+  String get mealSheetCaloriesLabel => 'Calories';
+
+  @override
+  String get mealSheetSave => 'Save';
+
+  @override
+  String get mealSheetSaveEdit => 'Save changes';
+
+  @override
+  String get mealSheetCancel => 'Cancel';
+
+  @override
+  String get mealItemMenuEdit => 'Edit';
+
+  @override
+  String get mealItemMenuDelete => 'Delete';
+
+  @override
+  String get mealDeleteDialogTitle => 'Delete meal?';
+
+  @override
+  String get mealDeleteDialogBody => 'You can undo right after deleting.';
+
+  @override
+  String get mealDeleteDialogConfirm => 'Delete';
+
+  @override
+  String get mealDeleteDialogCancel => 'Cancel';
+
+  @override
+  String get mealDeletedSnackbar => 'Meal removed';
+
+  @override
+  String get mealDeletedSnackbarUndo => 'Undo';
+
+  @override
+  String get mealAddedSnackbar => 'Meal added';
+
+  @override
+  String get mealUpdatedSnackbar => 'Meal updated';
+
+  @override
+  String get mealsErrorGeneric => 'Something went wrong. Try again.';
+
+  @override
+  String get mealValidationNameRequired => 'Enter a name';
+
+  @override
+  String get mealValidationNameTooLong => 'Max 60 characters';
+
+  @override
+  String get mealValidationCaloriesRequired => 'Enter calories';
+
+  @override
+  String get mealValidationCaloriesRange => 'Between 1 and 9999';
+
+  @override
+  String mealItemA11y(String name, int calories, String time) {
+    return '$name, $calories kcal, logged at $time. Tap to edit.';
+  }
+
+  @override
+  String mealsRingA11yWithGoal(int consumed, int goal, int remaining) {
+    return '$consumed kcal of $goal. $remaining remaining.';
+  }
+
+  @override
+  String mealsRingA11yOverGoal(int consumed, int over, int goal) {
+    return '$consumed kcal. $over over goal of $goal.';
+  }
+
+  @override
+  String mealsRingA11yNoGoal(int consumed) {
+    return '$consumed kcal today.';
+  }
+
+  @override
+  String get profileGoalSectionEyebrow => 'CALORIES';
+
+  @override
+  String get profileGoalCardTitle => 'Daily goal';
+
+  @override
+  String profileGoalCardValue(int kcal) {
+    return '$kcal kcal per day';
+  }
+
+  @override
+  String get profileGoalCardEmptyValue => 'Track your daily progress';
+
+  @override
+  String get profileGoalCardActionDefine => 'Set';
+
+  @override
+  String get profileGoalCardActionEdit => 'Edit';
+
+  @override
+  String get profileGoalSheetTitle => 'Daily goal';
+
+  @override
+  String get profileGoalSheetSubtitle =>
+      'How many calories do you want to consume per day?';
+
+  @override
+  String get profileGoalSheetSuggestionsLabel => 'Suggestions';
+
+  @override
+  String get profileGoalSheetSave => 'Save';
+
+  @override
+  String get profileGoalSheetRemove => 'Remove goal';
+
+  @override
+  String get profileGoalValidationRange => 'Between 500 and 9999';
 }
