@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../themes/themes.dart';
+import '../../home/state/aggregations.dart' as agg;
 
 /// Linha de 7 círculos representando a semana atual (domingo→sábado, padrão BR).
 ///
@@ -24,17 +25,10 @@ class WeekDaySelector extends StatelessWidget {
   final ValueChanged<DateTime> onSelect;
 
   /// Início da semana com domingo = dia 0 (padrão BR), normalizado a 00:00.
-  static DateTime startOfWeekSunday(DateTime d) {
-    final daysFromSunday = d.weekday % 7; // dom=0, seg=1, ..., sáb=6
-    return DateTime(d.year, d.month, d.day)
-        .subtract(Duration(days: daysFromSunday));
-  }
+  static DateTime startOfWeekSunday(DateTime d) => agg.startOfWeekSunday(d);
 
   /// Lista com os 7 dias (00:00) da semana de [d], em ordem dom→sáb.
-  static List<DateTime> currentWeekDays(DateTime d) {
-    final start = startOfWeekSunday(d);
-    return List.generate(7, (i) => start.add(Duration(days: i)));
-  }
+  static List<DateTime> currentWeekDays(DateTime d) => agg.currentWeekDays(d);
 
   void _handleTap(DateTime day) {
     if (day.isAtSameMomentAs(selectedDay)) return;
