@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mamba_growth/domain/models/fast.dart';
 import 'package:mamba_growth/domain/models/meal.dart';
 import 'package:mamba_growth/ui/home/state/aggregations.dart';
 
@@ -157,6 +158,150 @@ void main() {
     });
     test('consumed == goal + 1 → overGoal', () {
       expect(computeStatus(consumed: 2001, goal: 2000), MealStatus.overGoal);
+    });
+  });
+
+  group('aggregateWeeklyFasting', () {
+    final weekStart = DateTime(2026, 4, 26);
+
+    Fast f({
+      required int id,
+      required DateTime startAt,
+      required DateTime? endAt,
+      int targetHours = 16,
+      bool completed = true,
+    }) =>
+        Fast(
+          id: id,
+          startAt: startAt,
+          endAt: endAt,
+          targetHours: targetHours,
+          eatingHours: 8,
+          completed: completed,
+        );
+
+    test('empty list → zeros', () {
+      final s = aggregateWeeklyFasting(fasts: const [], weekStart: weekStart);
+      expect(s.completed, 0);
+      expect(s.total, 0);
+      expect(s.totalDuration, Duration.zero);
+      expect(s.average, Duration.zero);
+    });
+
+    test('counts only fasts with endAt inside the week window', () {
+      final s = aggregateWeeklyFasting(
+        fasts: [
+          f(
+            id: 1,
+            startAt: DateTime(2026, 4, 25, 20),
+            endAt: DateTime(2026, 4, 25, 23),
+          ), // before week
+          f(
+            id: 2,
+            startAt: DateTime(2026, 4, 26, 20),
+            endAt: DateTime(2026, 4, 27, 12),
+          ), // Monday endAt
+          f(
+            id: 3,
+            startAt: DateTime(2026, 5, 2, 20),
+            endAt: DateTime(2026, 5, 3, 12),
+          ), // next week
+        ],
+        weekStart: weekStart,
+      );
+      expect(s.total, 1);
+      expect(s.completed, 1);
+      expect(s.totalDuration, const Duration(hours: 16));
+      expect(s.average, const Duration(hours: 16));
+    });
+
+    test('average is total / days with fasts', () {
+      final s = aggregateWeeklyFasting(
+        fasts: [
+          f(
+            id: 1,
+            startAt: DateTime(2026, 4, 26, 20),
+            endAt: DateTime(2026, 4, 27, 12), // Mon endAt
+          ),
+          f(
+            id: 2,
+            startAt: DateTime(2026, 4, 28, 20),
+            endAt: DateTime(2026, 4, 29, 12), // Wed endAt
+          ),
+        ],
+        weekStart: weekStart,
+      );
+      expect(s.totalDuration, const Duration(hours: 32));
+      expect(s.average, const Duration(hours: 16));
+    });
+
+    test('completed flag separates completed from total', () {
+      final s = aggregateWeeklyFasting(
+        fasts: [
+          f(
+            id: 1,
+            startAt: DateTime(2026, 4, 26, 20),
+            endAt: DateTime(2026, 4, 27, 12),
+            completed: true,
+          ),
+          f(
+            id: 2,
+            startAt: DateTime(2026, 4, 28, 20),
+            endAt: DateTime(2026, 4, 28, 22), // ended early
+            completed: false,
+          ),
+        ],
+        weekStart: weekStart,
+      );
+      expect(s.total, 2);
+      expect(s.completed, 1);
+    });
+  });
+
+  group('lastFinishedFast', () {
+    test('null on empty list', () {
+      expect(lastFinishedFast(const []), isNull);
+    });
+
+    test('returns the fast with most recent endAt', () {
+      final older = Fast(
+        id: 1,
+        startAt: DateTime(2026, 4, 20, 20),
+        endAt: DateTime(2026, 4, 21, 12),
+        targetHours: 16,
+        eatingHours: 8,
+        completed: true,
+      );
+      final newer = Fast(
+        id: 2,
+        startAt: DateTime(2026, 4, 25, 20),
+        endAt: DateTime(2026, 4, 26, 12),
+        targetHours: 16,
+        eatingHours: 8,
+        completed: true,
+      );
+      expect(lastFinishedFast([older, newer]), newer);
+      expect(lastFinishedFast([newer, older]), newer);
+    });
+
+    test('skips fasts with endAt == null', () {
+      final active = Fast(
+        id: 1,
+        startAt: DateTime(2026, 4, 30, 8),
+        endAt: null,
+        targetHours: 16,
+        eatingHours: 8,
+        completed: false,
+      );
+      final finished = Fast(
+        id: 2,
+        startAt: DateTime(2026, 4, 25, 20),
+        endAt: DateTime(2026, 4, 26, 12),
+        targetHours: 16,
+        eatingHours: 8,
+        completed: true,
+      );
+      expect(lastFinishedFast([active, finished]), finished);
     });
   });
 }

@@ -4,6 +4,7 @@
 /// so they can be unit-tested without `pumpWidget` or fakes.
 library;
 
+import '../../../domain/models/fast.dart';
 import '../../../domain/models/meal.dart';
 
 /// Strips the time-of-day from [d], returning midnight (00:00) of the same calendar day.
@@ -73,9 +74,79 @@ List<DayKcal> aggregateWeekKcal({
   return (onTarget: onTarget, closed: closed);
 }
 
+/// Returns [MealStatus.noGoal] when [goal] is null or ≤ 0; otherwise
+/// compares [consumed] against [goal] for over/at/under status.
 MealStatus computeStatus({required int consumed, required int? goal}) {
   if (goal == null || goal <= 0) return MealStatus.noGoal;
   if (consumed > goal) return MealStatus.overGoal;
   if (consumed == goal) return MealStatus.atGoal;
   return MealStatus.underGoal;
+}
+
+class WeeklyFastingSummary {
+  const WeeklyFastingSummary({
+    required this.completed,
+    required this.total,
+    required this.totalDuration,
+    required this.average,
+  });
+
+  final int completed;
+  final int total;
+  final Duration totalDuration;
+  final Duration average;
+
+  static const empty = WeeklyFastingSummary(
+    completed: 0,
+    total: 0,
+    totalDuration: Duration.zero,
+    average: Duration.zero,
+  );
+}
+
+/// Aggregates fasts whose `endAt` falls in `[weekStart, weekStart + 7d)`.
+/// `average` is `totalDuration` divided by the number of distinct days
+/// with at least one fast (NOT by 7 — empty days do not pull the average down).
+WeeklyFastingSummary aggregateWeeklyFasting({
+  required List<Fast> fasts,
+  required DateTime weekStart,
+}) {
+  final weekEnd = weekStart.add(const Duration(days: 7));
+  final inWeek = <Fast>[];
+  for (final f in fasts) {
+    final end = f.endAt;
+    if (end == null) continue;
+    if (end.isBefore(weekStart) || !end.isBefore(weekEnd)) continue;
+    inWeek.add(f);
+  }
+  if (inWeek.isEmpty) return WeeklyFastingSummary.empty;
+
+  var completed = 0;
+  var totalMicros = 0;
+  final daysWithFasts = <DateTime>{};
+  for (final f in inWeek) {
+    if (f.completed) completed++;
+    totalMicros += f.endAt!.difference(f.startAt).inMicroseconds;
+    daysWithFasts.add(startOfDay(f.endAt!));
+  }
+  final total = inWeek.length;
+  final totalDuration = Duration(microseconds: totalMicros);
+  final average = Duration(microseconds: totalMicros ~/ daysWithFasts.length);
+  return WeeklyFastingSummary(
+    completed: completed,
+    total: total,
+    totalDuration: totalDuration,
+    average: average,
+  );
+}
+
+/// Returns the fast with the most recent non-null `endAt`, or null.
+Fast? lastFinishedFast(List<Fast> fasts) {
+  Fast? best;
+  for (final f in fasts) {
+    final end = f.endAt;
+    if (end == null) continue;
+    if (best == null || end.isAfter(best.endAt!)) best = f;
+  }
+  return best;
 }
