@@ -252,5 +252,37 @@
   "profileGoalSheetSuggestionsLabel": "Suggestions",
   "profileGoalSheetSave": "Save",
   "profileGoalSheetRemove": "Remove goal",
-  "profileGoalValidationRange": "Between 500 and 9999"
+  "profileGoalValidationRange": "Between 500 and 9999",
+  "profileGroupGoalsTitle": "Goals & tracking",
+  "profileGroupPreferencesTitle": "Preferences",
+  "profileGroupAboutTitle": "About",
+  "profileGoalRowTitle": "Daily calorie goal",
+  "profileGoalRowEmptySubtitle": "Not set yet",
+  "profileGoalRowValue": "{kcal} kcal",
+  "@profileGoalRowValue": {
+    "placeholders": { "kcal": { "type": "int" } }
+  },
+  "profileRowAppearance": "Appearance",
+  "profileRowAppearanceValueDark": "Dark",
+  "profileRowNotifications": "Notifications",
+  "profileRowLanguage": "Language",
+  "profileRowLanguageValueAuto": "System",
+  "profileRowUnits": "Units",
+  "profileRowUnitsValue": "kcal",
+  "profileRowPrivacy": "Privacy",
+  "profileRowTerms": "Terms of use",
+  "profileRowSupport": "Help & feedback",
+  "profileComingSoonSnack": "Coming soon.",
+  "profileSignOutDialogTitle": "Sign out?",
+  "profileSignOutDialogBody": "You'll need to sign in again to access your data.",
+  "profileSignOutDialogCancel": "Cancel",
+  "profileSignOutDialogConfirm": "Sign out",
+  "profileAppVersion": "{name} v{version} ({build})",
+  "@profileAppVersion": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "version": { "type": "String" },
+      "build": { "type": "String" }
+    }
+  }
 }

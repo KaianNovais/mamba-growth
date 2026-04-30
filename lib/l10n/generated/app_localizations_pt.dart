@@ -564,4 +564,75 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get profileGoalValidationRange => 'Entre 500 e 9999';
+
+  @override
+  String get profileGroupGoalsTitle => 'Metas e acompanhamento';
+
+  @override
+  String get profileGroupPreferencesTitle => 'Preferências';
+
+  @override
+  String get profileGroupAboutTitle => 'Sobre';
+
+  @override
+  String get profileGoalRowTitle => 'Meta diária de calorias';
+
+  @override
+  String get profileGoalRowEmptySubtitle => 'Ainda não definida';
+
+  @override
+  String profileGoalRowValue(int kcal) {
+    return '$kcal kcal';
+  }
+
+  @override
+  String get profileRowAppearance => 'Aparência';
+
+  @override
+  String get profileRowAppearanceValueDark => 'Escuro';
+
+  @override
+  String get profileRowNotifications => 'Notificações';
+
+  @override
+  String get profileRowLanguage => 'Idioma';
+
+  @override
+  String get profileRowLanguageValueAuto => 'Sistema';
+
+  @override
+  String get profileRowUnits => 'Unidades';
+
+  @override
+  String get profileRowUnitsValue => 'kcal';
+
+  @override
+  String get profileRowPrivacy => 'Privacidade';
+
+  @override
+  String get profileRowTerms => 'Termos de uso';
+
+  @override
+  String get profileRowSupport => 'Ajuda e feedback';
+
+  @override
+  String get profileComingSoonSnack => 'Em breve.';
+
+  @override
+  String get profileSignOutDialogTitle => 'Sair da conta?';
+
+  @override
+  String get profileSignOutDialogBody =>
+      'Você precisará entrar novamente para acessar seus dados.';
+
+  @override
+  String get profileSignOutDialogCancel => 'Cancelar';
+
+  @override
+  String get profileSignOutDialogConfirm => 'Sair';
+
+  @override
+  String profileAppVersion(String name, String version, String build) {
+    return '$name v$version ($build)';
+  }
 }

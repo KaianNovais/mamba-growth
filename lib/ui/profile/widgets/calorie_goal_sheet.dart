@@ -39,9 +39,11 @@ class _CalorieGoalSheetState extends State<CalorieGoalSheet> {
     final initial = context.read<MealsRepository>().currentGoal;
     _ctrl = TextEditingController(text: initial?.toString() ?? '');
     _ctrl.addListener(() {
-      if (_error != null && _validate(_ctrl.text) == null) {
-        setState(() => _error = null);
-      }
+      if (!mounted) return;
+      final clearedError = _error != null && _validate(_ctrl.text) == null;
+      setState(() {
+        if (clearedError) _error = null;
+      });
     });
   }
 
@@ -84,6 +86,7 @@ class _CalorieGoalSheetState extends State<CalorieGoalSheet> {
     final typo = context.typo;
     final l10n = AppLocalizations.of(context);
     final hasGoal = context.watch<MealsRepository>().currentGoal != null;
+    final selectedSuggestion = int.tryParse(_ctrl.text.trim());
 
     return Padding(
       padding:
@@ -95,119 +98,136 @@ class _CalorieGoalSheetState extends State<CalorieGoalSheet> {
             top: Radius.circular(AppRadius.xl),
           ),
         ),
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.xl,
-          AppSpacing.md,
-          AppSpacing.xl,
-          AppSpacing.xl,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: colors.borderDim,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.xl,
+              AppSpacing.md,
+              AppSpacing.xl,
+              AppSpacing.xl,
             ),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              l10n.profileGoalSheetTitle,
-              style: text.headlineSmall?.copyWith(color: colors.text),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              l10n.profileGoalSheetSubtitle,
-              style: text.bodyMedium?.copyWith(color: colors.textDim),
-            ),
-            const SizedBox(height: AppSpacing.xl),
-            Semantics(
-              label: l10n.mealSheetCaloriesLabel,
-              textField: true,
-              child: TextField(
-                controller: _ctrl,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(4),
-                ],
-                style: typo.numericLarge.copyWith(color: colors.text),
-                decoration: InputDecoration(
-                  labelText: l10n.mealSheetCaloriesLabel,
-                  suffixText: l10n.mealsKcalUnit,
-                  errorText: _error,
-                  filled: true,
-                  fillColor: colors.surface2,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppRadius.md),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: AppSpacing.md),
-            Text(
-              l10n.profileGoalSheetSuggestionsLabel.toUpperCase(),
-              style: typo.caption.copyWith(
-                color: colors.textDim,
-                letterSpacing: 1.6,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Wrap(
-              spacing: AppSpacing.sm,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                for (final s in _suggestions)
-                  ActionChip(
-                    label: Text('$s kcal'),
-                    onPressed: () => _ctrl.text = s.toString(),
-                    backgroundColor: colors.surface2,
-                    side: BorderSide(color: colors.border),
-                    labelStyle: text.bodyMedium?.copyWith(color: colors.text),
+                Center(
+                  child: Container(
+                    width: 36,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: colors.borderDim,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Text(
+                  l10n.profileGoalSheetTitle,
+                  style: text.headlineSmall?.copyWith(color: colors.text),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.profileGoalSheetSubtitle,
+                  style: text.bodyMedium?.copyWith(color: colors.textDim),
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                Semantics(
+                  label: l10n.mealSheetCaloriesLabel,
+                  textField: true,
+                  child: TextField(
+                    controller: _ctrl,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(4),
+                    ],
+                    style: typo.numericLarge.copyWith(color: colors.text),
+                    decoration: InputDecoration(
+                      labelText: l10n.mealSheetCaloriesLabel,
+                      suffixText: l10n.mealsKcalUnit,
+                      errorText: _error,
+                      filled: true,
+                      fillColor: colors.surface2,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                Text(
+                  l10n.profileGoalSheetSuggestionsLabel.toUpperCase(),
+                  style: typo.caption.copyWith(
+                    color: colors.textDim,
+                    letterSpacing: 1.6,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  children: [
+                    for (final s in _suggestions)
+                      ChoiceChip(
+                        label: Text('$s kcal'),
+                        selected: selectedSuggestion == s,
+                        onSelected: (_) {
+                          HapticFeedback.selectionClick();
+                          _ctrl.text = s.toString();
+                          _ctrl.selection = TextSelection.collapsed(
+                            offset: _ctrl.text.length,
+                          );
+                          setState(() {});
+                        },
+                        showCheckmark: false,
+                      ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                SizedBox(
+                  height: 56,
+                  child: FilledButton(
+                    onPressed: _save,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: colors.accent,
+                      foregroundColor: colors.bg,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.lg),
+                      ),
+                    ),
+                    child: Text(
+                      l10n.profileGoalSheetSave,
+                      style: text.labelLarge?.copyWith(
+                        color: colors.bg,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                if (hasGoal) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  SizedBox(
+                    height: 48,
+                    child: TextButton(
+                      onPressed: _remove,
+                      style: TextButton.styleFrom(
+                        foregroundColor: colors.danger,
+                      ),
+                      child: Text(
+                        l10n.profileGoalSheetRemove,
+                        style: text.labelLarge?.copyWith(
+                          color: colors.danger,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
-            const SizedBox(height: AppSpacing.xl),
-            SizedBox(
-              height: 56,
-              child: FilledButton(
-                onPressed: _save,
-                style: FilledButton.styleFrom(
-                  backgroundColor: colors.accent,
-                  foregroundColor: colors.bg,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppRadius.lg),
-                  ),
-                ),
-                child: Text(
-                  l10n.profileGoalSheetSave,
-                  style: text.labelLarge?.copyWith(
-                    color: colors.bg,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-            if (hasGoal) ...[
-              const SizedBox(height: AppSpacing.sm),
-              SizedBox(
-                height: 48,
-                child: TextButton(
-                  onPressed: _remove,
-                  child: Text(
-                    l10n.profileGoalSheetRemove,
-                    style: text.labelLarge?.copyWith(color: colors.textDim),
-                  ),
-                ),
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );

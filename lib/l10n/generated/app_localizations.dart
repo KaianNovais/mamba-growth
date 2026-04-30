@@ -1069,6 +1069,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Between 500 and 9999'**
   String get profileGoalValidationRange;
+
+  /// No description provided for @profileGroupGoalsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals & tracking'**
+  String get profileGroupGoalsTitle;
+
+  /// No description provided for @profileGroupPreferencesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get profileGroupPreferencesTitle;
+
+  /// No description provided for @profileGroupAboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get profileGroupAboutTitle;
+
+  /// No description provided for @profileGoalRowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily calorie goal'**
+  String get profileGoalRowTitle;
+
+  /// No description provided for @profileGoalRowEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set yet'**
+  String get profileGoalRowEmptySubtitle;
+
+  /// No description provided for @profileGoalRowValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{kcal} kcal'**
+  String profileGoalRowValue(int kcal);
+
+  /// No description provided for @profileRowAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get profileRowAppearance;
+
+  /// No description provided for @profileRowAppearanceValueDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get profileRowAppearanceValueDark;
+
+  /// No description provided for @profileRowNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get profileRowNotifications;
+
+  /// No description provided for @profileRowLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get profileRowLanguage;
+
+  /// No description provided for @profileRowLanguageValueAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get profileRowLanguageValueAuto;
+
+  /// No description provided for @profileRowUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'Units'**
+  String get profileRowUnits;
+
+  /// No description provided for @profileRowUnitsValue.
+  ///
+  /// In en, this message translates to:
+  /// **'kcal'**
+  String get profileRowUnitsValue;
+
+  /// No description provided for @profileRowPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get profileRowPrivacy;
+
+  /// No description provided for @profileRowTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of use'**
+  String get profileRowTerms;
+
+  /// No description provided for @profileRowSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & feedback'**
+  String get profileRowSupport;
+
+  /// No description provided for @profileComingSoonSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon.'**
+  String get profileComingSoonSnack;
+
+  /// No description provided for @profileSignOutDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out?'**
+  String get profileSignOutDialogTitle;
+
+  /// No description provided for @profileSignOutDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll need to sign in again to access your data.'**
+  String get profileSignOutDialogBody;
+
+  /// No description provided for @profileSignOutDialogCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get profileSignOutDialogCancel;
+
+  /// No description provided for @profileSignOutDialogConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get profileSignOutDialogConfirm;
+
+  /// No description provided for @profileAppVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} v{version} ({build})'**
+  String profileAppVersion(String name, String version, String build);
 }
 
 class _AppLocalizationsDelegate
