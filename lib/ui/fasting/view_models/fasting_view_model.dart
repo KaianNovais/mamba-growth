@@ -16,8 +16,8 @@ import '../../../utils/command.dart';
 /// (ativo/parado, protocolo) continuam vindo via `notifyListeners`.
 /// Ao reabrir o app a tela mostra o estado correto porque [now] é
 /// sempre fresco em `DateTime.now()`.
-class HomeViewModel extends ChangeNotifier with WidgetsBindingObserver {
-  HomeViewModel({required FastingRepository repository})
+class FastingViewModel extends ChangeNotifier with WidgetsBindingObserver {
+  FastingViewModel({required FastingRepository repository})
       : _repo = repository {
     _repo.addListener(_onRepoChanged);
     startFast = Command0<Fast>(_repo.startFast);

@@ -8,27 +8,27 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/result.dart';
 import '../../core/themes/themes.dart';
 import '../../core/widgets/progress_ring.dart';
-import '../view_models/home_view_model.dart';
+import '../view_models/fasting_view_model.dart';
 import 'end_fast_dialog.dart';
 import 'fast_completed_sheet.dart';
 import 'protocol_bottom_sheet.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class FastingScreen extends StatelessWidget {
+  const FastingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<HomeViewModel>(
-      create: (ctx) => HomeViewModel(
+    return ChangeNotifierProvider<FastingViewModel>(
+      create: (ctx) => FastingViewModel(
         repository: ctx.read<FastingRepository>(),
       ),
-      child: const _HomeView(),
+      child: const _FastingView(),
     );
   }
 }
 
-class _HomeView extends StatelessWidget {
-  const _HomeView();
+class _FastingView extends StatelessWidget {
+  const _FastingView();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class _HomeView extends StatelessWidget {
       ),
       body: SafeArea(
         top: false,
-        child: Consumer<HomeViewModel>(
+        child: Consumer<FastingViewModel>(
           builder: (context, vm, _) {
             if (!vm.isInitialized) {
               return const Center(child: CircularProgressIndicator());
@@ -61,7 +61,7 @@ class _HomeView extends StatelessWidget {
 
 class _Body extends StatefulWidget {
   const _Body({required this.vm});
-  final HomeViewModel vm;
+  final FastingViewModel vm;
 
   @override
   State<_Body> createState() => _BodyState();

@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mamba_growth/data/repositories/fasting/fasting_repository.dart';
 import 'package:mamba_growth/domain/models/fast.dart';
 import 'package:mamba_growth/domain/models/fasting_protocol.dart';
-import 'package:mamba_growth/ui/home/view_models/home_view_model.dart';
+import 'package:mamba_growth/ui/fasting/view_models/fasting_view_model.dart';
 import 'package:mamba_growth/utils/result.dart';
 
 class _FakeFastingRepository extends ChangeNotifier
@@ -65,10 +65,10 @@ Fast _activeFastNow() => Fast(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('HomeViewModel — exposição de estado', () {
+  group('FastingViewModel — exposição de estado', () {
     test('expõe isInitialized, selectedProtocol e activeFast do repo', () {
       final repo = _FakeFastingRepository();
-      final vm = HomeViewModel(repository: repo);
+      final vm = FastingViewModel(repository: repo);
       addTearDown(vm.dispose);
 
       expect(vm.isInitialized, true);
@@ -82,7 +82,7 @@ void main() {
 
     test('notifica listeners quando o repo muda', () {
       final repo = _FakeFastingRepository();
-      final vm = HomeViewModel(repository: repo);
+      final vm = FastingViewModel(repository: repo);
       addTearDown(vm.dispose);
 
       var notifies = 0;
@@ -94,11 +94,11 @@ void main() {
     });
   });
 
-  group('HomeViewModel — ticker e activeFast', () {
+  group('FastingViewModel — ticker e activeFast', () {
     test('não liga ticker quando não há jejum ativo', () {
       FakeAsync().run((async) {
         final repo = _FakeFastingRepository();
-        final vm = HomeViewModel(repository: repo);
+        final vm = FastingViewModel(repository: repo);
 
         expect(async.pendingTimers, isEmpty);
 
@@ -109,7 +109,7 @@ void main() {
     test('liga ticker quando há jejum ativo na inicialização', () {
       FakeAsync().run((async) {
         final repo = _FakeFastingRepository()..setActiveFast(_activeFastNow());
-        final vm = HomeViewModel(repository: repo);
+        final vm = FastingViewModel(repository: repo);
 
         expect(async.pendingTimers, isNotEmpty);
 
@@ -120,7 +120,7 @@ void main() {
     test('liga ticker quando activeFast passa de null para não-nulo', () {
       FakeAsync().run((async) {
         final repo = _FakeFastingRepository();
-        final vm = HomeViewModel(repository: repo);
+        final vm = FastingViewModel(repository: repo);
         expect(async.pendingTimers, isEmpty);
 
         repo.setActiveFast(_activeFastNow());
@@ -133,7 +133,7 @@ void main() {
     test('para ticker quando activeFast volta a null', () {
       FakeAsync().run((async) {
         final repo = _FakeFastingRepository()..setActiveFast(_activeFastNow());
-        final vm = HomeViewModel(repository: repo);
+        final vm = FastingViewModel(repository: repo);
         expect(async.pendingTimers, isNotEmpty);
 
         repo.setActiveFast(null);
@@ -144,14 +144,14 @@ void main() {
     });
   });
 
-  group('HomeViewModel — separação de canais', () {
+  group('FastingViewModel — separação de canais', () {
     // Garante que o tick 1Hz não causa rebuilds da árvore consumidora
     // de ChangeNotifier — só widgets que escutam nowListenable
     // reconstroem (esse é o ganho de performance da feature jejum).
     test('tick NÃO dispara ChangeNotifier do VM', () {
       FakeAsync().run((async) {
         final repo = _FakeFastingRepository();
-        final vm = HomeViewModel(repository: repo);
+        final vm = FastingViewModel(repository: repo);
         repo.setActiveFast(_activeFastNow());
 
         var vmNotifies = 0;
@@ -166,11 +166,11 @@ void main() {
     });
   });
 
-  group('HomeViewModel — lifecycle', () {
+  group('FastingViewModel — lifecycle', () {
     test('paused para o ticker; resumed religa quando há jejum ativo', () {
       FakeAsync().run((async) {
         final repo = _FakeFastingRepository()..setActiveFast(_activeFastNow());
-        final vm = HomeViewModel(repository: repo);
+        final vm = FastingViewModel(repository: repo);
         expect(async.pendingTimers, isNotEmpty);
 
         vm.didChangeAppLifecycleState(AppLifecycleState.paused);
@@ -186,7 +186,7 @@ void main() {
     test('resumed NÃO liga ticker se não há jejum ativo', () {
       FakeAsync().run((async) {
         final repo = _FakeFastingRepository();
-        final vm = HomeViewModel(repository: repo);
+        final vm = FastingViewModel(repository: repo);
 
         vm.didChangeAppLifecycleState(AppLifecycleState.paused);
         vm.didChangeAppLifecycleState(AppLifecycleState.resumed);
@@ -198,11 +198,11 @@ void main() {
     });
   });
 
-  group('HomeViewModel — dispose', () {
+  group('FastingViewModel — dispose', () {
     test('cancela ticker pendente', () {
       FakeAsync().run((async) {
         final repo = _FakeFastingRepository()..setActiveFast(_activeFastNow());
-        final vm = HomeViewModel(repository: repo);
+        final vm = FastingViewModel(repository: repo);
         expect(async.pendingTimers, isNotEmpty);
 
         vm.dispose();
