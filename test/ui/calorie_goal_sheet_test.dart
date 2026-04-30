@@ -22,6 +22,8 @@ class _Repo extends ChangeNotifier implements MealsRepository {
   @override
   Stream<List<Meal>> watchMealsForDay(DateTime day) async* { yield []; }
   @override
+  Future<List<Meal>> getMealsBetween(DateTime start, DateTime end) async => [];
+  @override
   Future<Result<Meal>> addMeal({required String name, required int calories}) async =>
       const Result.error(MealsException('na'));
   @override

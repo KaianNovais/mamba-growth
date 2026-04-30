@@ -91,6 +91,9 @@ class _StubMealsRepository extends ChangeNotifier implements MealsRepository {
   Stream<List<Meal>> watchMealsForDay(DateTime day) => const Stream.empty();
 
   @override
+  Future<List<Meal>> getMealsBetween(DateTime start, DateTime end) async => [];
+
+  @override
   Future<Result<Meal>> addMeal({
     required String name,
     required int calories,

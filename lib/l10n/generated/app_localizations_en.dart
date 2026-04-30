@@ -328,6 +328,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileHistoryRowSubtitle => 'View your past fasts';
 
   @override
+  String get profileMealsHistoryRowTitle => 'Calorie history';
+
+  @override
+  String get profileMealsHistoryRowSubtitle => 'Review your past days';
+
+  @override
+  String get mealsHistoryTitle => 'Calorie history';
+
+  @override
+  String get mealsHistoryEmptyTitle => 'Nothing here yet.';
+
+  @override
+  String get mealsHistoryEmptySubtitle =>
+      'Your logged meals will appear here as you build a track record.';
+
+  @override
+  String get mealsHistoryMealsCountOne => '1 meal';
+
+  @override
+  String mealsHistoryMealsCountMany(int count) {
+    return '$count meals';
+  }
+
+  @override
+  String get mealsHistoryDayEmpty => 'No meals logged this day.';
+
+  @override
+  String mealsHistoryWeekSelectorA11y(String weekday, int day, String state) {
+    String _temp0 = intl.Intl.selectLogic(state, {
+      'today': ', today',
+      'selected': ', selected',
+      'future': ', future, not available',
+      'other': '',
+    });
+    return '$weekday, day $day$_temp0';
+  }
+
+  @override
   String get profileEmptyTitle => 'Coming soon.';
 
   @override

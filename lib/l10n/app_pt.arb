@@ -146,6 +146,25 @@
   "profileHistorySectionEyebrow": "ATIVIDADE",
   "profileHistoryRowTitle": "Histórico de jejuns",
   "profileHistoryRowSubtitle": "Veja seus jejuns concluídos",
+  "profileMealsHistoryRowTitle": "Histórico de calorias",
+  "profileMealsHistoryRowSubtitle": "Revise seus dias anteriores",
+  "mealsHistoryTitle": "Histórico de calorias",
+  "mealsHistoryEmptyTitle": "Nada por aqui ainda.",
+  "mealsHistoryEmptySubtitle": "Suas refeições registradas vão aparecer aqui conforme você acumula histórico.",
+  "mealsHistoryMealsCountOne": "1 refeição",
+  "mealsHistoryMealsCountMany": "{count} refeições",
+  "@mealsHistoryMealsCountMany": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "mealsHistoryDayEmpty": "Nenhuma refeição neste dia.",
+  "mealsHistoryWeekSelectorA11y": "{weekday}, dia {day}{state, select, today{, hoje} selected{, selecionado} future{, dia futuro, indisponível} other{}}",
+  "@mealsHistoryWeekSelectorA11y": {
+    "placeholders": {
+      "weekday": { "type": "String" },
+      "day": { "type": "int" },
+      "state": { "type": "String" }
+    }
+  },
   "profileEmptyTitle": "Em breve.",
   "profileEmptySubtitle": "Configurações da conta e personalizações vão morar aqui.",
   "profileSignOut": "Sair",

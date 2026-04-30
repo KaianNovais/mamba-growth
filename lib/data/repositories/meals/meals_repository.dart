@@ -23,6 +23,11 @@ abstract class MealsRepository extends ChangeNotifier {
   /// A UI atual sempre observa "hoje".
   Stream<List<Meal>> watchMealsForDay(DateTime day);
 
+  /// Lê refeições com `eatenAt` em `[start, end)` em uma única consulta,
+  /// ordenadas desc por `eatenAt`. Não toca o cache do dia corrente —
+  /// seguro para histórico que cobre múltiplos dias.
+  Future<List<Meal>> getMealsBetween(DateTime start, DateTime end);
+
   Future<Result<Meal>> addMeal({required String name, required int calories});
 
   /// Atualiza apenas `name` e `calories` de uma refeição existente.

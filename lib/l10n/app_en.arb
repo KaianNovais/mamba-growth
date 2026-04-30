@@ -146,6 +146,25 @@
   "profileHistorySectionEyebrow": "ACTIVITY",
   "profileHistoryRowTitle": "Fasting history",
   "profileHistoryRowSubtitle": "View your past fasts",
+  "profileMealsHistoryRowTitle": "Calorie history",
+  "profileMealsHistoryRowSubtitle": "Review your past days",
+  "mealsHistoryTitle": "Calorie history",
+  "mealsHistoryEmptyTitle": "Nothing here yet.",
+  "mealsHistoryEmptySubtitle": "Your logged meals will appear here as you build a track record.",
+  "mealsHistoryMealsCountOne": "1 meal",
+  "mealsHistoryMealsCountMany": "{count} meals",
+  "@mealsHistoryMealsCountMany": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "mealsHistoryDayEmpty": "No meals logged this day.",
+  "mealsHistoryWeekSelectorA11y": "{weekday}, day {day}{state, select, today{, today} selected{, selected} future{, future, not available} other{}}",
+  "@mealsHistoryWeekSelectorA11y": {
+    "placeholders": {
+      "weekday": { "type": "String" },
+      "day": { "type": "int" },
+      "state": { "type": "String" }
+    }
+  },
   "profileEmptyTitle": "Coming soon.",
   "profileEmptySubtitle": "Account settings and customizations will live here.",
   "profileSignOut": "Sign out",

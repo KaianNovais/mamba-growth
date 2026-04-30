@@ -88,6 +88,21 @@ class MealsRepositoryLocal extends MealsRepository {
       );
 
   @override
+  Future<List<Meal>> getMealsBetween(DateTime start, DateTime end) async {
+    final db = await _localDb.database;
+    final rows = await db.query(
+      'meals',
+      where: 'eaten_at >= ? AND eaten_at < ?',
+      whereArgs: [
+        start.millisecondsSinceEpoch,
+        end.millisecondsSinceEpoch,
+      ],
+      orderBy: 'eaten_at DESC',
+    );
+    return List.unmodifiable(rows.map(_fromRow));
+  }
+
+  @override
   Stream<List<Meal>> watchMealsForDay(DateTime day) async* {
     final requested = _startOfDay(day);
     if (_currentDay == null || requested != _currentDay) {

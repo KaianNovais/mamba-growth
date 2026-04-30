@@ -674,6 +674,60 @@ abstract class AppLocalizations {
   /// **'View your past fasts'**
   String get profileHistoryRowSubtitle;
 
+  /// No description provided for @profileMealsHistoryRowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calorie history'**
+  String get profileMealsHistoryRowTitle;
+
+  /// No description provided for @profileMealsHistoryRowSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your past days'**
+  String get profileMealsHistoryRowSubtitle;
+
+  /// No description provided for @mealsHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calorie history'**
+  String get mealsHistoryTitle;
+
+  /// No description provided for @mealsHistoryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet.'**
+  String get mealsHistoryEmptyTitle;
+
+  /// No description provided for @mealsHistoryEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your logged meals will appear here as you build a track record.'**
+  String get mealsHistoryEmptySubtitle;
+
+  /// No description provided for @mealsHistoryMealsCountOne.
+  ///
+  /// In en, this message translates to:
+  /// **'1 meal'**
+  String get mealsHistoryMealsCountOne;
+
+  /// No description provided for @mealsHistoryMealsCountMany.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} meals'**
+  String mealsHistoryMealsCountMany(int count);
+
+  /// No description provided for @mealsHistoryDayEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No meals logged this day.'**
+  String get mealsHistoryDayEmpty;
+
+  /// No description provided for @mealsHistoryWeekSelectorA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'{weekday}, day {day}{state, select, today{, today} selected{, selected} future{, future, not available} other{}}'**
+  String mealsHistoryWeekSelectorA11y(String weekday, int day, String state);
+
   /// No description provided for @profileEmptyTitle.
   ///
   /// In en, this message translates to:

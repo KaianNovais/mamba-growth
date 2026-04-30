@@ -36,6 +36,14 @@ class _FakeMealsRepository extends ChangeNotifier implements MealsRepository {
     yield* _ctrl.stream;
   }
 
+  @override
+  Future<List<Meal>> getMealsBetween(DateTime start, DateTime end) async {
+    return _meals
+        .where((m) =>
+            !m.eatenAt.isBefore(start) && m.eatenAt.isBefore(end))
+        .toList();
+  }
+
   void _emit() {
     if (!_ctrl.isClosed) _ctrl.add(List.unmodifiable(_meals));
   }

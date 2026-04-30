@@ -331,6 +331,44 @@ class AppLocalizationsPt extends AppLocalizations {
   String get profileHistoryRowSubtitle => 'Veja seus jejuns concluídos';
 
   @override
+  String get profileMealsHistoryRowTitle => 'Histórico de calorias';
+
+  @override
+  String get profileMealsHistoryRowSubtitle => 'Revise seus dias anteriores';
+
+  @override
+  String get mealsHistoryTitle => 'Histórico de calorias';
+
+  @override
+  String get mealsHistoryEmptyTitle => 'Nada por aqui ainda.';
+
+  @override
+  String get mealsHistoryEmptySubtitle =>
+      'Suas refeições registradas vão aparecer aqui conforme você acumula histórico.';
+
+  @override
+  String get mealsHistoryMealsCountOne => '1 refeição';
+
+  @override
+  String mealsHistoryMealsCountMany(int count) {
+    return '$count refeições';
+  }
+
+  @override
+  String get mealsHistoryDayEmpty => 'Nenhuma refeição neste dia.';
+
+  @override
+  String mealsHistoryWeekSelectorA11y(String weekday, int day, String state) {
+    String _temp0 = intl.Intl.selectLogic(state, {
+      'today': ', hoje',
+      'selected': ', selecionado',
+      'future': ', dia futuro, indisponível',
+      'other': '',
+    });
+    return '$weekday, dia $day$_temp0';
+  }
+
+  @override
   String get profileEmptyTitle => 'Em breve.';
 
   @override
